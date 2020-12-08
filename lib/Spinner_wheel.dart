@@ -8,10 +8,8 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 
 class Roulette extends StatelessWidget {
-  int score;
+  int score = 60;
 
-
-  Roulette({this.score});
 
   final StreamController _dividerController = StreamController<int>();
   final _wheelNotifier = StreamController<double>();
@@ -54,12 +52,9 @@ class Roulette extends StatelessWidget {
             SizedBox(height: 10),
             new GestureDetector(
               onTap: () {
-                if(score <= 50){
-                  _onBasicAlertPressed(context);
-                }
-                else {
+
+
                   _wheelNotifier.sink.add(_generateRandomVelocity());
-                }
               },
               child: Container(
                 width: 300,
@@ -100,7 +95,7 @@ class Roulette extends StatelessWidget {
     );
   }
 
-  double _generateRandomVelocity() => (Random().nextDouble() * 6000) + 2000;
+  double _generateRandomVelocity() => (Random().nextDouble() * 10000) + 10000;
 
   double _generateRandomAngle() => Random().nextDouble() * pi * 2;
 }
@@ -126,29 +121,4 @@ class RouletteScore extends StatelessWidget {
     return Text('${labels[selected]}',
         style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0));
   }
-}
-
-_onBasicAlertPressed(context) {
-  int score;
-  Alert(
-    context: context,
-    title: "Dont have efficient coin",
-    desc: "Please collect some coin spin. ",
-    buttons: [
-      DialogButton(
-        child: Text(
-          "CANCEL",
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
-        onPressed: () {
-          score = score+50;
-          Navigator.push(context, MaterialPageRoute(builder:
-              (context) =>Roulette(
-                score: score,
-              )));
-        },
-        color: Colors.red
-      ),
-    ]
-  ).show();
 }
