@@ -20,8 +20,15 @@ class _LoginScreenState extends State<LoginScreen>
   AnimationController animationController;
   AnimationController animationController2;
   AnimationController textAnimationController;
+  var form = GlobalKey<FormState>();
   authMode currentAuthMode;
-  Map userData;
+  Map userData = {
+    "name": null,
+    "id": null,
+    "email": null,
+    "imgUrl": null,
+    "password": null
+  };
   var auth = Auth();
 
   @override
@@ -240,6 +247,17 @@ class _LoginScreenState extends State<LoginScreen>
                                 child: RaisedButton(
                                   onPressed: () async {
                                     var res = await auth.loginWithFB();
+                                    showDialog(
+                                        context: context,
+                                        builder: (ctx) => Center(
+                                              child: Container(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              ),
+                                            ));
+                                    Navigator.of(context).pop();
                                     setState(() {
                                       forwardAnimation();
                                       currentAuthMode = authMode.signinFB;
@@ -286,7 +304,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 40),
                                   child: Form(
-                                    // key: form,
+                                    key: form,
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                     child: SingleChildScrollView(
@@ -295,7 +313,6 @@ class _LoginScreenState extends State<LoginScreen>
                                           Container(
                                             margin: EdgeInsets.only(top: 180),
                                             child: TextFormField(
-                                              // controller: emailController,
                                               cursorColor: Colors.white,
                                               style: TextStyle(
                                                 color: Colors.white,
@@ -337,6 +354,9 @@ class _LoginScreenState extends State<LoginScreen>
                                                 }
                                                 return null;
                                               },
+                                              onSaved: (value) {
+                                                userData["email"] = value;
+                                              },
                                             ),
                                           ),
                                           SizedBox(
@@ -346,7 +366,6 @@ class _LoginScreenState extends State<LoginScreen>
                                             obscureText: true,
                                             autovalidateMode: AutovalidateMode
                                                 .onUserInteraction,
-                                            // controller: passwordController,
                                             cursorColor: Colors.white,
                                             style: TextStyle(
                                               color: Colors.white,
@@ -384,6 +403,9 @@ class _LoginScreenState extends State<LoginScreen>
                                               }
                                               return null;
                                             },
+                                            onSaved: (value) {
+                                              userData["password"] = value;
+                                            },
                                           ),
                                         ],
                                       ),
@@ -394,7 +416,30 @@ class _LoginScreenState extends State<LoginScreen>
                                   right: 50,
                                   bottom: 70,
                                   child: FloatingActionButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      showDialog(
+                                          context: context,
+                                          builder: (ctx) => Center(
+                                                child: Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              ));
+                                      form.currentState.save();
+                                      var res = await auth.logInWithEmail(
+                                          userData["email"],
+                                          userData["password"]);
+                                      if (res) {
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (ctx) => Home(userData),
+                                          ),
+                                        );
+                                      }
+                                    },
                                     child: Icon(Icons.arrow_right_alt),
                                     backgroundColor: Colors.indigo[900],
                                   ),

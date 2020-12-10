@@ -9,6 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth with ChangeNotifier {
   Map userData;
   final varFacebookLogin = FacebookLogin();
+  final signUpUrl =
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key= AIzaSyCf7uZkyXA1EL8B9y6nMqhIAXkL73F-7jo";
+  final signInUrl =
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key= AIzaSyCf7uZkyXA1EL8B9y6nMqhIAXkL73F-7jo";
   bool isLoggedIn = false;
 
   bool get loginStatus {
@@ -56,8 +60,37 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future logInWithEmail(String email, String password) async {
+    var signUpRes = await http.post(
+      signUpUrl,
+      body: jsonEncode(
+        {
+          "email": email,
+          "password": password,
+          "returnSecureToken": true,
+        },
+      ),
+    );
+    var signInRes = await http.post(
+      signInUrl,
+      body: jsonEncode(
+        {
+          "email": email,
+          "password": password,
+          "returnSecureToken": true,
+        },
+      ),
+    );
+    var finalres = jsonDecode(signInRes.body);
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+      "userData",
+      jsonEncode({"email": email}),
+    );
+    return finalres.keys.contains("idToken");
+  }
+
   Future<void> logOut(BuildContext context) async {
-    varFacebookLogin.logOut();
     var prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     Navigator.of(context).pushReplacement(

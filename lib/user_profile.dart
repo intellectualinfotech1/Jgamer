@@ -23,16 +23,42 @@ class UserProfileState extends State<UserProfile> {
               child: ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(25)),
-                  child: Image.network(widget.userData["imgUrl"]),
+                  child: widget.userData["imgUrl"] == null
+                      ? Container(
+                          alignment: Alignment.center,
+                          width: 50,
+                          height: 50,
+                          color: Colors.blue[800],
+                          child: Text(
+                            widget.userData["email"][0],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Quicksand",
+                              fontSize: 30,
+                            ),
+                          ),
+                        )
+                      : Image.network(
+                          widget.userData["imgUrl"],
+                        ),
                 ),
-                title: Text(
-                  widget.userData["name"],
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: "Quicksand",
-                  ),
-                ),
+                title: widget.userData["name"] == null
+                    ? Text(
+                        widget.userData["email"],
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: "Quicksand",
+                        ),
+                      )
+                    : Text(
+                        widget.userData["name"],
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                          fontFamily: "Quicksand",
+                        ),
+                      ),
               ),
             ),
             SizedBox(
