@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:jgamer/Spinner_wheel.dart';
+import 'package:jgamer/scratch_card.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _HomeState extends State<Home> {
       ),
 
       body: <Widget>[
-        Container(color: Colors.white,),
+        ScratchCard(),
         Container(color: Colors.blue,),
         Roulette(),
         Container(color: Colors.red,),
@@ -38,6 +39,7 @@ class _HomeState extends State<Home> {
         items: <Widget>[
           Icon(Icons.attach_money_rounded, size: 30, color: Colors.white,),
           Icon(Icons.widgets, size: 30, color: Colors.white,),
+
           Icon(Icons.album_rounded, size: 30, color: Colors.white,),
           Icon(Icons.perm_identity, size: 30, color: Colors.white,),
         ],

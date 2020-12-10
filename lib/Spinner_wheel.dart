@@ -10,7 +10,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 class Roulette extends StatelessWidget {
   int score = 60;
 
-
   final StreamController _dividerController = StreamController<int>();
   final _wheelNotifier = StreamController<double>();
   dispose() {
@@ -21,7 +20,6 @@ class Roulette extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
@@ -52,9 +50,7 @@ class Roulette extends StatelessWidget {
             SizedBox(height: 10),
             new GestureDetector(
               onTap: () {
-
-
-                  _wheelNotifier.sink.add(_generateRandomVelocity());
+                _wheelNotifier.sink.add(_generateRandomVelocity());
               },
               child: Container(
                 width: 300,

@@ -31,6 +31,7 @@ dependencies:
   curved_navigation_bar: ^0.3.4
   flutter_spinning_wheel: ^1.1.0
   rflutter_alert: ^1.1.0
+  scratcher: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,8 @@ flutter:
      - Image/roulette-8-300.png
      - Image/cpointer.png
      - images/close.png
+     - Image/scratchcard.jpg
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
