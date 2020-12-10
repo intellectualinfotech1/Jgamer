@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:jgamer/auth.dart';
 import 'constants.dart';
+import 'package:jgamer/Home.dart';
 
 enum authMode {
-  signIn,
-  signUp,
+  signinEmail,
+  signinGoogle,
+  signinFB,
 }
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +20,9 @@ class _LoginScreenState extends State<LoginScreen>
   AnimationController animationController;
   AnimationController animationController2;
   AnimationController textAnimationController;
+  authMode currentAuthMode;
+  Map userData;
+  var auth = Auth();
 
   @override
   void initState() {
@@ -33,9 +40,19 @@ class _LoginScreenState extends State<LoginScreen>
     );
     textAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 900),
+      duration: Duration(milliseconds: 1000),
     )..forward();
     super.initState();
+  }
+
+  void forwardAnimation() {
+    animationController.forward();
+    animationController2.forward();
+  }
+
+  void reverseAnimation() {
+    animationController.reverse();
+    animationController2.reverse();
   }
 
   @override
@@ -103,36 +120,376 @@ class _LoginScreenState extends State<LoginScreen>
                 );
               },
             ),
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AnimatedBuilder(
-                    animation: textAnimationController,
-                    builder: (_, __) {
-                      return Opacity(
-                        opacity: textAnimationController.value,
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: 170,
-                              left: 10 + textAnimationController.value * 30),
-                          child: Text(
-                            "Sign In",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 40,
-                              fontFamily: "Quicksand",
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 2,
+            (currentAuthMode == null)
+                ? SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AnimatedBuilder(
+                          animation: textAnimationController,
+                          builder: (_, __) {
+                            return Opacity(
+                              opacity: textAnimationController.value,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: 170,
+                                    left: 10 +
+                                        textAnimationController.value * 30),
+                                child: Text(
+                                  "Sign In",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 40,
+                                    fontFamily: "Quicksand",
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 2,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        AnimatedBuilder(
+                          animation: textAnimationController,
+                          builder: (_, __) {
+                            return Opacity(
+                              opacity: textAnimationController.value,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 30),
+                                margin: EdgeInsets.only(
+                                  top: 50,
+                                ),
+                                child: RaisedButton(
+                                  onPressed: () {
+                                    forwardAnimation();
+                                    setState(() {
+                                      currentAuthMode = authMode.signinEmail;
+                                    });
+                                  },
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: ListTile(
+                                    leading: Image.asset(
+                                      "assets/email.png",
+                                      width: 30,
+                                      color: Colors.black,
+                                      height: 30,
+                                    ),
+                                    title: Text(
+                                      "Sign in with Email",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: "Quicksand",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        AnimatedBuilder(
+                          animation: textAnimationController,
+                          builder: (_, __) {
+                            return Opacity(
+                              opacity: textAnimationController.value,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 30),
+                                margin: EdgeInsets.only(
+                                  top: 10,
+                                ),
+                                child: RaisedButton(
+                                  onPressed: () {},
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  color: Colors.red[800],
+                                  child: ListTile(
+                                    leading: Image.asset(
+                                      "assets/google.png",
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                    title: Text(
+                                      "Sign in with Google",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: "Quicksand",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        AnimatedBuilder(
+                          animation: textAnimationController,
+                          builder: (_, __) {
+                            return Opacity(
+                              opacity: textAnimationController.value,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 30),
+                                margin: EdgeInsets.only(
+                                  top: 10,
+                                ),
+                                child: RaisedButton(
+                                  onPressed: () async {
+                                    var res = await auth.loginWithFB();
+                                    setState(() {
+                                      forwardAnimation();
+                                      currentAuthMode = authMode.signinFB;
+                                      if (!res["status"]) {
+                                        currentAuthMode = null;
+                                        reverseAnimation();
+                                      } else {
+                                        userData = res["data"];
+                                      }
+                                    });
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  color: Colors.indigo[800],
+                                  child: ListTile(
+                                    leading: Image.asset(
+                                      "assets/facebook.png",
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                    title: Text(
+                                      "Sign in with Facebook",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: "Quicksand",
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(
+                    height: double.infinity,
+                    child: currentAuthMode == authMode.signinEmail
+                        ? Container(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 40),
+                                  child: Form(
+                                    // key: form,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: 180),
+                                            child: TextFormField(
+                                              // controller: emailController,
+                                              cursorColor: Colors.white,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "Quicksand",
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.emailAddress,
+                                              decoration: InputDecoration(
+                                                border: UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                labelText: "Email",
+                                                fillColor: Colors.white,
+                                                focusColor: Colors.white,
+                                                hoverColor: Colors.white,
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Colors.white),
+                                                ),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                labelStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: "Quicksand"),
+                                              ),
+                                              validator: (value) {
+                                                if (value.isEmpty) {
+                                                  return "Enter an email address";
+                                                }
+                                                if (!value.contains("@")) {
+                                                  return "Enter a valid email address";
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextFormField(
+                                            obscureText: true,
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            // controller: passwordController,
+                                            cursorColor: Colors.white,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Quicksand",
+                                            ),
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                              border: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              labelText: "Password",
+                                              fillColor: Colors.white,
+                                              focusColor: Colors.white,
+                                              hoverColor: Colors.white,
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.white),
+                                              ),
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "Quicksand"),
+                                            ),
+                                            validator: (value) {
+                                              if (value.length < 6) {
+                                                return "Passwords must be atleast six characters long";
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 50,
+                                  bottom: 70,
+                                  child: FloatingActionButton(
+                                    onPressed: () {},
+                                    child: Icon(Icons.arrow_right_alt),
+                                    backgroundColor: Colors.indigo[900],
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 50, left: 20),
+                                  child: IconButton(
+                                    icon: Icon(Icons.arrow_back),
+                                    onPressed: () {
+                                      setState(() {
+                                        currentAuthMode = null;
+                                        reverseAnimation();
+                                      });
+                                    },
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            height: double.infinity,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(top: 50, left: 20),
+                                  child: IconButton(
+                                    icon: Icon(Icons.arrow_back),
+                                    onPressed: () {
+                                      setState(() {
+                                        currentAuthMode = null;
+                                        reverseAnimation();
+                                      });
+                                    },
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Container(
+                                  height: 200,
+                                  margin: EdgeInsets.only(top: 100),
+                                  alignment: Alignment.center,
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25)),
+                                    child: Container(
+                                      color: Colors.white,
+                                      height: 50,
+                                      width: 50,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(25)),
+                                        child: Image.network(
+                                          userData["imgUrl"],
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 30,
+                                  margin: EdgeInsets.only(top: 250),
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    child: Text(
+                                      userData["name"],
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        color: Colors.white,
+                                        fontFamily: "Quicksand",
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 50,
+                                  bottom: 70,
+                                  child: FloatingActionButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (ctx) => Home(userData)),
+                                      );
+                                    },
+                                    child: Icon(Icons.arrow_right_alt),
+                                    backgroundColor: Colors.indigo[900],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                      );
-                    },
                   ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
