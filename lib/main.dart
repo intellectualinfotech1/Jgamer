@@ -14,6 +14,8 @@ void main() async {
     userData = jsonDecode(tempUserData);
   }
   runApp(MaterialApp(
+    title: "jGamer",
+    debugShowCheckedModeBanner: false,
     home: containsKey ? Home(userData) : MyApp(),
   ));
 }

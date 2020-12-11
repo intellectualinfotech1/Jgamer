@@ -209,7 +209,14 @@ class _LoginScreenState extends State<LoginScreen>
                                   top: 10,
                                 ),
                                 child: RaisedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    var res = await auth.loginWithGoogle();
+                                    setState(() {
+                                      forwardAnimation();
+                                      currentAuthMode = authMode.signinGoogle;
+                                      userData = res;
+                                    });
+                                  },
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   color: Colors.red[800],
@@ -247,17 +254,6 @@ class _LoginScreenState extends State<LoginScreen>
                                 child: RaisedButton(
                                   onPressed: () async {
                                     var res = await auth.loginWithFB();
-                                    showDialog(
-                                        context: context,
-                                        builder: (ctx) => Center(
-                                              child: Container(
-                                                width: 50,
-                                                height: 50,
-                                                child:
-                                                    CircularProgressIndicator(),
-                                              ),
-                                            ));
-                                    Navigator.of(context).pop();
                                     setState(() {
                                       forwardAnimation();
                                       currentAuthMode = authMode.signinFB;
