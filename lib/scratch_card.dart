@@ -7,9 +7,6 @@ import 'package:scratcher/scratcher.dart';
 
 class ScratchCard extends StatelessWidget {
 
-
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -26,7 +23,7 @@ class AppBody extends StatelessWidget {
 
   double _opacity = 0.0;
 
-  var list = ['\$200','\$300','\$400','\$500','\$600'];
+  var list = ['\$200','\$0','\$300','\$0','\$400','\$0','\$500','\$0','\$600','\$0',];
 
 
   final _random = new Random();
@@ -53,14 +50,15 @@ class AppBody extends StatelessWidget {
 
             return Scratcher(
               accuracy: ScratchAccuracy.low,
-              threshold: 1,
+              threshold: 50,
               brushSize: 20,
               onThreshold: () {
                 setState(() {
                   _opacity = 1;
                 });
               },
-              image: Image.asset('Image/scratchcard.jpg'),
+              image: Image.asset('Image/scratchcard.jpg'
+              ),
 
               child: AnimatedOpacity(
                 duration: Duration(milliseconds: 250),
@@ -97,7 +95,7 @@ class AppBody extends StatelessWidget {
           borderRadius: BorderRadius.circular(35),
           borderSide: BorderSide.none,
         ),
-        color: Colors.red,
+        color: Colors.indigo,
         child: Text(
           "Get A ScratchCard",
           style: TextStyle(

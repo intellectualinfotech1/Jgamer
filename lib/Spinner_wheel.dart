@@ -7,8 +7,7 @@ import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 
-class Roulette extends StatelessWidget {
-  int score = 60;
+class SpinnerWheel extends StatelessWidget {
 
   final StreamController _dividerController = StreamController<int>();
   final _wheelNotifier = StreamController<double>();
@@ -51,6 +50,7 @@ class Roulette extends StatelessWidget {
             new GestureDetector(
               onTap: () {
                 _wheelNotifier.sink.add(_generateRandomVelocity());
+
               },
               child: Container(
                 width: 300,
