@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/constants.dart';
 import 'package:jgamer/user_profile.dart';
+import 'package:jgamer/scratch_card.dart';
 
 class Home extends StatefulWidget {
   final Map userData;
@@ -31,9 +32,7 @@ class _HomeState extends State<Home> {
         backgroundColor: klightDeepBlue,
       ),
       body: <Widget>[
-        Container(
-          color: Colors.white,
-        ),
+        ScratchCard(),
         Container(
           color: Colors.blue,
         ),
