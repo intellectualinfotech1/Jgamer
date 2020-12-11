@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen>
     "imgUrl": null,
     "password": null
   };
+  List userKeys = [];
   var auth = Auth();
 
   @override
@@ -214,7 +215,8 @@ class _LoginScreenState extends State<LoginScreen>
                                     setState(() {
                                       forwardAnimation();
                                       currentAuthMode = authMode.signinGoogle;
-                                      userData = res;
+                                      userData = res[0];
+                                      userKeys = res[1];
                                     });
                                   },
                                   shape: RoundedRectangleBorder(
@@ -262,6 +264,7 @@ class _LoginScreenState extends State<LoginScreen>
                                         reverseAnimation();
                                       } else {
                                         userData = res["data"];
+                                        userKeys = res["keys"];
                                       }
                                     });
                                   },
@@ -314,6 +317,8 @@ class _LoginScreenState extends State<LoginScreen>
                                                 color: Colors.white,
                                                 fontFamily: "Quicksand",
                                               ),
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
                                               keyboardType:
                                                   TextInputType.emailAddress,
                                               decoration: InputDecoration(
@@ -414,24 +419,26 @@ class _LoginScreenState extends State<LoginScreen>
                                   child: FloatingActionButton(
                                     onPressed: () async {
                                       showDialog(
-                                          context: context,
-                                          builder: (ctx) => Center(
-                                                child: Container(
-                                                  width: 50,
-                                                  height: 50,
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                ),
-                                              ));
+                                        context: context,
+                                        child: Center(
+                                          child: Container(
+                                            height: 150,
+                                            width: 150,
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        ),
+                                      );
                                       form.currentState.save();
                                       var res = await auth.logInWithEmail(
                                           userData["email"],
                                           userData["password"]);
-                                      if (res) {
-                                        Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      if (res[0]) {
+                                        userKeys = res[1];
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                            builder: (ctx) => Home(userData),
+                                            builder: (ctx) =>
+                                                Home(userData, userKeys),
                                           ),
                                         );
                                       }
@@ -520,7 +527,8 @@ class _LoginScreenState extends State<LoginScreen>
                                     onPressed: () {
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
-                                            builder: (ctx) => Home(userData)),
+                                            builder: (ctx) =>
+                                                Home(userData, userKeys)),
                                       );
                                     },
                                     child: Icon(Icons.arrow_right_alt),

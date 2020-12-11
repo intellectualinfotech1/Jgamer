@@ -3,7 +3,8 @@ import 'package:jgamer/auth.dart';
 
 class UserProfile extends StatefulWidget {
   final Map userData;
-  UserProfile(this.userData);
+  final List userKeys;
+  UserProfile(this.userData, this.userKeys);
   @override
   State<StatefulWidget> createState() {
     return UserProfileState();
@@ -14,12 +15,15 @@ class UserProfileState extends State<UserProfile> {
   var auth = Auth();
   @override
   Widget build(BuildContext context) {
+    print(widget.userKeys);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: 30),
+              margin: EdgeInsets.symmetric(
+                vertical: 30,
+              ),
               child: ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -61,6 +65,29 @@ class UserProfileState extends State<UserProfile> {
                       ),
               ),
             ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.swap_horizontal_circle),
+              title: Text(
+                "Refferal Code",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontSize: 20,
+                ),
+              ),
+              subtitle: Text(widget.userKeys[0]),
+            ),
+            ListTile(
+              leading: Icon(Icons.monetization_on),
+              title: Text(
+                "Coins",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontSize: 20,
+                ),
+              ),
+              subtitle: Text(widget.userKeys[1].toString()),
+            ),
             SizedBox(
               height: 200,
             ),
@@ -72,7 +99,7 @@ class UserProfileState extends State<UserProfile> {
                 "Log Out",
                 style: TextStyle(fontFamily: "Quicksand"),
               ),
-            )
+            ),
           ],
         ),
       ),

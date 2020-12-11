@@ -7,7 +7,8 @@ import 'package:jgamer/scratch_card.dart';
 
 class Home extends StatefulWidget {
   final Map userData;
-  Home(this.userData);
+  final List userKeys;
+  Home(this.userData, this.userKeys);
   @override
   _HomeState createState() => _HomeState();
 }
@@ -22,10 +23,17 @@ class _HomeState extends State<Home> {
         titleSpacing: 30,
         toolbarHeight: 80,
         actions: [
-          Padding(padding: EdgeInsets.fromLTRB(10.0,10.0,30.0,10.0),
-            child: Text("Score"),
-          ),
-
+          Icon(Icons.monetization_on),
+          Padding(
+            padding: const EdgeInsets.only(top: 24, right: 15, left: 10),
+            child: Text(
+              widget.userKeys[1].toString(),
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "Quicksand",
+              ),
+            ),
+          )
         ],
         title: Text(
           "jGamer",
@@ -43,7 +51,7 @@ class _HomeState extends State<Home> {
           color: Colors.blue,
         ),
         Roulette(),
-        UserProfile(widget.userData),
+        UserProfile(widget.userData, widget.userKeys),
       ][currenIndex],
       bottomNavigationBar: CurvedNavigationBar(
         onTap: changePage,

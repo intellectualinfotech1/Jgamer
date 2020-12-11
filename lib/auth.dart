@@ -8,8 +8,9 @@ import 'package:jgamer/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class Auth with ChangeNotifier {
+class Auth {
   Map userData;
+  int coins = 0;
   final varFacebookLogin = FacebookLogin();
   final varGoogleLogin = GoogleSignIn();
   final signUpUrl =
@@ -28,21 +29,39 @@ class Auth with ChangeNotifier {
     } else {
       isLoggedIn = true;
     }
-    notifyListeners();
   }
 
   Future loginWithGoogle() async {
+    var userList;
     await varGoogleLogin.signIn().then(
-      (value) {
+      (value) async {
+        var prefs = await SharedPreferences.getInstance();
         userData = {
           "name": value.displayName,
           "id": value.id,
           "imgUrl": value.photoUrl,
           "email": value.email
         };
+
+        userList = await registerUser(
+            userData["id"], userData["name"], userData["email"]);
+        prefs.setString(
+          "userData",
+          jsonEncode({
+            "name": value.displayName,
+            "id": value.id,
+            "email": value.email,
+            "imgUrl": value.photoUrl,
+            "key": userList[0],
+            "coins": userList[1],
+          }),
+        );
       },
     );
-    return userData;
+    return [
+      userData,
+      userList,
+    ];
   }
 
   Future<Map> loginWithFB() async {
@@ -61,13 +80,23 @@ class Auth with ChangeNotifier {
         var id = graphRes["id"];
         userData = {"name": name, "id": id, "imgUrl": imgUrl, "email": email};
         var prefs = await SharedPreferences.getInstance();
+
+        var userList = await registerUser(id, name, email);
         prefs.setString(
           "userData",
           jsonEncode(
-              {"name": name, "id": id, "email": email, "imgUrl": imgUrl}),
+            {
+              "name": name,
+              "id": id,
+              "email": email,
+              "imgUrl": imgUrl,
+              "key": userList[0],
+              "coins": userList[1],
+            },
+          ),
         );
-        notifyListeners();
-        return {"status": true, "data": userData};
+
+        return {"status": true, "data": userData, "keys": userList};
         break;
       case FacebookLoginStatus.cancelledByUser:
         return {"status": false, "data": null};
@@ -100,11 +129,20 @@ class Auth with ChangeNotifier {
     );
     var finalres = jsonDecode(signInRes.body);
     var prefs = await SharedPreferences.getInstance();
+
+    var userList = await registerUser("", "", email);
     prefs.setString(
       "userData",
-      jsonEncode({"email": email}),
+      jsonEncode(
+        {
+          "email": email,
+          "key": userList[0],
+          "coins": userList[1],
+        },
+      ),
     );
-    return finalres.keys.contains("idToken");
+    prefs.setString("userKeys", userList.toString());
+    return [finalres.keys.contains("idToken"), userList];
   }
 
   Future<void> logOut(BuildContext context) async {
@@ -115,5 +153,49 @@ class Auth with ChangeNotifier {
         builder: (ctx) => LoginScreen(),
       ),
     );
+  }
+
+  Future<List> registerUser(String uId, String name, String email) async {
+    var user;
+    var userKey;
+    var databaseUrl =
+        "https://jgamer-347e6-default-rtdb.firebaseio.com/users.json";
+    await http.get(databaseUrl).then(
+      (value) async {
+        var users = jsonDecode(value.body);
+        if (users != null) {
+          user = null;
+          userKey = null;
+          for (var key in users.keys) {
+            if ((users[key]["userId"] == uId && uId.isNotEmpty) ||
+                (users[key]["Email"] == email && email.isNotEmpty)) {
+              user = users[key];
+              userKey = key;
+            }
+          }
+        }
+        if (user == null) {
+          await http.post(
+            databaseUrl,
+            body: jsonEncode(
+              {"userId": uId, "Name": name, "Email": email, "Coins": coins},
+            ),
+          );
+          await http.get(databaseUrl).then(
+            (value) async {
+              var users = jsonDecode(value.body);
+              for (var key in users.keys) {
+                if ((users[key]["userId"] == uId && uId.isNotEmpty) ||
+                    (users[key]["Email"] == email && email.isNotEmpty)) {
+                  user = users[key];
+                  userKey = key;
+                }
+              }
+            },
+          );
+        }
+      },
+    );
+    return [userKey, user["Coins"]];
   }
 }

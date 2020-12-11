@@ -8,15 +8,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var prefs = await SharedPreferences.getInstance();
   var containsKey = prefs.containsKey("userData");
+  var userKeys;
   Map userData;
   if (containsKey) {
     var tempUserData = prefs.getString("userData");
     userData = jsonDecode(tempUserData);
+    var tempKey = userData["key"];
+    var tempCoins = userData["coins"];
+    userKeys = [tempKey, tempCoins];
   }
   runApp(MaterialApp(
     title: "jGamer",
     debugShowCheckedModeBanner: false,
-    home: containsKey ? Home(userData) : MyApp(),
+    home: containsKey ? Home(userData, userKeys) : MyApp(),
   ));
 }
 
