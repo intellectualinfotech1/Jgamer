@@ -21,6 +21,12 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         titleSpacing: 30,
         toolbarHeight: 80,
+        actions: [
+          Padding(padding: EdgeInsets.fromLTRB(10.0,10.0,30.0,10.0),
+            child: Text("Score"),
+          ),
+
+        ],
         title: Text(
           "jGamer",
           style: TextStyle(

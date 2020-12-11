@@ -9,8 +9,10 @@ class ScratchCard extends StatelessWidget {
 
 
 
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
        debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -21,7 +23,14 @@ class ScratchCard extends StatelessWidget {
 }
 
 class AppBody extends StatelessWidget {
+
   double _opacity = 0.0;
+
+  var list = ['\$200','\$300','\$400','\$500','\$600'];
+
+
+  final _random = new Random();
+
 
   Future<void> scratchCardDialog(BuildContext context) {
     return showDialog<void>(
@@ -44,8 +53,8 @@ class AppBody extends StatelessWidget {
 
             return Scratcher(
               accuracy: ScratchAccuracy.low,
-              threshold: 25,
-              brushSize: 25,
+              threshold: 1,
+              brushSize: 20,
               onThreshold: () {
                 setState(() {
                   _opacity = 1;
@@ -61,7 +70,7 @@ class AppBody extends StatelessWidget {
                   width: 300,
                   alignment: Alignment.center,
                   child:Text(
-                    '\$200',
+                    getRandomElement(list),
                      style: TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -79,6 +88,7 @@ class AppBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       alignment: Alignment.center,
       child: FlatButton(
@@ -103,4 +113,12 @@ class AppBody extends StatelessWidget {
       ),
     );
   }
+
+   getRandomElement(List<String> list) {
+    final random = new Random();
+    var i = random.nextInt(list.length);
+    return list[i];
+  }
+
+
 }
