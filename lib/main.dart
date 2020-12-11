@@ -16,7 +16,7 @@ void main() async {
   runApp(MaterialApp(
     title: "jGamer",
     debugShowCheckedModeBanner: false,
-    home: containsKey ? Home(userData) : MyApp(),
+    home: containsKey ? Home(userData: userData) : MyApp(),
   ));
 }
 

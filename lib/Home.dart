@@ -2,18 +2,25 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/constants.dart';
+import 'package:jgamer/tictactoe.dart';
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
 
 class Home extends StatefulWidget {
   final Map userData;
-  Home(this.userData);
+
+
+  Home({this.userData});
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   int currenIndex = 0;
+
+  int score = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +30,8 @@ class _HomeState extends State<Home> {
         toolbarHeight: 80,
         actions: [
           Padding(padding: EdgeInsets.fromLTRB(10.0,10.0,30.0,10.0),
-            child: Text("Score"),
+            child: Text("Score $score"),
+
           ),
 
         ],
@@ -39,10 +47,9 @@ class _HomeState extends State<Home> {
       ),
       body: <Widget>[
         ScratchCard(),
-        Container(
-          color: Colors.blue,
-        ),
-        Roulette(),
+       Container(color: Colors.blue),
+        SpinnerWheel(),
+        Container(color: Colors.blue),
         UserProfile(widget.userData),
       ][currenIndex],
       bottomNavigationBar: CurvedNavigationBar(
@@ -50,7 +57,7 @@ class _HomeState extends State<Home> {
         height: 50.0,
         items: <Widget>[
           Icon(
-            Icons.attach_money_rounded,
+            Icons.card_giftcard_sharp,
             size: 30,
             color: Colors.white,
           ),
@@ -61,6 +68,11 @@ class _HomeState extends State<Home> {
           ),
           Icon(
             Icons.album_rounded,
+            size: 30,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.shopping_basket,
             size: 30,
             color: Colors.white,
           ),

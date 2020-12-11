@@ -431,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen>
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                            builder: (ctx) => Home(userData),
+                                            builder: (ctx) => Home(userData: userData),
                                           ),
                                         );
                                       }
@@ -520,7 +520,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     onPressed: () {
                                       Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
-                                            builder: (ctx) => Home(userData)),
+                                            builder: (ctx) => Home(userData: userData)),
                                       );
                                     },
                                     child: Icon(Icons.arrow_right_alt),
