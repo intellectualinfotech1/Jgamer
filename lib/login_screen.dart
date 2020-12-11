@@ -209,7 +209,9 @@ class _LoginScreenState extends State<LoginScreen>
                                   top: 10,
                                 ),
                                 child: RaisedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    auth.loginWithGoogle();
+                                  },
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   color: Colors.red[800],

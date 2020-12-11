@@ -58,8 +58,8 @@ class Roulette extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Colors.red,
-                      Colors.red[200],
+                      Colors.indigo,
+                      Colors.indigo[200],
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,

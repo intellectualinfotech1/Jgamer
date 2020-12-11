@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:jgamer/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth with ChangeNotifier {
   Map userData;
   final varFacebookLogin = FacebookLogin();
+  final varGoogleLogin = GoogleSignIn();
   final signUpUrl =
       "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key= AIzaSyCf7uZkyXA1EL8B9y6nMqhIAXkL73F-7jo";
   final signInUrl =
@@ -26,6 +28,11 @@ class Auth with ChangeNotifier {
       isLoggedIn = true;
     }
     notifyListeners();
+  }
+
+  Future loginWithGoogle () async{
+    var account = await varGoogleLogin.signIn();
+    print(account);
   }
 
   Future<Map> loginWithFB() async {
