@@ -5,6 +5,8 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:jgamer/login_screen.dart';
+import 'package:jgamer/coins.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -54,8 +56,10 @@ class Auth {
             "imgUrl": value.photoUrl,
             "key": userList[0],
             "coins": userList[1],
+            "user": userList[2],
           }),
         );
+        prefs.setInt("coins", userList[1]);
       },
     );
     return [
@@ -92,9 +96,11 @@ class Auth {
               "imgUrl": imgUrl,
               "key": userList[0],
               "coins": userList[1],
+              "user": userList[2],
             },
           ),
         );
+        prefs.setInt("coins", userList[1]);
 
         return {"status": true, "data": userData, "keys": userList};
         break;
@@ -138,9 +144,11 @@ class Auth {
           "email": email,
           "key": userList[0],
           "coins": userList[1],
+          "user": userList[2],
         },
       ),
     );
+    prefs.setInt("coins", userList[1]);
     prefs.setString("userKeys", userList.toString());
     return [finalres.keys.contains("idToken"), userList];
   }
@@ -196,6 +204,6 @@ class Auth {
         }
       },
     );
-    return [userKey, user["Coins"]];
+    return [userKey, user["Coins"], user];
   }
 }

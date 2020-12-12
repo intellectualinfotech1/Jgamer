@@ -1,10 +1,12 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:jgamer/Spinner_wheel.dart';
+import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
 import 'package:jgamer/tictactoe.dart';
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   final Map userData;
@@ -16,23 +18,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int currenIndex = 0;
-
   int score = 0;
+  var currentCoins;
 
-  _HomeState({this.score});
+  @override
+  void initState() {
+    currentCoins = widget.userKeys[1];
+    print(currentCoins);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    var coinProvider = Provider.of<Coins>(context);
+    coinProvider.loadUser(widget.userKeys[2]);
+    currentCoins = coinProvider.getCoins;
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 30,
         toolbarHeight: 80,
         actions: [
-          Icon(Icons.monetization_on),
+          Image.asset(
+            "assets/diamond.png",
+            height: 25,
+            width: 25,
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 24, right: 15, left: 10),
             child: Text(
-              widget.userKeys[1].toString(),
+              currentCoins.toString(),
               style: TextStyle(
                 fontSize: 25,
                 fontFamily: "Quicksand",

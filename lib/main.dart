@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jgamer/Home.dart';
+import 'package:jgamer/coins.dart';
 import 'package:jgamer/login_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -14,23 +16,34 @@ void main() async {
     var tempUserData = prefs.getString("userData");
     userData = jsonDecode(tempUserData);
     var tempKey = userData["key"];
-    var tempCoins = userData["coins"];
-    userKeys = [tempKey, tempCoins];
+    var tempCoins = prefs.getInt("coins");
+    var user = userData["user"];
+    userKeys = [
+      tempKey,
+      tempCoins,
+      user,
+    ];
   }
-  runApp(MaterialApp(
-    title: "jGamer",
-    debugShowCheckedModeBanner: false,
-    home: containsKey ? Home(userData, userKeys) : MyApp(),
+  runApp(ChangeNotifierProvider(
+    create: ( context) => Coins(),
+    child: MaterialApp(
+      title: "jGamer",
+      debugShowCheckedModeBanner: false,
+      home: containsKey ? Home(userData, userKeys) : MyApp(),
+    ),
   ));
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "jGamer",
-      debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+    return ChangeNotifierProvider(
+      create: (context) => Coins(),
+      child: MaterialApp(
+        title: "jGamer",
+        debugShowCheckedModeBanner: false,
+        home: LoginScreen(),
+      ),
     );
   }
 }

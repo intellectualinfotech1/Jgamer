@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jgamer/coins.dart';
 import 'package:provider/provider.dart';
 import 'package:jgamer/auth.dart';
 import 'constants.dart';
@@ -67,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+    var coins = Provider.of<Coins>(context, listen: false);
 
     return Scaffold(
       body: Container(
@@ -217,6 +219,7 @@ class _LoginScreenState extends State<LoginScreen>
                                       currentAuthMode = authMode.signinGoogle;
                                       userData = res[0];
                                       userKeys = res[1];
+                                      coins.loadUser(userKeys[2]);
                                     });
                                   },
                                   shape: RoundedRectangleBorder(
@@ -265,6 +268,7 @@ class _LoginScreenState extends State<LoginScreen>
                                       } else {
                                         userData = res["data"];
                                         userKeys = res["keys"];
+                                        coins.loadUser(userKeys[2]);
                                       }
                                     });
                                   },
@@ -434,6 +438,7 @@ class _LoginScreenState extends State<LoginScreen>
                                           userData["password"]);
                                       Navigator.of(context).pop();
                                       if (res[0]) {
+                                        coins.loadUser(res[1][2]);
                                         userKeys = res[1];
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(

@@ -6,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-
 class SpinnerWheel extends StatelessWidget {
-
   final StreamController _dividerController = StreamController<int>();
   final _wheelNotifier = StreamController<double>();
   dispose() {
@@ -34,8 +32,7 @@ class SpinnerWheel extends StatelessWidget {
               dividers: 8,
               onUpdate: _dividerController.add,
               onEnd: _dividerController.add,
-              secondaryImage:
-              Image.asset("Image/cpointer.png"),
+              secondaryImage: Image.asset("Image/cpointer.png"),
               secondaryImageHeight: 50,
               secondaryImageWidth: 50,
               shouldStartOrStop: _wheelNotifier.stream,
@@ -44,17 +41,16 @@ class SpinnerWheel extends StatelessWidget {
             StreamBuilder(
               stream: _dividerController.stream,
               builder: (context, snapshot) =>
-              snapshot.hasData ? RouletteScore(snapshot.data) : Container(),
+                  snapshot.hasData ? RouletteScore(snapshot.data) : Container(),
             ),
             SizedBox(height: 10),
             new GestureDetector(
               onTap: () {
                 _wheelNotifier.sink.add(_generateRandomVelocity());
-
               },
               child: Container(
                 width: 300,
-                height:35 ,
+                height: 35,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -97,7 +93,6 @@ class SpinnerWheel extends StatelessWidget {
 }
 
 class RouletteScore extends StatelessWidget {
-
   final int selected;
 
   final Map<int, String> labels = {
@@ -111,7 +106,6 @@ class RouletteScore extends StatelessWidget {
     8: '100\$',
   };
 
-
   RouletteScore(this.selected);
 
   @override
@@ -119,8 +113,4 @@ class RouletteScore extends StatelessWidget {
     return Text('${labels[selected]}',
         style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0));
   }
-
 }
-
-
-
