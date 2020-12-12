@@ -4,6 +4,7 @@ import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
 import 'package:jgamer/home_page.dart';
+import 'package:jgamer/main.dart';
 import 'package:jgamer/memorygame.dart';
 import 'package:jgamer/tictactoe.dart';
 import 'package:jgamer/user_profile.dart';
@@ -70,7 +71,7 @@ class _HomeState extends State<Home> {
       body: <Widget>[
         ScratchCard(),
        Memory(),
-        SpinnerWheel(),
+        MyHomePage(),
         Container(color: Colors.blue),
         UserProfile(widget.userData, widget.userKeys),
       ][currenIndex],
