@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/coins.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scratcher/scratcher.dart';
-import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:provider/provider.dart';
 
 class ScratchCard extends StatelessWidget {
@@ -53,6 +52,7 @@ class AppBody extends StatelessWidget {
               'You\'ve won a scratch card',
               style: TextStyle(
                   color: Colors.black,
+                  fontFamily: "Quicksand",
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),

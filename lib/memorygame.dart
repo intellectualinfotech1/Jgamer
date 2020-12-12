@@ -14,12 +14,11 @@ class _MemoryState extends State<Memory> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     reStart();
   }
-  void reStart() {
 
+  void reStart() {
     myPairs = getPairs();
     myPairs.shuffle();
 
@@ -36,111 +35,118 @@ class _MemoryState extends State<Memory> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 10 ,
-              ),
-              points != 800 ? Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "$points/800",
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    "Points",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ) : Container(),
-              SizedBox(
-                height: 5,
-              ),
-              points != 800 ? GridView(
-                shrinkWrap: true,
-                //physics: ClampingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisSpacing: 0.0, maxCrossAxisExtent: 100.0),
-                children: List.generate(gridViewTiles.length, (index) {
-                  return Tile(
-                    imagePathUrl: gridViewTiles[index].getImageAssetPath(),
-                    tileIndex: index,
-                    parent: this,
-                  );
-                }),
-              ) : Container(
-                  child: Column(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: (){
-                          setState(() {
-                            points = 0;
-                            reStart();
-                          });
-                        },
-                        child: Container(
-                          height: 20,
-                          width: 200,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(24),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 10,
+                ),
+                points != 800
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "$points/800",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w500),
                           ),
-                          child: Text("Replay", style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500
-                          ),),
-                        ),
-                      ),
-                      SizedBox(height: 5,),
-                      GestureDetector(
-                        onTap: (){
-                          // TODO
-                        },
-                        child: Container(
-                          height: 20,
-                          width: 200,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(
+                          Text(
+                            "Points",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 5,
+                ),
+                points != 800
+                    ? GridView(
+                        shrinkWrap: true,
+                        //physics: ClampingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            mainAxisSpacing: 0.0, maxCrossAxisExtent: 100.0),
+                        children: List.generate(gridViewTiles.length, (index) {
+                          return Tile(
+                            imagePathUrl:
+                                gridViewTiles[index].getImageAssetPath(),
+                            tileIndex: index,
+                            parent: this,
+                          );
+                        }),
+                      )
+                    : Container(
+                        child: Column(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                points = 0;
+                                reStart();
+                              });
+                            },
+                            child: Container(
+                              height: 20,
+                              width: 200,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
                                 color: Colors.blue,
-                                width: 2
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Text(
+                                "Replay",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
-                            borderRadius: BorderRadius.circular(24),
                           ),
-                          child: Text("Rate Us", style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500
-                          ),),
-                        ),
-                      ),
-                    ],
-                  )
-              )
-            ],
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // TODO
+                            },
+                            child: Container(
+                              height: 20,
+                              width: 200,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.blue, width: 2),
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Text(
+                                "Rate Us",
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ))
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
 
 class Tile extends StatefulWidget {
   String imagePathUrl;
@@ -218,12 +224,12 @@ class _TileState extends State<Tile> {
         margin: EdgeInsets.all(5),
         child: myPairs[widget.tileIndex].getImageAssetPath() != ""
             ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
-            ? myPairs[widget.tileIndex].getImageAssetPath()
-            : widget.imagePathUrl)
+                ? myPairs[widget.tileIndex].getImageAssetPath()
+                : widget.imagePathUrl)
             : Container(
-          color: Colors.white,
-          child: Image.asset("assets/correct.png"),
-        ),
+                color: Colors.white,
+                child: Image.asset("assets/correct.png"),
+              ),
       ),
     );
   }

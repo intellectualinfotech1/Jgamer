@@ -49,7 +49,8 @@ class _HomePageState extends State<HomePage> {
         activePlayer = 2;
         player1.add(gb.id);
       } else {
-        gb.text ="O";;
+        gb.text = "O";
+        ;
         gb.bg = Colors.black;
         activePlayer = 1;
         player2.add(gb.id);
@@ -79,11 +80,10 @@ class _HomePageState extends State<HomePage> {
     }
 
     var r = new Random();
-    var randIndex = r.nextInt(emptyCells.length-1);
+    var randIndex = r.nextInt(emptyCells.length - 1);
     var cellID = emptyCells[randIndex];
-    int i = buttonsList.indexWhere((p)=> p.id == cellID);
+    int i = buttonsList.indexWhere((p) => p.id == cellID);
     playGame(buttonsList[i]);
-
   }
 
   int checkWinner() {
@@ -177,40 +177,39 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-
-        body: new Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            new Expanded(
-              child: new GridView.builder(
-                padding: const EdgeInsets.all(10.0),
-                gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1.0,
-                    crossAxisSpacing: 9.0,
-                    mainAxisSpacing: 9.0),
-                itemCount: buttonsList.length,
-                itemBuilder: (context, i) => new SizedBox(
-                  width: 100.0,
-                  height: 100.0,
-                  child: new RaisedButton(
-                    padding: const EdgeInsets.all(8.0),
-                    onPressed: buttonsList[i].enabled
-                        ? () => playGame(buttonsList[i])
-                        : null,
-                    child: new Text(
-                      buttonsList[i].text,
-                      style: new TextStyle(
-                          color: Colors.white, fontSize: 20.0),
-                    ),
-                    color: buttonsList[i].bg,
-                    disabledColor: buttonsList[i].bg,
+        body: Center(
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          new Expanded(
+            child: new GridView.builder(
+              padding: const EdgeInsets.all(10.0),
+              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1.0,
+                  crossAxisSpacing: 9.0,
+                  mainAxisSpacing: 9.0),
+              itemCount: buttonsList.length,
+              itemBuilder: (context, i) => new SizedBox(
+                width: 100.0,
+                height: 100.0,
+                child: new RaisedButton(
+                  padding: const EdgeInsets.all(8.0),
+                  onPressed: buttonsList[i].enabled
+                      ? () => playGame(buttonsList[i])
+                      : null,
+                  child: new Text(
+                    buttonsList[i].text,
+                    style: new TextStyle(color: Colors.white, fontSize: 20.0),
                   ),
+                  color: buttonsList[i].bg,
+                  disabledColor: buttonsList[i].bg,
                 ),
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    ));
   }
 }

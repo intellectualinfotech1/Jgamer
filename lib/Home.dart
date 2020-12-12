@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
+import 'package:jgamer/games_front_page.dart';
 import 'package:jgamer/home_page.dart';
 import 'package:jgamer/main.dart';
 import 'package:jgamer/memorygame.dart';
@@ -27,14 +28,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     currentCoins = widget.userKeys[1];
-    print(currentCoins);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var coinProvider = Provider.of<Coins>(context);
-    coinProvider.loadUser(widget.userKeys[2]);
+    coinProvider.loadUser(widget.userKeys[2], widget.userKeys[0]);
     currentCoins = coinProvider.getCoins;
 
     return Scaffold(
@@ -70,9 +70,9 @@ class _HomeState extends State<Home> {
       ),
       body: <Widget>[
         ScratchCard(),
-       Memory(),
-        MyHomePage(),
-        Container(color: Colors.blue),
+        GamesFrontPage(),
+        Roulette(),
+        Container(),
         UserProfile(widget.userData, widget.userKeys),
       ][currenIndex],
       bottomNavigationBar: CurvedNavigationBar(

@@ -219,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen>
                                       currentAuthMode = authMode.signinGoogle;
                                       userData = res[0];
                                       userKeys = res[1];
-                                      coins.loadUser(userKeys[2]);
+                                      coins.loadUser(userKeys[2], userKeys[0]);
                                     });
                                   },
                                   shape: RoundedRectangleBorder(
@@ -268,7 +268,8 @@ class _LoginScreenState extends State<LoginScreen>
                                       } else {
                                         userData = res["data"];
                                         userKeys = res["keys"];
-                                        coins.loadUser(userKeys[2]);
+                                        coins.loadUser(
+                                            userKeys[2], userKeys[0]);
                                       }
                                     });
                                   },
@@ -438,7 +439,7 @@ class _LoginScreenState extends State<LoginScreen>
                                           userData["password"]);
                                       Navigator.of(context).pop();
                                       if (res[0]) {
-                                        coins.loadUser(res[1][2]);
+                                        coins.loadUser(res[1][2], res[1][0]);
                                         userKeys = res[1];
                                         Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
