@@ -31,6 +31,7 @@ class SpinnerWheel extends StatelessWidget {
               initialSpinAngle: _generateRandomAngle(),
               spinResistance: 0.6,
               canInteractWhileSpinning: false,
+
               dividers: 8,
               onUpdate: _dividerController.add,
               onEnd: _dividerController.add,

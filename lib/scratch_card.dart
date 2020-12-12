@@ -59,7 +59,7 @@ class AppBody extends StatelessWidget {
 
             return Scratcher(
               accuracy: ScratchAccuracy.low,
-              threshold: 50,
+              threshold: 40,
               brushSize: 20,
               onThreshold: () {
                 setState(() {
@@ -128,7 +128,7 @@ class AppBody extends StatelessWidget {
   _onAlertButtonPressed(context) {
     Alert(
       context: context,
-      type: AlertType.success,
+      type: AlertType.none,
       title: "You Won",
       desc: "$no",
       buttons: [

@@ -2,6 +2,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/constants.dart';
+import 'package:jgamer/home_page.dart';
+import 'package:jgamer/memorygame.dart';
 import 'package:jgamer/tictactoe.dart';
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
@@ -52,7 +54,7 @@ class _HomeState extends State<Home> {
       ),
       body: <Widget>[
         ScratchCard(),
-        Container(color: Colors.blue),
+       Memory(),
         SpinnerWheel(),
         Container(color: Colors.blue),
         UserProfile(widget.userData, widget.userKeys),
