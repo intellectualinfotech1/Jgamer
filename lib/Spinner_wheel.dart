@@ -97,6 +97,7 @@ class SpinnerWheel extends StatelessWidget {
 }
 
 class RouletteScore extends StatelessWidget {
+
   final int selected;
 
   final Map<int, String> labels = {
@@ -110,6 +111,7 @@ class RouletteScore extends StatelessWidget {
     8: '100\$',
   };
 
+
   RouletteScore(this.selected);
 
   @override
@@ -117,4 +119,8 @@ class RouletteScore extends StatelessWidget {
     return Text('${labels[selected]}',
         style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0));
   }
+
 }
+
+
+

@@ -19,6 +19,8 @@ class _HomeState extends State<Home> {
 
   int score = 0;
 
+  _HomeState({this.score});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

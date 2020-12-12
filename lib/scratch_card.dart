@@ -1,7 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scratcher/scratcher.dart';
+import 'package:dart_random_choice/dart_random_choice.dart';
+
+
 
 
 
@@ -22,14 +26,19 @@ class ScratchCard extends StatelessWidget {
 class AppBody extends StatelessWidget {
 
   double _opacity = 0.0;
+  var no;
+
+  AppBody({this.no});
+
 
   var list = ['\$200','\$0','\$300','\$0','\$400','\$0','\$500','\$0','\$600','\$0',];
 
 
-  final _random = new Random();
-
 
   Future<void> scratchCardDialog(BuildContext context) {
+     no  = getRandomElement(list);
+
+
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -54,21 +63,19 @@ class AppBody extends StatelessWidget {
               brushSize: 20,
               onThreshold: () {
                 setState(() {
-                  _opacity = 1;
+                  _onAlertButtonPressed(context);
                 });
               },
+
               image: Image.asset('Image/scratchcard.jpg'
               ),
 
-              child: AnimatedOpacity(
-                duration: Duration(milliseconds: 250),
-                opacity: _opacity,
-                child: Container(
+              child: Container(
                   height: 200,
                   width: 300,
                   alignment: Alignment.center,
                   child:Text(
-                    getRandomElement(list),
+                   "$no",
                      style: TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,
@@ -76,7 +83,7 @@ class AppBody extends StatelessWidget {
                   ),
                   ),
                 ),
-              ),
+
             );
           }),
         );
@@ -86,6 +93,7 @@ class AppBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
 
     return Container(
       alignment: Alignment.center,
@@ -117,6 +125,25 @@ class AppBody extends StatelessWidget {
     var i = random.nextInt(list.length);
     return list[i];
   }
+  _onAlertButtonPressed(context) {
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: "You Won",
+      desc: "$no",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Redem",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+          }
+        )
+      ],
+    ).show();
+  }
+
 
 
 }
