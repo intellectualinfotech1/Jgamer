@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:jgamer/constants.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class Roulette extends StatefulWidget {
   @override
@@ -37,7 +39,7 @@ class _RouletteState extends State<Roulette> {
                     width: 310,
                     height: 310,
                     child: SpinningWheel(
-                      Image.asset('Image/roulette-8-300.png'),
+                      Image.asset('Image/roulette-8-300.jpeg'),
                       width: 310,
                       height: 310,
                       initialSpinAngle: _generateRandomAngle(),
@@ -101,8 +103,14 @@ class _RouletteState extends State<Roulette> {
                 ),
               ),
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 70),
-              onPressed: () =>
-                  _wheelNotifier.sink.add(_generateRandomVelocity()),
+              onPressed: () {
+                _wheelNotifier.sink.add(_generateRandomVelocity());
+                if( Duration(milliseconds: 800) == true){
+                  _onAlertButtonPressed(context);
+                }
+
+                }
+
             ),
           ],
         ),
@@ -119,14 +127,14 @@ class RouletteScore extends StatelessWidget {
   final int selected;
 
   final Map<int, String> labels = {
-    1: '1000\$',
-    2: '400\$',
-    3: '800\$',
-    4: '7000\$',
-    5: '5000\$',
-    6: '300\$',
-    7: '2000\$',
-    8: '100\$',
+    1: '100',
+    2: '0',
+    3: '5',
+    4: '20',
+    5: '0',
+    6: '10',
+    7: '0',
+    8: '30',
   };
 
   RouletteScore(this.selected);
@@ -137,3 +145,23 @@ class RouletteScore extends StatelessWidget {
         style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0));
   }
 }
+_onAlertButtonPressed(context) {
+  Alert(
+    context: context,
+    type: AlertType.error,
+    title: "RFLUTTER ALERT",
+    desc: "Flutter is more awesome with RFlutter Alert.",
+    buttons: [
+      DialogButton(
+        child: Text(
+          "COOL",
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        onPressed: (){
+
+        }
+      )
+    ],
+  ).show();
+}
+
