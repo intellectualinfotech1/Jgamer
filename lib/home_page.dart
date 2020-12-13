@@ -176,40 +176,45 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: Center(
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          new Expanded(
-            child: new GridView.builder(
-              padding: const EdgeInsets.all(10.0),
-              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.0,
-                  crossAxisSpacing: 9.0,
-                  mainAxisSpacing: 9.0),
-              itemCount: buttonsList.length,
-              itemBuilder: (context, i) => new SizedBox(
-                width: 100.0,
-                height: 100.0,
-                child: new RaisedButton(
-                  padding: const EdgeInsets.all(8.0),
-                  onPressed: buttonsList[i].enabled
-                      ? () => playGame(buttonsList[i])
-                      : null,
-                  child: new Text(
-                    buttonsList[i].text,
-                    style: new TextStyle(color: Colors.white, fontSize: 20.0),
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: Container(
+          margin:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
+          child: GridView.builder(
+            padding: const EdgeInsets.all(10.0),
+            gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 9.0,
+                mainAxisSpacing: 9.0),
+            itemCount: buttonsList.length,
+            itemBuilder: (context, i) => new SizedBox(
+              width: 100.0,
+              height: 100.0,
+              child: new RaisedButton(
+                padding: const EdgeInsets.all(8.0),
+                onPressed: buttonsList[i].enabled
+                    ? () => playGame(buttonsList[i])
+                    : null,
+                child: new Text(
+                  buttonsList[i].text,
+                  style: new TextStyle(
+                    color: Colors.white,
+                    fontSize: 70.0,
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.w900,
                   ),
-                  color: buttonsList[i].bg,
-                  disabledColor: buttonsList[i].bg,
                 ),
+                color: buttonsList[i].bg,
+                disabledColor: buttonsList[i].bg,
               ),
             ),
           ),
-        ],
+        ),
       ),
-    ));
+    );
   }
 }
