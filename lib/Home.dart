@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
       ),
       body: <Widget>[
         ScratchCard(),
-       Memory(),
+       HomePage(),
         MyHomePage(),
         Container(color: Colors.blue),
         UserProfile(widget.userData, widget.userKeys),
