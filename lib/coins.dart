@@ -8,12 +8,26 @@ class Coins with ChangeNotifier {
   int coins;
   Map user;
   String userKey;
+  int couponCount;
+
+  int get getCouponCount {
+    return couponCount;
+  }
+
+  Future changeCouponCount(int newCount) {
+    couponCount = newCount;
+    notifyListeners();
+  }
 
   Future<void> loadUser(Map newUser, String newUserKey) async {
     var prefs = await SharedPreferences.getInstance();
     user = newUser;
     userKey = newUserKey;
     coins = prefs.getInt("coins");
+    couponCount = 5;
+    if (prefs.containsKey("scratchAmount")) {
+      couponCount = prefs.getInt("scratchAmount");
+    }
     notifyListeners();
   }
 
@@ -27,6 +41,24 @@ class Coins with ChangeNotifier {
         await http.get(databaseUrl).then((value) => jsonDecode(value.body));
     res["Coins"] = coins;
     await http.patch(databaseUrl, body: jsonEncode(res));
+    notifyListeners();
+  }
+
+  Future<bool> reduceCoins(int value) async {
+    if (coins >= value) {
+      var prefs = await SharedPreferences.getInstance();
+      coins = coins - value;
+      var databaseUrl =
+          "https://jgamer-347e6-default-rtdb.firebaseio.com/users/$userKey.json";
+      prefs.setInt("coins", coins);
+      var res =
+          await http.get(databaseUrl).then((value) => jsonDecode(value.body));
+      res["Coins"] = coins;
+      await http.patch(databaseUrl, body: jsonEncode(res));
+      notifyListeners();
+      return true;
+    }
+    return false;
   }
 
   int get getCoins {
