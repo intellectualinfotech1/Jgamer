@@ -7,7 +7,6 @@ import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:jgamer/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-
 class Roulette extends StatefulWidget {
   @override
   _RouletteState createState() => _RouletteState();
@@ -105,12 +104,13 @@ class _RouletteState extends State<Roulette> {
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 70),
               onPressed: () {
                 _wheelNotifier.sink.add(_generateRandomVelocity());
-                if( Duration(milliseconds: 800) == true){
-                  _onAlertButtonPressed(context);
-                }
-
-                }
-
+                Future.delayed(
+                  Duration(milliseconds: 5000),
+                  () {
+                    _onAlertButtonPressed(context);
+                  },
+                );
+              },
             ),
           ],
         ),
@@ -145,6 +145,7 @@ class RouletteScore extends StatelessWidget {
         style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0));
   }
 }
+
 _onAlertButtonPressed(context) {
   Alert(
     context: context,
@@ -153,15 +154,11 @@ _onAlertButtonPressed(context) {
     desc: "Flutter is more awesome with RFlutter Alert.",
     buttons: [
       DialogButton(
-        child: Text(
-          "COOL",
-          style: TextStyle(color: Colors.white, fontSize: 20),
-        ),
-        onPressed: (){
-
-        }
-      )
+          child: Text(
+            "COOL",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {})
     ],
   ).show();
 }
-
