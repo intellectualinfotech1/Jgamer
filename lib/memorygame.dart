@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:jgamer/custom_dailog1.dart';
 import 'package:jgamer/models/TileModel.dart';
 import 'package:jgamer/data/data.dart';
+import 'package:provider/provider.dart';
+
+import 'coins.dart';
 
 class Memory extends StatefulWidget {
   @override
@@ -95,7 +99,8 @@ class _MemoryState extends State<Memory> {
                                 reStart();
                               });
                             },
-                            child: Container(
+                            child:InkWell(
+                              child:Container(
                               height: 20,
                               width: 200,
                               alignment: Alignment.center,
@@ -110,33 +115,15 @@ class _MemoryState extends State<Memory> {
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500),
                               ),
+
                             ),
+                              onTap: (){
+                                reStart();
+
+                              },
+                            )
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              // TODO
-                            },
-                            child: Container(
-                              height: 20,
-                              width: 200,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.blue, width: 2),
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              child: Text(
-                                "Rate Us",
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
+                          CustomDialog1("You Won", "you get 5 coin", collect1)
                         ],
                       ))
               ],
@@ -145,6 +132,12 @@ class _MemoryState extends State<Memory> {
         ),
       ),
     );
+  }
+
+  void collect1() {
+    if (Navigator.canPop(context)) Navigator.pop(context);
+    var coins = Provider.of<Coins>(context, listen: false);
+    coins.addCoins(5);
   }
 }
 
