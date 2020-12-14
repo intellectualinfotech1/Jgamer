@@ -9,13 +9,13 @@ class GamesFrontPage extends StatelessWidget {
       "name": "Tic Tac Toe",
       "game": HomePage(),
       "thumb":
-          "https://previews.123rf.com/images/bilderundvektor/bilderundvektor1107/bilderundvektor110700078/10034033-tic-tac-toe-game.jpg"
+          "Image/itctactoeimg.jpg"
     },
     {
       "name": "Memory Game",
       "game": Memory(),
       "thumb":
-          "https://st.depositphotos.com/1688971/1219/v/950/depositphotos_12192166-stock-illustration-kids-memory-game.jpg"
+          "Image/memorygameimg.jpg"
     },
   ];
   @override
@@ -44,7 +44,7 @@ class GamesFrontPage extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
-                      child: Image.network(
+                      child: Image.asset(
                         games[index]["thumb"],
                         width: double.infinity,
                         fit: BoxFit.cover,

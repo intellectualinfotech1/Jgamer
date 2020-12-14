@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:jgamer/custom_dailog1.dart';
+import 'package:provider/provider.dart';
+import 'coins.dart';
 import 'custom_dailog.dart';
 import 'game_button.dart';
 
@@ -154,8 +157,8 @@ class _HomePageState extends State<HomePage> {
       if (winner == 1) {
         showDialog(
             context: context,
-            builder: (_) => new CustomDialog("You Won",
-                "Press the reset button to start again.", resetGame));
+            builder: (_) => new CustomDialog1("Congratulation You Won",
+                "Collect your reward", collect));
       } else {
         showDialog(
             context: context,
@@ -169,6 +172,14 @@ class _HomePageState extends State<HomePage> {
 
   void resetGame() {
     if (Navigator.canPop(context)) Navigator.pop(context);
+    setState(() {
+      buttonsList = doInit();
+    });
+  }
+  void collect() {
+    if (Navigator.canPop(context)) Navigator.pop(context);
+    var coins = Provider.of<Coins>(context, listen: false);
+    coins.addCoins(10);
     setState(() {
       buttonsList = doInit();
     });
@@ -203,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                   buttonsList[i].text,
                   style: new TextStyle(
                     color: Colors.white,
-                    fontSize: 70.0,
+                    fontSize: 60.0,
                     fontFamily: "Quicksand",
                     fontWeight: FontWeight.w900,
                   ),

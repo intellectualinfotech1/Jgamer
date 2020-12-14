@@ -62,6 +62,8 @@ flutter:
      - images/close.png
      - assets/
      - Image/scratchcard.jpg
+     - Image/itctactoeimg.jpg
+     - Image/memorygameimg.jpg
 
 
 

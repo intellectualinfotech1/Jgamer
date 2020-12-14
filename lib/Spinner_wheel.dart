@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinning_wheel/flutter_spinning_wheel.dart';
 import 'package:jgamer/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import './displayScore.dart';
 
 class Roulette extends StatefulWidget {
   @override
@@ -30,17 +31,17 @@ class _RouletteState extends State<Roulette> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 310,
-              height: 310,
+              width: 200,
+              height: 200,
               child: Stack(
                 children: [
                   Container(
-                    width: 310,
-                    height: 310,
+                    width: 200,
+                    height: 200,
                     child: SpinningWheel(
                       Image.asset('Image/roulette-8-300.jpeg'),
-                      width: 310,
-                      height: 310,
+                      width: 200,
+                      height: 200,
                       initialSpinAngle: _generateRandomAngle(),
                       spinResistance: 0.6,
                       canInteractWhileSpinning: false,
@@ -82,7 +83,7 @@ class _RouletteState extends State<Roulette> {
             StreamBuilder(
               stream: _dividerController.stream,
               builder: (context, snapshot) =>
-                  snapshot.hasData ? RouletteScore(snapshot.data) : Container(),
+                  snapshot.hasData ? RoutletScore1(snapshot.data) : Container(),
             ),
             SizedBox(height: 30),
             new RaisedButton(
@@ -103,13 +104,13 @@ class _RouletteState extends State<Roulette> {
               ),
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 70),
               onPressed: () {
-                _wheelNotifier.sink.add(_generateRandomVelocity());
                 Future.delayed(
                   Duration(milliseconds: 5000),
                   () {
                     _onAlertButtonPressed(context);
                   },
                 );
+                _wheelNotifier.sink.add(_generateRandomVelocity());
               },
             ),
           ],
@@ -125,6 +126,7 @@ class _RouletteState extends State<Roulette> {
 
 class RouletteScore extends StatelessWidget {
   final int selected;
+  var number;
 
   final Map<int, String> labels = {
     1: '100',
@@ -141,24 +143,29 @@ class RouletteScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    number = labels[selected];
     return Text('${labels[selected]}',
         style: TextStyle(fontStyle: FontStyle.italic, fontSize: 24.0));
   }
-}
 
+
+}
 _onAlertButtonPressed(context) {
   Alert(
     context: context,
-    type: AlertType.error,
-    title: "RFLUTTER ALERT",
-    desc: "Flutter is more awesome with RFlutter Alert.",
+    type: AlertType.success,
+    title: "Congratulation",
+    desc: 'you won diamonds',
     buttons: [
       DialogButton(
           child: Text(
-            "COOL",
+            "Collect",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
-          onPressed: () {})
+          onPressed: (
+
+              ) {})
     ],
   ).show();
 }
+
