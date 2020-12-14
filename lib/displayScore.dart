@@ -15,8 +15,7 @@ class RoutletScore1 extends StatelessWidget {
     8: '30',
   };
 
-   RoutletScore1(this.selected1) ;
-
+  RoutletScore1(this.selected1);
 
   @override
   Widget build(BuildContext context) {

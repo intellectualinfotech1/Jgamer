@@ -9,9 +9,19 @@ class Coins with ChangeNotifier {
   Map user;
   String userKey;
   int couponCount;
+  int spinCount;
 
   int get getCouponCount {
     return couponCount;
+  }
+
+  int get getSpinCount {
+    return spinCount;
+  }
+
+  Future changeSpinCount(int newCount) {
+    spinCount = newCount;
+    notifyListeners();
   }
 
   Future changeCouponCount(int newCount) {
@@ -25,8 +35,12 @@ class Coins with ChangeNotifier {
     userKey = newUserKey;
     coins = prefs.getInt("coins");
     couponCount = 5;
+    spinCount = 5;
     if (prefs.containsKey("scratchAmount")) {
       couponCount = prefs.getInt("scratchAmount");
+    }
+    if (prefs.containsKey("spinAmount")) {
+      spinCount = prefs.getInt("spinAmount");
     }
     notifyListeners();
   }

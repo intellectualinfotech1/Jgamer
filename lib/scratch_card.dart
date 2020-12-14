@@ -112,7 +112,7 @@ class AppBody extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            "You have 0 free coupons left.\n\n Come back tommorrow to collect 5 free coupons. \n\n Or buy a new one.",
+            "You have 0 free coupons left.\n\nCome back tommorrow to collect 5 free coupons. \n\nOr buy a new one.",
             style: TextStyle(
               fontFamily: "Quicksand",
               fontSize: 20,
