@@ -180,9 +180,7 @@ class _HomePageState extends State<HomePage> {
     if (Navigator.canPop(context)) Navigator.pop(context);
     var coins = Provider.of<Coins>(context, listen: false);
     coins.addCoins(10);
-    setState(() {
-      buttonsList = doInit();
-    });
+
   }
 
   @override

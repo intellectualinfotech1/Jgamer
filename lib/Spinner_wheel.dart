@@ -105,7 +105,7 @@ class _RouletteState extends State<Roulette> {
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 70),
               onPressed: () {
                 Future.delayed(
-                  Duration(milliseconds: 5000),
+                  Duration(milliseconds: 4300),
                   () {
                     _onAlertButtonPressed(context);
                   },
@@ -162,9 +162,9 @@ _onAlertButtonPressed(context) {
             "Collect",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
-          onPressed: (
+          onPressed: () {
 
-              ) {})
+          })
     ],
   ).show();
 }
