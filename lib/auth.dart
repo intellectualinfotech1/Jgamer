@@ -155,7 +155,7 @@ class Auth {
 
   Future<void> logOut(BuildContext context) async {
     var prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+    prefs.remove("userData");
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => LoginScreen(),
