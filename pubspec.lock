@@ -135,6 +135,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+  infinite_listview:
+    dependency: transitive
+    description:
+      name: infinite_listview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1+1"
   intl:
     dependency: transitive
     description:
@@ -240,6 +247,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  roller_list:
+    dependency: "direct main"
+    description:
+      name: roller_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.1"
   scratcher:
     dependency: "direct main"
     description:
