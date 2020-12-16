@@ -4,9 +4,11 @@ import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
 import 'package:jgamer/games_front_page.dart';
+import 'package:jgamer/store.dart';
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   final Map userData;
@@ -20,11 +22,18 @@ class _HomeState extends State<Home> {
   int currenIndex = 0;
   int score = 0;
   var currentCoins;
+  http.Response linkData;
 
   @override
   void initState() {
     currentCoins = widget.userKeys[1];
+    loadData();
     super.initState();
+  }
+
+  Future<http.Response> loadData() async {
+    var link = "https://jgamer-347e6-default-rtdb.firebaseio.com/data.json";
+    linkData = await http.get(link);
   }
 
   @override
@@ -68,7 +77,7 @@ class _HomeState extends State<Home> {
         ScratchCard(),
         GamesFrontPage(),
         Roulette(),
-        Container(),
+        Store(linkData),
         UserProfile(widget.userData, widget.userKeys),
       ][currenIndex],
       bottomNavigationBar: CurvedNavigationBar(

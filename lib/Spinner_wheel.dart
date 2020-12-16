@@ -317,6 +317,7 @@ class _RouletteState extends State<Roulette> {
             SizedBox(height: 30),
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.2,
               child: RaisedButton(
                 child: Column(
                   children: [
@@ -330,7 +331,7 @@ class _RouletteState extends State<Roulette> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 8,
                     ),
                     Text(
                       "${coinProv.getSpinCount.toString()} free spins remaining for today...",
@@ -350,7 +351,7 @@ class _RouletteState extends State<Roulette> {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(
-                  vertical: 20,
+                  vertical: 15,
                 ),
                 onPressed: isSpinActive
                     ? () async {
