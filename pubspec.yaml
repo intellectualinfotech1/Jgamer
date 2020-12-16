@@ -38,6 +38,7 @@ dependencies:
   google_sign_in: 4.0.2
   scratcher: ^1.4.0
   dart_random_choice: ^0.0.2
+  share: ^0.6.5+4
 
 dev_dependencies:
   flutter_test:

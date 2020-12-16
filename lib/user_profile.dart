@@ -4,6 +4,7 @@ import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:share/share.dart';
 
 class UserProfile extends StatefulWidget {
   final Map userData;
@@ -80,6 +81,7 @@ class UserProfileState extends State<UserProfile> {
                 ),
               ),
               subtitle: Text(widget.userKeys[0]),
+              onTap: () => Share.share("download jgamer from link and use my reffrel code ${widget.userKeys[0]} www.google.com"),
             ),
             Divider(),
             ListTile(
@@ -105,7 +107,7 @@ class UserProfileState extends State<UserProfile> {
               ),
               onTap: () {
                 showDialog(
-                  context: context,
+                  context: context, 
                   builder: (ctx) {
                     return AlertDialog(
                       shape: RoundedRectangleBorder(
@@ -153,36 +155,10 @@ class UserProfileState extends State<UserProfile> {
                           ),
                           textColor: Colors.redAccent[700],
                         ),
-                        // RaisedButton(
-                        //   onPressed: () {},
-                        //   padding: EdgeInsets.symmetric(horizontal: 10),
-                        //   color: Colors.redAccent[700],
-                        //   shape: RoundedRectangleBorder(
-                        //     borderRadius: BorderRadius.all(
-                        //       Radius.circular(10),
-                        //     ),
-                        //   ),
-                        //   child: Text(
-                        //     "Log Out",
-                        // style: TextStyle(
-                        //   color: Colors.white,
-                        //   fontFamily: "Quicksand",
-                        //   fontWeight: FontWeight.bold,
-                        //   fontSize: 20,
-                        // ),
-                        //   ),
-                        // ),
+
                       ],
                     );
-                    // return Center(
-                    //   child: Card(
-                    //     child: Container(
-                    //       child: Text(
-                    //         "Are You sure ??",
-                    //       ),
-                    //     ),
-                    //   ),
-                    // );
+
                   },
                 );
               },
