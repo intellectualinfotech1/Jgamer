@@ -29,13 +29,13 @@ class AppBody extends StatelessWidget {
   var list = [
     0,
     10,
-    50,
+    5,
     100,
-    150,
-    200,
     10,
-    250,
-    300,
+    20,
+    10,
+    0,
+    30,
     20,
   ];
 
@@ -62,7 +62,7 @@ class AppBody extends StatelessWidget {
           content: StatefulBuilder(builder: (context, StateSetter setState) {
             return Scratcher(
               accuracy: ScratchAccuracy.low,
-              threshold: 60,
+              threshold:40 ,
               brushSize: 25,
               onThreshold: () {
                 setState(() {
@@ -265,8 +265,8 @@ class AppBody extends StatelessWidget {
                           fontFamily: "Quicksand",
                           fontSize: 20,
                         ),
-                      ),
-                    ],
+                      ),                    ],
+
                   ),
                 ),
               ],

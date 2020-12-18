@@ -39,6 +39,8 @@ dependencies:
   scratcher: ^1.4.0
   dart_random_choice: ^0.0.2
   share: ^0.6.5+4
+  roller_list: ^0.6.1
+  rate_my_app: ^0.7.2
 
 dev_dependencies:
   flutter_test:
