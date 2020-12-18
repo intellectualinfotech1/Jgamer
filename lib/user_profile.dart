@@ -99,6 +99,20 @@ class UserProfileState extends State<UserProfile> {
             ),
             Divider(),
             ListTile(
+              leading: Icon(Icons.star),
+              title: Text(
+                "Rate App",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontSize: 20,
+                ),
+              ),
+              onTap: (){
+                RateMyApp();
+              },
+            ),
+            Divider(),
+            ListTile(
               leading: Icon(Icons.logout),
               title: Text(
                 "Log Out",
