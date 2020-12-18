@@ -171,7 +171,7 @@ class _StoreState extends State<Store> {
                         title: Text(
                           storeData[currentSelection][index]["Cash"],
                           style: TextStyle(
-                            fontSize: 40,
+                            fontSize: 200,
                             fontFamily: "Quicksand",
                             fontWeight: FontWeight.w700,
                           ),

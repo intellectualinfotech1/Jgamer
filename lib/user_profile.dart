@@ -5,6 +5,7 @@ import 'package:jgamer/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
+import 'package:rate_my_app/rate_my_app.dart';
 
 class UserProfile extends StatefulWidget {
   final Map userData;
@@ -169,4 +170,36 @@ class UserProfileState extends State<UserProfile> {
       ),
     );
   }
+}
+
+class RateMyApp {
+  WidgetBuilder builder = buildProgressIndicator;
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(
+        title: const Text('Rate my app !'),
+      ),
+      body: RateMyAppBuilder(
+        builder: builder,
+        onInitialized: (context, rateMyApp) {
+          rateMyApp.conditions.forEach((condition) {
+            if (condition is DebuggableCondition) {
+              print(condition.valuesAsString); // We iterate through our list of conditions and we print all debuggable ones.
+            }
+          });
+
+          print('Are all conditions met ? ' + (rateMyApp.shouldOpenDialog ? 'Yes' : 'No'));
+
+          if (rateMyApp.shouldOpenDialog) {
+            rateMyApp.showRateDialog(context);
+          }
+        },
+      ),
+    ),
+  );
+
+  /// Builds the progress indicator, allowing to wait for Rate my app to initialize.
+  static Widget buildProgressIndicator(BuildContext context) => const Center(child: CircularProgressIndicator());
 }
