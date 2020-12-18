@@ -660,10 +660,10 @@ class _StoreState extends State<Store> {
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 250,
+                maxCrossAxisExtent: currentSelection2 == "Outfits" ? 250 : 700,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
-                childAspectRatio: currentSelection2 == "Outfits" ? 0.6 : 1,
+                childAspectRatio: currentSelection2 == "Outfits" ? 0.6 : 1.5,
               ),
               itemBuilder: (ctx, index) {
                 return Card(
