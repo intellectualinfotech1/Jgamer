@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jgamer/RateApp.dart';
 import 'package:jgamer/auth.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
@@ -96,6 +97,16 @@ class UserProfileState extends State<UserProfile> {
                 ),
               ),
               subtitle: Text(coins.getCoins.toString()),
+            ),
+            Divider(),
+            FlatButton(
+                onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RateApps1()),
+              );
+            },
+                child: Text("Press")
             ),
             Divider(),
             ListTile(
