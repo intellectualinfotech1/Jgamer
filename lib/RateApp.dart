@@ -5,25 +5,19 @@ import './content.dart';
 /// First plugin test method.
 
 /// The body of the main Rate my app test widget.
-class RateApp extends StatefulWidget {
-  /// Creates a new Rate my app test app instance.
-  const RateApp();
-
+class RateApps1 extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _RateAppState();
+  State<StatefulWidget> createState() => _RateApps1State();
 }
 
 /// The body state of the main Rate my app test widget.
-class _RateAppState extends State<RateApp> {
+class _RateApps1State extends State<RateApps1> {
   /// The widget builder.
   WidgetBuilder builder = buildProgressIndicator;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
     home: Scaffold(
-      appBar: AppBar(
-        title: const Text('Rate my app !'),
-      ),
       body: RateMyAppBuilder(
         builder: builder,
         onInitialized: (context, rateMyApp) {

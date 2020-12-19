@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jgamer/RateApp.dart';
 import 'package:jgamer/auth.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
@@ -98,18 +99,14 @@ class UserProfileState extends State<UserProfile> {
               subtitle: Text(coins.getCoins.toString()),
             ),
             Divider(),
-            ListTile(
-              leading: Icon(Icons.star),
-              title: Text(
-                "Rate App",
-                style: TextStyle(
-                  fontFamily: "Quicksand",
-                  fontSize: 20,
-                ),
-              ),
-              onTap: (){
-                RateMyApp();
-              },
+            FlatButton(
+                onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RateApps1()),
+              );
+            },
+                child: Text("Press")
             ),
             Divider(),
             ListTile(
