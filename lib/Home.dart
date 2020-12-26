@@ -1,5 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:jgamer/QuizScreen.dart';
 import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
@@ -74,7 +75,7 @@ class _HomeState extends State<Home> {
         backgroundColor: klightDeepBlue,
       ),
       body: <Widget>[
-        ScratchCard(),
+        homepage(),
         GamesFrontPage(),
         Roulette(),
         Store(linkData),
@@ -118,7 +119,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
   void changePage(int index) {
     setState(() {
       currenIndex = index;

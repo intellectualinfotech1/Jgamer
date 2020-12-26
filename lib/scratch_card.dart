@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:jgamer/coins.dart';
-import 'package:jgamer/Home.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scratcher/scratcher.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,9 @@ class ScratchCard extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+
         body: AppBody(),
+
       ),
     );
   }
@@ -69,6 +69,7 @@ class AppBody extends StatelessWidget {
                   _onAlertButtonPressed(context);
                 });
               },
+
               image: Image.asset('Image/scratchcard.jpg'),
               child: Container(
                 height: 200,
@@ -97,6 +98,7 @@ class AppBody extends StatelessWidget {
                   ],
                 ),
               ),
+
             );
           }),
         );
@@ -153,6 +155,7 @@ class AppBody extends StatelessWidget {
                         ),
                       ),
                     ],
+
                   ),
                 ),
                 SizedBox(
