@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/RateApp.dart';
 import 'package:jgamer/auth.dart';
 import 'package:jgamer/coins.dart';
-import 'package:jgamer/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:share/share.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 
 class UserProfile extends StatefulWidget {
   final Map userData;
   final List userKeys;
+
   UserProfile(this.userData, this.userKeys);
   @override
   State<StatefulWidget> createState() {
@@ -107,6 +106,17 @@ class UserProfileState extends State<UserProfile> {
                   );
                 },
                 child: Text("Press")),
+            ListTile(
+                leading: Icon(Icons.star),
+                title: Text(
+                  "Rate My App",
+                  style: TextStyle(
+                    fontFamily: "Quicksand",
+                    fontSize: 20,
+                  ),
+                ),
+                subtitle: Text("get 1000 diamonds"),
+                onTap: () {}),
             Divider(),
             ListTile(
               leading: Icon(Icons.logout),

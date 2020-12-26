@@ -1,8 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:jgamer/coins.dart';
-import 'package:jgamer/Home.dart';
 import 'package:jgamer/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scratcher/scratcher.dart';
