@@ -82,9 +82,9 @@ class UserProfileState extends State<UserProfile> {
                   fontSize: 20,
                 ),
               ),
-              subtitle: Text(widget.userKeys[0]),
+              subtitle: Text(widget.userKeys[2]["referId"]),
               onTap: () => Share.share(
-                  "download jgamer from link and use my reffrel code ${widget.userKeys[0]} www.google.com"),
+                  "download jgamer from link and use my reffrel code ${widget.userKeys[2]['referId']} www.google.com"),
             ),
             Divider(),
             ListTile(
@@ -100,14 +100,13 @@ class UserProfileState extends State<UserProfile> {
             ),
             Divider(),
             FlatButton(
-                onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RateApps1()),
-              );
-            },
-                child: Text("Press")
-            ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RateApps1()),
+                  );
+                },
+                child: Text("Press")),
             Divider(),
             ListTile(
               leading: Icon(Icons.logout),

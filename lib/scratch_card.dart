@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/Home.dart';
+import 'package:jgamer/constants.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scratcher/scratcher.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +63,7 @@ class AppBody extends StatelessWidget {
           content: StatefulBuilder(builder: (context, StateSetter setState) {
             return Scratcher(
               accuracy: ScratchAccuracy.low,
-              threshold:40 ,
+              threshold: 40,
               brushSize: 25,
               onThreshold: () {
                 setState(() {
@@ -265,8 +266,8 @@ class AppBody extends StatelessWidget {
                           fontFamily: "Quicksand",
                           fontSize: 20,
                         ),
-                      ),                    ],
-
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -335,7 +336,7 @@ class AppBody extends StatelessWidget {
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
                 ),
-                color: Colors.indigo,
+                color: klightDeepBlue,
                 child: Column(
                   children: [
                     Text(
@@ -403,6 +404,7 @@ class AppBody extends StatelessWidget {
       ),
       buttons: [
         DialogButton(
+            color: klightDeepBlue,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

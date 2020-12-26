@@ -413,6 +413,53 @@ class _LoginScreenState extends State<LoginScreen>
                                               userData["password"] = value;
                                             },
                                           ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextFormField(
+                                            autovalidateMode: AutovalidateMode
+                                                .onUserInteraction,
+                                            cursorColor: Colors.white,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Quicksand",
+                                            ),
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                              border: UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              labelText: "Name",
+                                              fillColor: Colors.white,
+                                              focusColor: Colors.white,
+                                              hoverColor: Colors.white,
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.white),
+                                              ),
+                                              enabledBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "Quicksand"),
+                                            ),
+                                            validator: (value) {
+                                              if (value.isEmpty) {
+                                                return "Enter a valid name";
+                                              }
+                                              return null;
+                                            },
+                                            onSaved: (value) {
+                                              userData["name"] = value;
+                                            },
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -425,6 +472,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     onPressed: () async {
                                       showDialog(
                                         context: context,
+                                        barrierDismissible: false,
                                         child: Center(
                                           child: Container(
                                             height: 150,
@@ -435,8 +483,10 @@ class _LoginScreenState extends State<LoginScreen>
                                       );
                                       form.currentState.save();
                                       var res = await auth.logInWithEmail(
-                                          userData["email"],
-                                          userData["password"]);
+                                        userData["email"],
+                                        userData["password"],
+                                        userData["name"],
+                                      );
                                       Navigator.of(context).pop();
                                       if (res[0]) {
                                         coins.loadUser(res[1][2], res[1][0]);

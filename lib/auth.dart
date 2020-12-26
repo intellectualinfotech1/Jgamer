@@ -112,7 +112,7 @@ class Auth {
     }
   }
 
-  Future logInWithEmail(String email, String password) async {
+  Future logInWithEmail(String email, String password, String name) async {
     var signUpRes = await http.post(
       signUpUrl,
       body: jsonEncode(
@@ -136,7 +136,8 @@ class Auth {
     var finalres = jsonDecode(signInRes.body);
     var prefs = await SharedPreferences.getInstance();
 
-    var userList = await registerUser("", "", email);
+    var userList =
+        await registerUser(jsonDecode(signUpRes.body)["localId"], name, email);
     prefs.setString(
       "userData",
       jsonEncode(
@@ -166,6 +167,7 @@ class Auth {
   Future<List> registerUser(String uId, String name, String email) async {
     var user;
     var userKey;
+    var userKey2;
     var databaseUrl =
         "https://jgamer-347e6-default-rtdb.firebaseio.com/users.json";
     await http.get(databaseUrl).then(
@@ -183,10 +185,18 @@ class Auth {
           }
         }
         if (user == null) {
+          var refId = await getRefData();
           await http.post(
             databaseUrl,
             body: jsonEncode(
-              {"userId": uId, "Name": name, "Email": email, "Coins": coins},
+              {
+                "userId": uId,
+                "Name": name,
+                "Email": email,
+                "Coins": coins,
+                "referId": refId,
+                "refrenceOffered": false,
+              },
             ),
           );
           await http.get(databaseUrl).then(
@@ -205,5 +215,20 @@ class Auth {
       },
     );
     return [userKey, user["Coins"], user];
+  }
+
+  getRefData() async {
+    var refId = await http.get(
+        "https://jgamer-347e6-default-rtdb.firebaseio.com/latestRefId.json");
+    var temp = jsonDecode(refId.body);
+    var temp2 = int.parse(temp["latestId"]);
+    var temp3 = (temp2 + 1).toString();
+    await http.patch(
+      "https://jgamer-347e6-default-rtdb.firebaseio.com/latestRefId.json",
+      body: jsonEncode(
+        {"latestId": temp3},
+      ),
+    );
+    return temp2.toString();
   }
 }
