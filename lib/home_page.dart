@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
         showDialog(
             context: context,
             builder: (_) => new CustomDialog1("Congratulation You Won",
-                "Collect your reward", collect1));
+                "Collect your reward 5", collect1));
       } else {
         showDialog(
             context: context,
@@ -177,7 +177,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
   void collect1() {
-    if (Navigator.canPop(context)) Navigator.pop(context);
+    if (Navigator.canPop(context))
+      Navigator.pop(context);
+      Navigator.pop(context);
     var coins = Provider.of<Coins>(context, listen: false);
     coins.addCoins(5);
     setState(() {

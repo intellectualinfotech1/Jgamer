@@ -98,14 +98,6 @@ class UserProfileState extends State<UserProfile> {
               subtitle: Text(coins.getCoins.toString()),
             ),
             Divider(),
-            FlatButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RateApps1()),
-                  );
-                },
-                child: Text("Press")),
             ListTile(
                 leading: Icon(Icons.star),
                 title: Text(
