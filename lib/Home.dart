@@ -27,12 +27,14 @@ class _HomeState extends State<Home> {
   int score = 0;
   var currentCoins;
   http.Response linkData;
+  http.Response leaderBoard;
   var shown = false;
 
   @override
   void initState() {
     currentCoins = widget.userKeys[1];
     loadData();
+    getLeaderBoard();
     if (!widget.userKeys[2]["refrenceOffered"]) {
       Future.delayed(Duration.zero, () {
         var codeController = TextEditingController();
@@ -337,22 +339,40 @@ class _HomeState extends State<Home> {
     linkData = await http.get(link);
   }
 
+  Future getLeaderBoard() async {
+    leaderBoard = await http.get(
+        "https://jgamer-347e6-default-rtdb.firebaseio.com/leaderboard.json");
+  }
+
   Future<void> checkForRefrences() async {
     var res = await http.get(
         "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences/${widget.userKeys[2]['referId']}.json");
     var temp = jsonDecode(res.body);
     for (var ref in temp) {
+      print(ref["moneyCollectedbySender"] == false);
       if (ref["moneyCollectedbySender"] == false) {
         ref["moneyCollectedbySender"] = true;
         await http.patch(
             "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences.json",
             body: jsonEncode({widget.userKeys[2]["referId"]: temp}));
+        var users = await http
+            .get("https://jgamer-347e6-default-rtdb.firebaseio.com/users.json");
+        var finalUsers = jsonDecode(users.body);
+        var userKeys = finalUsers.keys;
+        var name;
+        var email;
+        for (var key in userKeys) {
+          if (finalUsers[key]["referId"] == widget.userKeys[2]['referId']) {
+            name = finalUsers[key]["Name"];
+            email = finalUsers[key]["Email"];
+          }
+        }
         showDialog(
           context: context,
           barrierDismissible: false,
           child: AlertDialog(
             title: Text(
-              "You just reffered our app to a friend",
+              "You just reffered our app to $name from $email",
               style: TextStyle(
                 fontFamily: "Quicksand",
                 fontSize: 20,
@@ -438,7 +458,7 @@ class _HomeState extends State<Home> {
       ),
       body: <Widget>[
         homepage(),
-        GamesFrontPage(),
+        GamesFrontPage(leaderBoard),
         Roulette(),
         Store(linkData),
         UserProfile(widget.userData, widget.userKeys),
@@ -481,6 +501,7 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
   void changePage(int index) {
     setState(() {
       currenIndex = index;
