@@ -78,9 +78,7 @@ class _homepageState extends State<homepage> {
     return Scaffold(
       body: ListView(
         children: <Widget>[
-
           customcard("Java",des[1]),
-
         ],
       ),
     );
