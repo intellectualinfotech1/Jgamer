@@ -42,6 +42,7 @@ dependencies:
   rate_my_app: ^0.7.2
   roller_list: ^0.6.1
   flutter_neumorphic: ^3.0.3
+  assets_audio_player: ^2.0.13+1
 
 
 

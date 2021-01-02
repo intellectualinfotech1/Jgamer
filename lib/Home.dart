@@ -10,6 +10,7 @@ import 'package:jgamer/firstpage.dart';
 import 'package:jgamer/games_front_page.dart';
 import 'package:jgamer/sloat_machine.dart';
 import 'package:jgamer/store.dart';
+import 'package:jgamer/third_page.dart';
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
 import 'package:provider/provider.dart';
@@ -461,7 +462,7 @@ class _HomeState extends State<Home> {
       body: <Widget>[
         FirstPage(),
         GamesFrontPage(leaderBoard),
-        SlotMachine(),
+        ThirdPage(),
         Store(linkData),
         UserProfile(widget.userData, widget.userKeys),
       ][currenIndex],

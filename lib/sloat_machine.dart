@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:roller_list/roller_list.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'coins.dart';
 
 
@@ -132,7 +132,16 @@ class _SlotMachineState extends State<SlotMachine> {
             ),
 
             onPressed: () {
+              final assetsAudioPlayer = AssetsAudioPlayer();
               _startRotating();
+              Future.delayed(
+                Duration(milliseconds: 800),
+                    () {
+                      assetsAudioPlayer.open(
+                        Audio("assets/slot.wav"),
+                      );
+                },
+              );
               Future.delayed(
                 Duration(milliseconds: 5000),
                     () {
@@ -146,7 +155,7 @@ class _SlotMachineState extends State<SlotMachine> {
                     _onBasicAlertPressed(context);
                   }
                   else if(first == second && third == second){
-                    _onBasicAlertPressed(context);
+                    _onBasicAlertPressed1(context);
 
                   }
                 },
@@ -195,6 +204,7 @@ double _randomeTime() => (Random().nextDouble());
       desc: "You won 20",
       buttons: [
         DialogButton(
+          color: Colors.purple,
           radius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -209,6 +219,34 @@ double _randomeTime() => (Random().nextDouble());
           onPressed: () {
             var coinProv = Provider.of<Coins>(context, listen: false);
             coinProv.addCoins(20);
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ).show();
+  }
+  _onBasicAlertPressed1(context) {
+    Alert(
+      context: context,
+      title: "Congratulation",
+      desc: "You won 40",
+      buttons: [
+        DialogButton(
+          color: Colors.purple,
+          radius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+          child: Text(
+            "Collect",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.bold),
+          ),
+          onPressed: () {
+            var coinProv = Provider.of<Coins>(context, listen: false);
+            coinProv.addCoins(40);
             Navigator.of(context).pop();
           },
         ),
