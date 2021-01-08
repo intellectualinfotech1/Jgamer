@@ -292,21 +292,7 @@ class _RouletteState extends State<Roulette> {
                 ],
               ),
             ),
-            // SpinningWheel(
-            //   Image.asset('Image/roulette-8-300.png'),
-            //   width: 310,
-            //   height: 310,
-            //   initialSpinAngle: _generateRandomAngle(),
-            //   spinResistance: 0.6,
-            //   canInteractWhileSpinning: false,
-            //   dividers: 8,
-            //   onUpdate: _dividerController.add,
-            //   onEnd: _dividerController.add,
-            //   secondaryImage: Image.asset('Image/cpointer.png'),
-            //   secondaryImageHeight: 50,
-            //   secondaryImageWidth: 50,
-            //   shouldStartOrStop: _wheelNotifier.stream,
-            // ),
+
             StreamBuilder(
               stream: _dividerController.stream,
               builder: (context, snapshot) {

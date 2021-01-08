@@ -1,53 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:jgamer/sloat_machine.dart';
-
 import 'Spinner_wheel.dart';
+import 'constants.dart';
 
-class ThirdPage extends StatelessWidget {
+class ThiredPage extends StatelessWidget {
+  var games = [
+    {
+      "name": "Tic Tac Toe",
+      "game": Roulette(),
+      "thumb":
+      "Image/itctactoeimg.jpg"
+    },
+    {
+      "name": "Memory Game",
+      "game": SlotMachine(),
+      "thumb":
+      "Image/memorygameimg.jpg"
+    },
+  ];
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyPage(),
-    );
-  }
-}
-class MyPage extends StatelessWidget {
-  Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Container(
-              color: Color(0xffB0F9D2),
-              child: InkWell(
-                  child: Center(child: Text('Spin Wheel')),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Roulette()),
-                    );
-                  }),
+      body: ListView.builder(
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 10,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15))),
+            margin: EdgeInsets.symmetric(
+              vertical: 10,
             ),
-          ),
-          Expanded(
-            child: Container(
-              color: Color(0xffDDC3FF),
-              child: InkWell(
-                  child: Center(child: Text('Slot Machine')),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SlotMachine()),
-                    );
-                  }),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => games[index]["game"],
+                  ),
+                );
+              },
+              child: Container(
+                height: 160,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      child: Image.asset(
+                        games[index]["thumb"],
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding:
+                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        color: kdeepBlue,
+                        child: Text(
+                          games[index]["name"],
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Quicksand",
+                            fontSize: 35,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          );
+        },
+        itemCount: games.length,
       ),
     );
   }

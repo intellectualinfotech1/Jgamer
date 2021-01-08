@@ -462,7 +462,7 @@ class _HomeState extends State<Home> {
       body: <Widget>[
         FirstPage(),
         GamesFrontPage(leaderBoard),
-        ThirdPage(),
+        ThiredPage(),
         Store(linkData),
         UserProfile(widget.userData, widget.userKeys),
       ][currenIndex],
