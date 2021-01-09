@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:jgamer/RateApp.dart';
+import 'package:jgamer/Install.dart';
 import 'package:jgamer/auth.dart';
 import 'package:jgamer/coins.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:http/http.dart' as http;
 
 class UserProfile extends StatefulWidget {
   final Map userData;
@@ -19,9 +20,17 @@ class UserProfile extends StatefulWidget {
 
 class UserProfileState extends State<UserProfile> {
   var auth = Auth();
+  http.Response linkDataa;
+  Future<http.Response> loadData() async {
+    var link = "https://jgamer-347e6-default-rtdb.firebaseio.com/apps.json";
+    linkDataa = await http.get(link);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var coins = Provider.of<Coins>(context);
+    loadData();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -109,6 +118,23 @@ class UserProfileState extends State<UserProfile> {
                 ),
                 subtitle: Text("get 1000 diamonds"),
                 onTap: () {}),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.monetization_on),
+              title: Text(
+                "Install & earn",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontSize: 20,
+                ),
+              ),
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InstallnEran(linkDataa)));
+
+              },
+            ),
             Divider(),
             ListTile(
               leading: Icon(Icons.logout),
