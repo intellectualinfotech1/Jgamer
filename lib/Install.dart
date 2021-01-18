@@ -115,6 +115,7 @@ _onBasicAlertPressed(context) async{
     context: context,
     title: "RFLUTTER ALERT",
     desc: "Flutter is more awesome with RFlutter Alert.",
+
   ).show();
 
 }
