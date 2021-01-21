@@ -10,7 +10,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'coins.dart';
-
+import 'constants.dart';
 
 class SlotMachine extends StatefulWidget {
   @override
@@ -45,138 +45,132 @@ class _SlotMachineState extends State<SlotMachine> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-
-      children: <Widget>[
-        SizedBox(
-          height: 37.0,
-        ),
-        Container(
-          width: double.infinity,
-
-          child: Stack(
-            children: <Widget>[
-              Image.asset('assets/images/slot-machine.jpg'),
-
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: klightDeepBlue,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            child: Stack(
+              children: <Widget>[
+                Image.asset('assets/images/slot-machine.jpg'),
                 Positioned(
                   left: 85,
                   right: 84,
                   top: 114,
                   child: Container(
-                  width:80,
-                  height: 91,
-                  color: Colors.white,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 10,
-                        child: RollerList(
-                          items: slots,
-                          enabled: false,
-                          key: leftRoller,
-                          onSelectedIndexChanged: (value) {
-                            setState(() {
-                              first = value - 1;
-                            });
-                          },
+                    width: 80,
+                    height: 91,
+                    color: Colors.white,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 10,
+                          child: RollerList(
+                            items: slots,
+                            enabled: false,
+                            key: leftRoller,
+                            onSelectedIndexChanged: (value) {
+                              setState(() {
+                                first = value - 1;
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                      VerticalDivider(
-                        thickness: 5.0,
-                        width: 2,
-                        color: Colors.black,
-                      ),
-
-                      Expanded(
-                        flex: 10,
-                        child: RollerList(
-                          items: slots,
-                          enabled: false,
-                          key: centerRoller,
-                          onSelectedIndexChanged: (value) {
-                            setState(() {
-                              second = value - 1;
-                            });
-                          },
+                        VerticalDivider(
+                          thickness: 5.0,
+                          width: 2,
+                          color: Colors.black,
                         ),
-                      ),
-                      VerticalDivider(
-                        thickness: 5.0,
-                        width: 2,
-                        color: Colors.black,
-                      ),
-                      Expanded(
-                        flex: 10,
-                        child: RollerList(
-                          enabled: false,
-                          items: slots,
-                          key: rightRoller,
-                          onSelectedIndexChanged: (value) {
-                            setState(() {
-                              third = value - 1;
-                            });
-                          },
+                        Expanded(
+                          flex: 10,
+                          child: RollerList(
+                            items: slots,
+                            enabled: false,
+                            key: centerRoller,
+                            onSelectedIndexChanged: (value) {
+                              setState(() {
+                                second = value - 1;
+                              });
+                            },
+                          ),
                         ),
-                      )
-                    ],
+                        VerticalDivider(
+                          thickness: 5.0,
+                          width: 2,
+                          color: Colors.black,
+                        ),
+                        Expanded(
+                          flex: 10,
+                          child: RollerList(
+                            enabled: false,
+                            items: slots,
+                            key: rightRoller,
+                            onSelectedIndexChanged: (value) {
+                              setState(() {
+                                third = value - 1;
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                  ),
-            ],
+              ],
+            ),
           ),
-        ),
-        DialogButton(
-          color: Colors.purple,
+          DialogButton(
+            color: Colors.purple,
             radius: BorderRadius.all(
               Radius.circular(10),
             ),
-
             onPressed: () {
               final assetsAudioPlayer = AssetsAudioPlayer();
               _startRotating();
               Future.delayed(
                 Duration(milliseconds: 800),
-                    () {
-                      assetsAudioPlayer.open(
-                        Audio("assets/slot.wav"),
-                      );
+                () {
+                  assetsAudioPlayer.open(
+                    Audio("assets/slot.wav"),
+                  );
                 },
               );
               Future.delayed(
                 Duration(milliseconds: 5000),
-                    () {
+                () {
                   _finishRotating();
                 },
               );
               Future.delayed(
                 Duration(milliseconds: 6000),
-                    () {
-                  if(first == second || second == third || third == first){
+                () {
+                  if (first == second || second == third || third == first) {
                     _onBasicAlertPressed(context);
-                  }
-                  else if(first == second && third == second){
+                  } else if (first == second && third == second) {
                     _onBasicAlertPressed1(context);
-
                   }
                 },
               );
-
             },
-          child: Text(
-          "start",
-          style: TextStyle(
-
-              color: Colors.white,
-              fontSize: 20,
-              fontFamily: "Quicksand",
-              fontWeight: FontWeight.bold),
-        ),
-        ),
-
-      ],
+            child: Text(
+              "Start",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: "Quicksand",
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
     );
   }
-double _randomeTime() => (Random().nextDouble());
+
+  double _randomeTime() => (Random().nextDouble());
   void _startRotating() {
     rotator = Timer.periodic(_ROTATION_DURATION, _rotateRoller);
   }
@@ -197,6 +191,7 @@ double _randomeTime() => (Random().nextDouble());
   void _finishRotating() {
     rotator?.cancel();
   }
+
   _onBasicAlertPressed(context) {
     Alert(
       context: context,
@@ -225,6 +220,7 @@ double _randomeTime() => (Random().nextDouble());
       ],
     ).show();
   }
+
   _onBasicAlertPressed1(context) {
     Alert(
       context: context,
@@ -256,19 +252,14 @@ double _randomeTime() => (Random().nextDouble());
 
   static List<Widget> _getSlots() {
     List<Widget> result = new List();
-    for (int i = 0; i <=  9 ; i++) {
-      result.add(
-          Neumorphic(
-
-            style: NeumorphicStyle(
-                shape: NeumorphicShape.convex,
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(0)),
-               surfaceIntensity: 1.0,
-
-                color: Colors.white
-
-            ),
-          child: Image.asset(
+    for (int i = 0; i <= 9; i++) {
+      result.add(Neumorphic(
+        style: NeumorphicStyle(
+            shape: NeumorphicShape.convex,
+            boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(0)),
+            surfaceIntensity: 1.0,
+            color: Colors.white),
+        child: Image.asset(
           "assets/images/$i.png",
           width: double.infinity,
           height: double.infinity,

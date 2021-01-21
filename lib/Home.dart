@@ -31,6 +31,10 @@ class _HomeState extends State<Home> {
   var currentCoins;
   http.Response linkData;
   http.Response leaderBoard;
+  String shareMessage;
+  List refrenceIds = [];
+  List refrenceNames = [];
+  List refrenceEmails = [];
   var shown = false;
 
   @override
@@ -38,6 +42,7 @@ class _HomeState extends State<Home> {
     currentCoins = widget.userKeys[1];
     loadData();
     getLeaderBoard();
+    getShareMesaage();
     if (!widget.userKeys[2]["refrenceOffered"]) {
       Future.delayed(Duration.zero, () {
         var codeController = TextEditingController();
@@ -86,8 +91,8 @@ class _HomeState extends State<Home> {
               ),
               RaisedButton(
                 onPressed: () async {
-                  if (codeController.text.length >= 4 &&
-                      codeController.text.length <= 6) {
+                  if (codeController.text.length >= 5 &&
+                      codeController.text.length <= 7) {
                     await makeRefrence(codeController.text, context);
                     refferalShown();
                   } else {
@@ -172,7 +177,6 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-
     var refUrl =
         "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences.json";
     var res = await http.get(
@@ -337,7 +341,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  Future<http.Response> loadData() async {
+  Future loadData() async {
     var link = "https://jgamer-347e6-default-rtdb.firebaseio.com/data.json";
     linkData = await http.get(link);
   }
@@ -347,75 +351,90 @@ class _HomeState extends State<Home> {
         "https://jgamer-347e6-default-rtdb.firebaseio.com/leaderboard.json");
   }
 
+  Future getShareMesaage() async {
+    shareMessage = await http
+        .get("https://jgamer-347e6-default-rtdb.firebaseio.com/share.json")
+        .then((value) => value.body.toString());
+  }
+
   Future<void> checkForRefrences() async {
     var res = await http.get(
         "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences/${widget.userKeys[2]['referId']}.json");
     var temp = jsonDecode(res.body);
-    for (var ref in temp) {
-      print(ref["moneyCollectedbySender"] == false);
-      if (ref["moneyCollectedbySender"] == false) {
-        ref["moneyCollectedbySender"] = true;
-        await http.patch(
-            "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences.json",
-            body: jsonEncode({widget.userKeys[2]["referId"]: temp}));
-        var users = await http
-            .get("https://jgamer-347e6-default-rtdb.firebaseio.com/users.json");
-        var finalUsers = jsonDecode(users.body);
-        var userKeys = finalUsers.keys;
-        var name;
-        var email;
-        for (var key in userKeys) {
-          if (finalUsers[key]["referId"] == widget.userKeys[2]['referId']) {
-            name = finalUsers[key]["Name"];
-            email = finalUsers[key]["Email"];
-          }
-        }
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          child: AlertDialog(
-            title: Text(
-              "You just reffered our app to $name from $email",
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+    if (temp != null) {
+      for (var ref in temp) {
+        if (ref["moneyCollectedbySender"] == false) {
+          ref["moneyCollectedbySender"] = true;
+          await http.patch(
+              "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences.json",
+              body: jsonEncode({widget.userKeys[2]["referId"]: temp}));
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            child: AlertDialog(
+              title: Text(
+                "You just reffered our app",
+                style: TextStyle(
+                  fontFamily: "Quicksand",
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            content: RaisedButton(
-              onPressed: () {
-                var coinProv = Provider.of<Coins>(context, listen: false);
-                coinProv.addCoins(50);
-                Navigator.of(context).pop();
-              },
-              color: klightDeepBlue,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Reedem 50",
-                    style: TextStyle(
-                      fontFamily: "Quicksand",
-                      fontSize: 18,
-                      color: Colors.white,
+              content: RaisedButton(
+                onPressed: () {
+                  var coinProv = Provider.of<Coins>(context, listen: false);
+                  coinProv.addCoins(50);
+                  Navigator.of(context).pop();
+                },
+                color: klightDeepBlue,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Reedem 50",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Image.asset(
-                    "assets/diamond.png",
-                    width: 16,
-                    height: 16,
-                  ),
-                ],
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Image.asset(
+                      "assets/diamond.png",
+                      width: 16,
+                      height: 16,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        }
       }
     }
     shown = false;
+  }
+
+  Future getRefrences() async {
+    var temp = await http.get(
+        "https://jgamer-347e6-default-rtdb.firebaseio.com/refrences/${widget.userKeys[2]["referId"]}.json");
+    var refs = jsonDecode(temp.body);
+    temp = await http
+        .get("https://jgamer-347e6-default-rtdb.firebaseio.com/users.json");
+    var users = jsonDecode(temp.body);
+    for (var ref in refs) {
+      for (var key in users.keys) {
+        if (users[key]["referId"] == ref["referedTo"]) {
+          if (!refrenceNames.contains(users[key]["Name"])) {
+            refrenceNames.add(users[key]["Name"]);
+            refrenceIds.add(users[key]["referId"]);
+            refrenceEmails.add(users[key]["Email"]);
+          }
+        }
+      }
+    }
   }
 
   @override
@@ -425,6 +444,7 @@ class _HomeState extends State<Home> {
     currentCoins = coinProvider.getCoins;
     if (!shown) {
       checkForRefrences();
+      getRefrences();
       shown = true;
     }
 
@@ -461,10 +481,18 @@ class _HomeState extends State<Home> {
       ),
       body: <Widget>[
         FirstPage(),
-        GamesFrontPage(leaderBoard),
+        GamesFrontPage(),
         ThiredPage(),
         Store(linkData),
-        UserProfile(widget.userData, widget.userKeys),
+        UserProfile(
+          widget.userData,
+          widget.userKeys,
+          leaderBoard,
+          refrenceIds,
+          refrenceNames,
+          refrenceEmails,
+          shareMessage,
+        ),
       ][currenIndex],
       bottomNavigationBar: CurvedNavigationBar(
         onTap: changePage,

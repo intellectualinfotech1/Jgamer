@@ -6,6 +6,7 @@ import 'package:jgamer/data/data.dart';
 import 'package:provider/provider.dart';
 
 import 'coins.dart';
+import 'constants.dart';
 
 class Memory extends StatefulWidget {
   @override
@@ -42,7 +43,9 @@ class _MemoryState extends State<Memory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: klightDeepBlue,
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -93,36 +96,33 @@ class _MemoryState extends State<Memory> {
                         child: Column(
                         children: <Widget>[
                           GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                points = 0;
-                                reStart();
-                              });
-                            },
-                            child:InkWell(
-                              child:Container(
-                              height: 20,
-                              width: 200,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              child: Text(
-                                "Replay",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w500),
-                              ),
-
-                            ),
-                              onTap: (){
-                                reStart();
-
+                              onTap: () {
+                                setState(() {
+                                  points = 0;
+                                  reStart();
+                                });
                               },
-                            )
-                          ),
+                              child: InkWell(
+                                child: Container(
+                                  height: 20,
+                                  width: 200,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: Text(
+                                    "Replay",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                onTap: () {
+                                  reStart();
+                                },
+                              )),
                           CustomDialog1("You Won", "you get 5 coin", collect1)
                         ],
                       ))

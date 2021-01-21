@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/custom_dailog1.dart';
 import 'package:provider/provider.dart';
 import 'coins.dart';
+import 'constants.dart';
 import 'custom_dailog.dart';
 import 'game_button.dart';
 
@@ -157,8 +158,8 @@ class _HomePageState extends State<HomePage> {
       if (winner == 1) {
         showDialog(
             context: context,
-            builder: (_) => new CustomDialog1("Congratulation You Won",
-                "Collect your reward 5", collect1));
+            builder: (_) => new CustomDialog1(
+                "Congratulation You Won", "Collect your reward 5", collect1));
       } else {
         showDialog(
             context: context,
@@ -176,10 +177,10 @@ class _HomePageState extends State<HomePage> {
       buttonsList = doInit();
     });
   }
+
   void collect1() {
-    if (Navigator.canPop(context))
-      Navigator.pop(context);
-      Navigator.pop(context);
+    if (Navigator.canPop(context)) Navigator.pop(context);
+    Navigator.pop(context);
     var coins = Provider.of<Coins>(context, listen: false);
     coins.addCoins(5);
     setState(() {
@@ -190,12 +191,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: klightDeepBlue,
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
         child: Container(
           margin:
-              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
+              EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
           child: GridView.builder(
             padding: const EdgeInsets.all(10.0),
             gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(

@@ -6,16 +6,14 @@ import 'constants.dart';
 class ThiredPage extends StatelessWidget {
   var games = [
     {
-      "name": "Tic Tac Toe",
+      "name": "Spin & Earn",
       "game": Roulette(),
-      "thumb":
-      "Image/itctactoeimg.jpg"
+      "thumb": "Image/roulette-8-300.png"
     },
     {
-      "name": "Memory Game",
+      "name": "Slot Machine",
       "game": SlotMachine(),
-      "thumb":
-      "Image/memorygameimg.jpg"
+      "thumb": "assets/images/slot-machine.jpg"
     },
   ];
   @override
@@ -29,6 +27,7 @@ class ThiredPage extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(15))),
             margin: EdgeInsets.symmetric(
               vertical: 10,
+              horizontal: 8,
             ),
             child: GestureDetector(
               onTap: () {
@@ -55,7 +54,7 @@ class ThiredPage extends StatelessWidget {
                       right: 0,
                       child: Container(
                         padding:
-                        EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         color: kdeepBlue,
                         child: Text(
                           games[index]["name"],

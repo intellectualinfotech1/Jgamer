@@ -254,6 +254,9 @@ class _RouletteState extends State<Roulette> {
     refreshSpins();
     var coinProv = Provider.of<Coins>(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: klightDeepBlue,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -292,7 +295,6 @@ class _RouletteState extends State<Roulette> {
                 ],
               ),
             ),
-
             StreamBuilder(
               stream: _dividerController.stream,
               builder: (context, snapshot) {

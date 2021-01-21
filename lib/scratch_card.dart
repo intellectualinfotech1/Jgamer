@@ -7,23 +7,23 @@ import 'package:scratcher/scratcher.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ScratchCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: AppBody(),
-      ),
-    );
-  }
-}
+// class ScratchCard extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: Scaffold(
+//         body: AppBody(),
+//       ),
+//     );
+//   }
+// }
 
-class AppBody extends StatelessWidget {
+class ScratchCard extends StatelessWidget {
   double _opacity = 0.0;
   var no;
 
-  AppBody({this.no});
+  ScratchCard({this.no});
 
   var list = [
     0,
@@ -319,59 +319,52 @@ class AppBody extends StatelessWidget {
   Widget build(BuildContext context) {
     refreshCoupons();
     var coinProv = Provider.of<Coins>(context);
-    return Scaffold(
-      body: SingleChildScrollView(
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.symmetric(
+        horizontal: 20,
+      ),
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: FlatButton(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+        shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(25),
+          borderSide: BorderSide.none,
+        ),
+        color: klightDeepBlue,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: FlatButton(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25),
-                  borderSide: BorderSide.none,
-                ),
-                color: klightDeepBlue,
-                child: Column(
-                  children: [
-                    Text(
-                      "Get A ScratchCard",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Quicksand",
-                        fontSize: 25,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "${coinProv.getCouponCount.toString()} free coupons remaining for today...",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Quicksand",
-                        fontSize: 20,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-                onPressed: () async {
-                  var res = await registerScratch(coinProv);
-                  if (res) {
-                    scratchCardDialog(context);
-                  } else {
-                    noScractchCardDialog(context, coinProv);
-                  }
-                },
+            Text(
+              "Get A ScratchCard",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Quicksand",
+                fontSize: 25,
               ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "${coinProv.getCouponCount.toString()} free coupons remaining for today...",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "Quicksand",
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
+        onPressed: () async {
+          var res = await registerScratch(coinProv);
+          if (res) {
+            scratchCardDialog(context);
+          } else {
+            noScractchCardDialog(context, coinProv);
+          }
+        },
       ),
     );
   }
