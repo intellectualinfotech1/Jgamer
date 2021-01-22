@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:jgamer/coins.dart';
 import 'package:jgamer/home_page.dart';
 import 'package:jgamer/memorygame.dart';
+import 'package:jgamer/sloat_machine.dart';
+import 'Spinner_wheel.dart';
 import 'constants.dart';
 import 'package:http/http.dart' as http;
 
 class GamesFrontPage extends StatelessWidget {
+
   var games = [
     {
       "name": "Tic Tac Toe",
@@ -18,7 +22,22 @@ class GamesFrontPage extends StatelessWidget {
       "game": Memory(),
       "thumb": "Image/memorygameimg.jpg"
     },
+    {
+      "name": "Spin & Earn",
+      "game":  Roulette(),
+      "thumb": "Image/roulette-8-300.png"
+    },
+    {
+      "name": "Slot Machine",
+      "game": SlotMachine(),
+      "thumb": "assets/images/slot-machine.jpg"
+    },
   ];
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

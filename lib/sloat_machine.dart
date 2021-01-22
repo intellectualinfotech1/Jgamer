@@ -9,10 +9,14 @@ import 'package:roller_list/roller_list.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'coins.dart';
 import 'constants.dart';
 
 class SlotMachine extends StatefulWidget {
+
+
+
   @override
   State<StatefulWidget> createState() {
     return _SlotMachineState();
@@ -42,9 +46,225 @@ class _SlotMachineState extends State<SlotMachine> {
     rotator?.cancel();
     super.dispose();
   }
+  Future<bool> registerSpin(Coins coinProv) async {
+    var prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey("spinAmount")) {
+      prefs.setInt("spinAmount", 5);
+    }
+    var remSpin = prefs.getInt("spinAmount");
+    if (remSpin == 0) {
+      return false;
+    }
+    if (remSpin == 1) {
+      prefs.setString(
+          "nextSpins",
+          DateTime.now()
+              .add(Duration(days: 1))
+              .subtract(
+            Duration(
+              hours: DateTime.now().hour,
+              minutes: DateTime.now().minute,
+              seconds: DateTime.now().second,
+            ),
+          )
+              .toIso8601String());
+    }
+    prefs.setInt("spinAmount", remSpin - 1);
+    coinProv.changeSpinCount(prefs.getInt("spinAmount"));
+    return true;
+  }
+
+  void noSpinDialog(BuildContext context, Coins coinProv) {
+    showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text(
+          "You have 0 free spins left.\n\nCome back tommorrow to collect 5 free spins. \n\nOr buy a new one.",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 20,
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        content: Container(
+          height: 120,
+          child: Column(
+            children: [
+              OutlineButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                padding: EdgeInsets.symmetric(vertical: 5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cancel_outlined),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Cancel",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              OutlineButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      title: Text(
+                        "Do you want to trade 70 diamonds for a spin ?",
+                        style: TextStyle(
+                          fontFamily: "Quicksand",
+                          fontSize: 16,
+                        ),
+                      ),
+                      content: OutlineButton(
+                        onPressed: () {
+                          if (coinProv.getCoins >= 70) {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                            coinProv.reduceCoins(70);
+                            _startRotating();
+                            Future.delayed(
+                              Duration(milliseconds: 5000),
+                                  () {
+                                _finishRotating();
+                              },
+                            );
+                            Future.delayed(
+                              Duration(milliseconds: 6000),
+                                  () {
+                                if (first == second || second == third || third == first) {
+                                  _onBasicAlertPressed(context);
+                                } else if (first == second && third == second) {
+                                  _onBasicAlertPressed1(context);
+                                }
+                                else if (first != second && third != second) {
+                                  _onBasicAlertPressed3(context);
+                                }
+                              },
+                            );
+
+                          } else {
+                            showDialog(
+                              context: context,
+                              child: AlertDialog(
+                                title: Text(
+                                  "You do not have enough diamonds",
+                                  style: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                content: OutlineButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  padding: EdgeInsets.symmetric(vertical: 5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "OK",
+                                    style: TextStyle(
+                                      fontFamily: "Quicksand",
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        padding: EdgeInsets.symmetric(vertical: 5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              "assets/diamond.png",
+                              width: 30,
+                              height: 30,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "70",
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                padding: EdgeInsets.symmetric(vertical: 5),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/diamond.png",
+                      width: 30,
+                      height: 30,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "70",
+                      style: TextStyle(
+                        fontFamily: "Quicksand",
+                        fontSize: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    var coinProv = Provider.of<Coins>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
@@ -123,47 +343,71 @@ class _SlotMachineState extends State<SlotMachine> {
               ],
             ),
           ),
-          DialogButton(
+          Divider(
+            color: Colors.transparent ,
+          ),
+          RaisedButton(
+            child: Column(
+              children: [
+                Text(
+                  "Spin",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Quicksand",
+                    fontSize: 30,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "${coinProv.getSpinCount.toString()} free spins remaining for today...",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Quicksand",
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
             color: Colors.purple,
-            radius: BorderRadius.all(
-              Radius.circular(10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(25),
+              ),
             ),
-            onPressed: () {
-              final assetsAudioPlayer = AssetsAudioPlayer();
-              _startRotating();
-              Future.delayed(
-                Duration(milliseconds: 800),
-                () {
-                  assetsAudioPlayer.open(
-                    Audio("assets/slot.wav"),
-                  );
-                },
-              );
-              Future.delayed(
-                Duration(milliseconds: 5000),
-                () {
-                  _finishRotating();
-                },
-              );
-              Future.delayed(
-                Duration(milliseconds: 6000),
-                () {
-                  if (first == second || second == third || third == first) {
-                    _onBasicAlertPressed(context);
-                  } else if (first == second && third == second) {
-                    _onBasicAlertPressed1(context);
-                  }
-                },
-              );
+            padding: EdgeInsets.symmetric(
+              vertical: 15,
+            ),
+            onPressed: () async{
+              var res =  await registerSpin(coinProv);
+             if(res) {
+                _startRotating();
+                Future.delayed(
+                  Duration(milliseconds: 5000),
+                  () {
+                    _finishRotating();
+                  },
+                );
+                Future.delayed(
+                  Duration(milliseconds: 6000),
+                  () {
+                    if (first == second || second == third || third == first) {
+                      _onBasicAlertPressed(context);
+                    } else if (first == second && third == second) {
+                      _onBasicAlertPressed1(context);
+                    }
+                    else if (first != second && third != second) {
+                      _onBasicAlertPressed3(context);
+                    }
+                  },
+                );
+              }else{
+               noSpinDialog(context, coinProv);
+             }
             },
-            child: Text(
-              "Start",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontFamily: "Quicksand",
-                  fontWeight: FontWeight.bold),
-            ),
           ),
         ],
       ),
@@ -214,6 +458,32 @@ class _SlotMachineState extends State<SlotMachine> {
           onPressed: () {
             var coinProv = Provider.of<Coins>(context, listen: false);
             coinProv.addCoins(20);
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ).show();
+  }
+  _onBasicAlertPressed3(context) {
+    Alert(
+      context: context,
+      title: "Bad Luck",
+      desc: "sorry! better luck next time",
+      buttons: [
+        DialogButton(
+          color: Colors.purple,
+          radius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+          child: Text(
+            "ok",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.bold),
+          ),
+          onPressed: () {
             Navigator.of(context).pop();
           },
         ),

@@ -12,6 +12,7 @@ import 'coins.dart';
 import 'package:provider/provider.dart';
 
 class Roulette extends StatefulWidget {
+
   @override
   _RouletteState createState() => _RouletteState();
 }
@@ -20,6 +21,7 @@ class _RouletteState extends State<Roulette> {
   final StreamController _dividerController = StreamController<int>();
   var isSpinActive = true;
   var currentScore;
+  var currentCoins;
 
   final _wheelNotifier = StreamController<double>();
 
@@ -27,6 +29,7 @@ class _RouletteState extends State<Roulette> {
     _dividerController.close();
     _wheelNotifier.close();
   }
+
 
   Future<bool> registerSpin(Coins coinProv) async {
     var prefs = await SharedPreferences.getInstance();
@@ -256,6 +259,23 @@ class _RouletteState extends State<Roulette> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
+        actions: [
+          Image.asset(
+            "assets/diamond.png",
+            height: 25,
+            width: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10, right: 15, left: 10),
+            child: Text(
+              currentCoins.toString(),
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "Quicksand",
+              ),
+            ),
+          )
+        ],
       ),
       body: Center(
         child: Column(

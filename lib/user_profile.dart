@@ -16,6 +16,7 @@ class UserProfile extends StatefulWidget {
   final List refrenceIds;
   final List refrenceNames;
   final List refrenceEmails;
+  final List refrenceImage;
   final String shareMessage;
 
   UserProfile(
@@ -25,7 +26,9 @@ class UserProfile extends StatefulWidget {
     this.refrenceIds,
     this.refrenceNames,
     this.refrenceEmails,
+    this.refrenceImage,
     this.shareMessage,
+
   );
   @override
   State<StatefulWidget> createState() {
@@ -111,7 +114,10 @@ class UserProfileState extends State<UserProfile> {
                     widget.refrenceIds,
                     widget.refrenceNames,
                     widget.refrenceEmails,
+                    widget.refrenceImage,
                     widget.shareMessage,
+                    widget.userKeys,
+
                   ),
                 ),
               ),
@@ -310,6 +316,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
           ),
           child: Column(
             children: [
+
               Container(
                 padding: EdgeInsets.only(
                   top: 10,
@@ -374,6 +381,8 @@ class _LeaderBoardState extends State<LeaderBoard> {
                                 width: 15,
                                 height: 15,
                               ),
+                            Divider(color: Colors.black,
+                            )
                             ],
                           ),
                         ),
@@ -395,13 +404,17 @@ class Refrences extends StatelessWidget {
   List refrenceIds;
   List refrenceNames;
   List refrenceEmails;
+  List refrenceImage;
   String shareMessage;
+  final List userKeys;
 
   Refrences(
     this.refrenceIds,
     this.refrenceNames,
     this.refrenceEmails,
+    this.refrenceImage,
     this.shareMessage,
+      this.userKeys
   );
 
   @override
@@ -409,6 +422,14 @@ class Refrences extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
+        title: Text(
+          "Your refrences",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 40,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       body: Container(
         width: double.infinity,
@@ -418,16 +439,12 @@ class Refrences extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15),
-              child: Text(
-                "Your refrences",
-                style: TextStyle(
-                  fontFamily: "Quicksand",
-                  fontSize: 40,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+
             ),
-            Divider(),
+            Divider(
+              thickness: 1.0,
+              color: Colors.black,
+            ),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (ctx, index) {
@@ -450,25 +467,43 @@ class Refrences extends StatelessWidget {
                                     MediaQuery.of(context).size.width * 0.2,
                               ),
                               child: ListTile(
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Name : ${refrenceNames[index]}",
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(25)),
+                                  child: refrenceImage[index] == null
+                                      ? Container(
+                                    alignment: Alignment.center,
+                                    width: 50,
+                                    height: 50,
+                                    color: Colors.blue[800],
+                                    child: Text(
+                                     refrenceNames[index],
                                       style: TextStyle(
+                                        color: Colors.white,
                                         fontFamily: "Quicksand",
-                                        fontSize: 20,
+                                        fontSize: 30,
                                       ),
                                     ),
-                                    Text(
-                                      "Email : ${refrenceEmails[index]}",
-                                      style: TextStyle(
-                                        fontFamily: "Quicksand",
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    Divider(),
-                                  ],
+                                  )
+                                      : Image.network(
+                                    refrenceImage[index],
+                                  ),
+                                ),
+                                title: refrenceNames[index] == null
+                                    ? Text(
+                                  refrenceNames[index],
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: "Quicksand",
+                                  ),
+                                )
+                                    : Text(
+                                  refrenceNames[index],
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: "Quicksand",
+                                  ),
                                 ),
                               ),
                             )
@@ -479,7 +514,7 @@ class Refrences extends StatelessWidget {
             ),
             Container(
               child: RaisedButton(
-                onPressed: () => Share.share(shareMessage),
+                onPressed: () => Share.share("please download  jgamer ${userKeys[2]["referId"]}525"),
                 color: klightDeepBlue,
                 child: Container(
                   width: double.infinity,

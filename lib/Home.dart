@@ -34,6 +34,7 @@ class _HomeState extends State<Home> {
   String shareMessage;
   List refrenceIds = [];
   List refrenceNames = [];
+  List refrenceImage = [];
   List refrenceEmails = [];
   var shown = false;
 
@@ -429,6 +430,7 @@ class _HomeState extends State<Home> {
         if (users[key]["referId"] == ref["referedTo"]) {
           if (!refrenceNames.contains(users[key]["Name"])) {
             refrenceNames.add(users[key]["Name"]);
+            refrenceImage.add(users[key]["Name"]);
             refrenceIds.add(users[key]["referId"]);
             refrenceEmails.add(users[key]["Email"]);
           }
@@ -482,7 +484,6 @@ class _HomeState extends State<Home> {
       body: <Widget>[
         FirstPage(),
         GamesFrontPage(),
-        ThiredPage(),
         Store(linkData),
         UserProfile(
           widget.userData,
@@ -491,6 +492,7 @@ class _HomeState extends State<Home> {
           refrenceIds,
           refrenceNames,
           refrenceEmails,
+          refrenceImage,
           shareMessage,
         ),
       ][currenIndex],
@@ -505,11 +507,6 @@ class _HomeState extends State<Home> {
           ),
           Icon(
             Icons.widgets,
-            size: 30,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.album_rounded,
             size: 30,
             color: Colors.white,
           ),

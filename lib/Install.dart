@@ -7,6 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+import 'constants.dart';
+
 
 class InstallnEran extends StatefulWidget {
   final Response linkDataa;
@@ -29,9 +31,12 @@ class _InstallnEranState extends State<InstallnEran> {
     var InstallData = jsonDecode(widget.linkDataa.body);
     print(InstallData);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: klightDeepBlue,
+        title: Text('Install & Earn'),
+      ),
       body: ListView.builder(
         itemBuilder: (context, index)  {
-           var isInstalled = false;
           // isInstalled = checkApps(InstallData[index]["packagename"]);
 
           return Card(
@@ -41,55 +46,103 @@ class _InstallnEranState extends State<InstallnEran> {
             margin: EdgeInsets.symmetric(
               vertical: 10,
             ),
-            child: GestureDetector(
-              onTap: () {
+              child: InkWell(
+                onTap: (){
+                  setState(() async{
+                    bool isInstalled = await DeviceApps.isAppInstalled(InstallData[index]["packagename"]);
 
-              },
-              child: Container(
-                height: 160,
+                    if(isInstalled == false){
+                      _launchURL(InstallData[index]);
+                    }
+                    else{
+                      _onBasicAlertPressed(context);
+                    }
+                  }
+                  );
+
+                },
                 child: Stack(
                   children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                      child: Image.network(
-                        InstallData[index]
-                        ['imageurl'],
-                        width: double.infinity,
-                        height: 150,
-                        fit: BoxFit.cover,
+                    Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
+                        child: Image.network(
+                          InstallData[index]["imageurl"],
+                          width: double.infinity,
+                          height: 170,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
+                    Container(
+                      height: 260,
+                      width: double.infinity,
+                      alignment: Alignment.bottomRight,
                       child: Container(
-                          padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          child: RaisedButton(
-                            onPressed:() {
-                              setState(() async{
-                                 // isInstalled = await DeviceApps.isAppInstalled(InstallData[index]["packagename"]);
-
-                                if(isInstalled == false){
-                                  _launchURL(InstallData[index]);
-                                }
-                                else{
-                                  _onBasicAlertPressed(context);
-                                }
-                              }
-                                );
-                              },
-
-                            child: Text("collect" ),
-
-                          )
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                          ),
+                          color: kdeepBlue,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        height: 90,
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              InstallData[index]
+                              ["name"],
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  InstallData[index]
+                                  ["Diamonds"],
+                                  style: TextStyle(
+                                    fontFamily: "Quicksand",
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Image.asset(
+                                  "assets/diamond.png",
+                                  width: 18,
+                                  height: 18,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
-                ),
-              ),
-            ),
+                ),)
           );
         },
         itemCount: InstallData.length,
@@ -113,8 +166,27 @@ _launchURL(InstallData) async {
 _onBasicAlertPressed(context) async{
   Alert(
     context: context,
-    title: "RFLUTTER ALERT",
-    desc: "Flutter is more awesome with RFlutter Alert.",
+    title: "Sorry",
+    desc: "This app is already install in your device",
+    buttons: [
+      DialogButton(
+        color: Colors.blueAccent,
+        radius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        child: Text(
+          "OK",
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    ],
 
   ).show();
 
