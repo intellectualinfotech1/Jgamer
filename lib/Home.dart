@@ -453,7 +453,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 30,
-        toolbarHeight: 80,
+        toolbarHeight: 60,
         actions: [
           Image.asset(
             "assets/diamond.png",
@@ -461,7 +461,7 @@ class _HomeState extends State<Home> {
             width: 25,
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 24, right: 15, left: 10),
+            padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
             child: Text(
               currentCoins.toString(),
               style: TextStyle(

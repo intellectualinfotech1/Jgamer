@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jgamer/constants.dart';
+import 'package:provider/provider.dart';
+import 'coins.dart';
 
 class AdsButton extends StatelessWidget {
   @override
@@ -40,9 +42,29 @@ class AdsButton extends StatelessWidget {
 class AdsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var coinProvider = Provider.of<Coins>(context);
+    var currentCoins = coinProvider.getCoins;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
+        toolbarHeight: 60,
+        actions: [
+          Image.asset(
+            "assets/diamond.png",
+            height: 25,
+            width: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
+            child: Text(
+              currentCoins.toString(),
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "Quicksand",
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         child: Column(

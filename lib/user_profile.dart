@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:jgamer/Install.dart';
 import 'package:jgamer/auth.dart';
@@ -28,7 +29,6 @@ class UserProfile extends StatefulWidget {
     this.refrenceEmails,
     this.refrenceImage,
     this.shareMessage,
-
   );
   @override
   State<StatefulWidget> createState() {
@@ -117,7 +117,6 @@ class UserProfileState extends State<UserProfile> {
                     widget.refrenceImage,
                     widget.shareMessage,
                     widget.userKeys,
-
                   ),
                 ),
               ),
@@ -316,7 +315,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
           ),
           child: Column(
             children: [
-
               Container(
                 padding: EdgeInsets.only(
                   top: 10,
@@ -381,8 +379,9 @@ class _LeaderBoardState extends State<LeaderBoard> {
                                 width: 15,
                                 height: 15,
                               ),
-                            Divider(color: Colors.black,
-                            )
+                              Divider(
+                                color: Colors.black,
+                              )
                             ],
                           ),
                         ),
@@ -414,7 +413,7 @@ class Refrences extends StatelessWidget {
     this.refrenceEmails,
     this.refrenceImage,
     this.shareMessage,
-      this.userKeys
+    this.userKeys,
   );
 
   @override
@@ -426,7 +425,7 @@ class Refrences extends StatelessWidget {
           "Your refrences",
           style: TextStyle(
             fontFamily: "Quicksand",
-            fontSize: 40,
+            fontSize: 30,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -436,15 +435,6 @@ class Refrences extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.15),
-
-            ),
-            Divider(
-              thickness: 1.0,
-              color: Colors.black,
-            ),
             Expanded(
               child: ListView.builder(
                 itemBuilder: (ctx, index) {
@@ -463,46 +453,33 @@ class Refrences extends StatelessWidget {
                       : index < refrenceEmails.length
                           ? Container(
                               margin: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.2,
+                                vertical: 15,
                               ),
                               child: ListTile(
                                 leading: ClipRRect(
-                                  borderRadius: BorderRadius.all(Radius.circular(25)),
-                                  child: refrenceImage[index] == null
-                                      ? Container(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25)),
+                                  child: Container(
+                                    color: klightCyan,
                                     alignment: Alignment.center,
                                     width: 50,
                                     height: 50,
-                                    color: Colors.blue[800],
                                     child: Text(
-                                     refrenceNames[index],
+                                      (index + 1).toString(),
                                       style: TextStyle(
-                                        color: Colors.white,
                                         fontFamily: "Quicksand",
-                                        fontSize: 30,
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                  )
-                                      : Image.network(
-                                    refrenceImage[index],
                                   ),
                                 ),
-                                title: refrenceNames[index] == null
-                                    ? Text(
+                                title: Text(
                                   refrenceNames[index],
                                   style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.w900,
                                     fontFamily: "Quicksand",
-                                  ),
-                                )
-                                    : Text(
-                                  refrenceNames[index],
-                                  style: TextStyle(
                                     fontSize: 25,
-                                    fontWeight: FontWeight.w900,
-                                    fontFamily: "Quicksand",
                                   ),
                                 ),
                               ),
@@ -514,7 +491,8 @@ class Refrences extends StatelessWidget {
             ),
             Container(
               child: RaisedButton(
-                onPressed: () => Share.share("please download  jgamer ${userKeys[2]["referId"]}525"),
+                onPressed: () => Share.share(
+                    "please download  jgamer ${userKeys[2]["referId"]}525"),
                 color: klightDeepBlue,
                 child: Container(
                   width: double.infinity,

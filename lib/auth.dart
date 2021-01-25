@@ -135,7 +135,7 @@ class Auth {
     );
     var finalres = jsonDecode(signInRes.body);
     var prefs = await SharedPreferences.getInstance();
-
+    print(finalres);
     var userList =
         await registerUser(jsonDecode(signUpRes.body)["localId"], name, email);
     prefs.setString(
@@ -177,8 +177,8 @@ class Auth {
           user = null;
           userKey = null;
           for (var key in users.keys) {
-            if ((users[key]["userId"] == uId && uId.isNotEmpty) ||
-                (users[key]["Email"] == email && email.isNotEmpty)) {
+            if ((users[key]["userId"] == uId) ||
+                (users[key]["Email"] == email)) {
               user = users[key];
               userKey = key;
             }
