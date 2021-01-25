@@ -130,7 +130,7 @@ class _SlotMachineState extends State<SlotMachine> {
                     context: context,
                     child: AlertDialog(
                       title: Text(
-                        "Do you want to trade 70 diamonds for a spin ?",
+                        "Do you want to trade 40 diamonds for a spin ?",
                         style: TextStyle(
                           fontFamily: "Quicksand",
                           fontSize: 16,
@@ -138,10 +138,10 @@ class _SlotMachineState extends State<SlotMachine> {
                       ),
                       content: OutlineButton(
                         onPressed: () {
-                          if (coinProv.getCoins >= 70) {
+                          if (coinProv.getCoins >= 40) {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
-                            coinProv.reduceCoins(70);
+                            coinProv.reduceCoins(40);
                             _startRotating();
                             Future.delayed(
                               Duration(milliseconds: 5000),
@@ -216,7 +216,7 @@ class _SlotMachineState extends State<SlotMachine> {
                               width: 10,
                             ),
                             Text(
-                              "70",
+                              "40",
                               style: TextStyle(
                                 fontFamily: "Quicksand",
                                 fontSize: 20,
@@ -246,7 +246,7 @@ class _SlotMachineState extends State<SlotMachine> {
                       width: 10,
                     ),
                     Text(
-                      "70",
+                      "40",
                       style: TextStyle(
                         fontFamily: "Quicksand",
                         fontSize: 20,
@@ -440,7 +440,7 @@ class _SlotMachineState extends State<SlotMachine> {
     Alert(
       context: context,
       title: "Congratulation",
-      desc: "You won 20",
+      desc: "You won 50",
       buttons: [
         DialogButton(
           color: Colors.purple,
@@ -457,7 +457,8 @@ class _SlotMachineState extends State<SlotMachine> {
           ),
           onPressed: () {
             var coinProv = Provider.of<Coins>(context, listen: false);
-            coinProv.addCoins(20);
+            coinProv.addCoins(50
+            );
             Navigator.of(context).pop();
           },
         ),
@@ -495,7 +496,7 @@ class _SlotMachineState extends State<SlotMachine> {
     Alert(
       context: context,
       title: "Congratulation",
-      desc: "You won 40",
+      desc: "You won 70",
       buttons: [
         DialogButton(
           color: Colors.purple,
@@ -512,7 +513,7 @@ class _SlotMachineState extends State<SlotMachine> {
           ),
           onPressed: () {
             var coinProv = Provider.of<Coins>(context, listen: false);
-            coinProv.addCoins(40);
+            coinProv.addCoins(70);
             Navigator.of(context).pop();
           },
         ),
