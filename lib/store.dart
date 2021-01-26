@@ -5,6 +5,9 @@ import 'package:http/http.dart';
 import 'package:jgamer/coins.dart';
 import 'package:provider/provider.dart';
 import 'package:jgamer/constants.dart';
+import 'package:ironsource/ironsource.dart';
+import 'package:ironsource/models.dart';
+
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Store extends StatefulWidget {
@@ -20,12 +23,88 @@ enum Level {
   three,
 }
 
-class _StoreState extends State<Store> {
+class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingObserver{
   var currentLevel = Level.one;
   var currentSelection;
   var currentSelection2;
   var currentSelection3;
   var _controller = TextEditingController();
+  final String appKey = "e873a699";
+
+  bool rewardeVideoAvailable = false,
+      offerwallAvailable = false,
+      showBanner = false,
+      interstitialReady = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    init();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch(state){
+
+      case AppLifecycleState.resumed:
+        IronSource.activityResumed();
+        break;
+      case AppLifecycleState.inactive:
+      // TODO: Handle this case.
+        break;
+      case AppLifecycleState.paused:
+      // TODO: Handle this case.
+        IronSource.activityPaused();
+        break;
+
+    }
+  }
+
+  void init() async {
+    var userId = await IronSource.getAdvertiserId();
+    await IronSource.validateIntegration();
+    await IronSource.setUserId(userId);
+    await IronSource.initialize(appKey: appKey, listener: this);
+    rewardeVideoAvailable = await IronSource.isRewardedVideoAvailable();
+    offerwallAvailable = await IronSource.isOfferwallAvailable();
+    setState(() {});
+  }
+
+  void loadInterstitial() {
+    IronSource.loadInterstitial();
+  }
+
+  void showInterstitial() async {
+    if (await IronSource.isInterstitialReady()) {
+      IronSource.showInterstitial();
+    } else {
+      print(
+        "Interstial is not ready. use 'Ironsource.loadInterstial' before showing it",
+      );
+    }
+  }
+
+  void showOfferwall() async {
+    if (await IronSource.isOfferwallAvailable()) {
+      IronSource.showOfferwall();
+    } else {
+      print("Offerwall not available");
+    }
+  }
+
+  void showRewardedVideo() async {
+    if (await IronSource.isRewardedVideoAvailable()) {
+      IronSource.showRewardedVideol();
+    } else {
+      print("RewardedVideo not available");
+    }
+  }
+
+  void showHideBanner() {
+    setState(() {
+      showBanner = !showBanner;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -205,6 +284,7 @@ class _StoreState extends State<Store> {
                     ),
                     onPressed: () {
                       setState(() {
+                        showInterstitial();
                         currentSelection = null;
                         currentLevel = Level.one;
                       });
@@ -315,6 +395,7 @@ class _StoreState extends State<Store> {
                       size: 40,
                     ),
                     onPressed: () {
+                      showInterstitial();
                       setState(() {
                         currentSelection = null;
                         currentLevel = Level.one;
@@ -348,6 +429,7 @@ class _StoreState extends State<Store> {
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: GestureDetector(
                       onTap: () {
+                        showInterstitial();
                         currentSelection2 =
                             storeData[currentSelection][index]["Discription"];
                         showDialog(
@@ -367,6 +449,7 @@ class _StoreState extends State<Store> {
                             actions: [
                               RaisedButton(
                                 onPressed: () {
+                                  showInterstitial();
                                   Navigator.of(context).pop();
                                 },
                                 padding: EdgeInsets.symmetric(
@@ -390,6 +473,7 @@ class _StoreState extends State<Store> {
                               ),
                               RaisedButton(
                                 onPressed: () {
+                                  showOfferwall();
                                   var coinProv = Provider.of<Coins>(context,
                                       listen: false);
                                   if (coinProv.getCoins >=
@@ -512,6 +596,7 @@ class _StoreState extends State<Store> {
                                           ),
                                         ),
                                         content: RaisedButton(
+
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
@@ -1034,6 +1119,8 @@ class _StoreState extends State<Store> {
                             ),
                           ),
                           actions: [
+                            IronSourceBannerAd(
+                                  keepAlive: true, listener: BannerAdListener()),
                             RaisedButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -1085,12 +1172,15 @@ class _StoreState extends State<Store> {
                                         ),
                                       ),
                                       content: TextField(
+
                                         controller: _controller,
                                         decoration: InputDecoration(
                                           labelText: "$currentSelection3 ID",
                                         ),
                                       ),
                                       actions: [
+                                        IronSourceBannerAd(
+                                          keepAlive: true, listener: BannerAdListener()),
                                         RaisedButton(
                                           onPressed: () async {
                                             if (_controller.text.isNotEmpty) {
@@ -1116,6 +1206,7 @@ class _StoreState extends State<Store> {
                                               showDialog(
                                                 context: context,
                                                 barrierDismissible: false,
+
                                                 child: AlertDialog(
                                                   title: Text(
                                                     "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your $currentSelection3 account in 7 working days",
@@ -1126,6 +1217,11 @@ class _StoreState extends State<Store> {
                                                           FontWeight.w600,
                                                     ),
                                                   ),
+                                                   content: Align(
+                                                      alignment: Alignment.bottomCenter,
+                                                      child: IronSourceBannerAd(
+                                                          keepAlive: true, listener: BannerAdListener()),
+                                                    ),
                                                   actions: [
                                                     RaisedButton(
                                                       onPressed: () {
@@ -1297,4 +1393,172 @@ class _StoreState extends State<Store> {
       );
     }
   }
+  @override
+  void onInterstitialAdClicked() {
+    print("onInterstitialAdClicked");
+  }
+
+  @override
+  void onInterstitialAdClosed() {
+    print("onInterstitialAdClosed");
+  }
+
+  @override
+  void onInterstitialAdLoadFailed(IronSourceError error) {
+    print("onInterstitialAdLoadFailed : ${error.toString()}");
+  }
+
+  @override
+  void onInterstitialAdOpened() {
+    print("onInterstitialAdOpened");
+    setState(() {
+      interstitialReady = false;
+    });
+
+
+  }
+
+  @override
+  void onInterstitialAdReady() {
+    print("onInterstitialAdReady");
+    setState(() {
+      interstitialReady = true;
+    });
+
+  }
+
+  @override
+  void onInterstitialAdShowFailed(IronSourceError error) {
+
+    print("onInterstitialAdShowFailed : ${error.toString()}");
+    setState(() {
+      interstitialReady = false;
+    });
+  }
+
+  @override
+  void onInterstitialAdShowSucceeded() {
+    print("nInterstitialAdShowSucceeded");
+  }
+
+  @override
+  void onGetOfferwallCreditsFailed(IronSourceError error) {
+
+    print("onGetOfferwallCreditsFailed : ${error.toString()}");
+  }
+
+  @override
+  void onOfferwallAdCredited(OfferwallCredit reward) {
+
+    print("onOfferwallAdCredited : $reward");
+  }
+
+  @override
+  void onOfferwallAvailable(bool available) {
+    print("onOfferwallAvailable : $available");
+
+    setState(() {
+      offerwallAvailable = available;
+    });
+  }
+
+  @override
+  void onOfferwallClosed() {
+    print("onOfferwallClosed");
+  }
+
+  @override
+  void onOfferwallOpened() {
+    print("onOfferwallOpened");
+  }
+
+  @override
+  void onOfferwallShowFailed(IronSourceError error) {
+    print("onOfferwallShowFailed ${error.toString()}");
+  }
+
+  @override
+  void onRewardedVideoAdClicked(Placement placement) {
+
+    print("onRewardedVideoAdClicked");
+  }
+
+  @override
+  void onRewardedVideoAdClosed() {
+    print("onRewardedVideoAdClosed");
+
+  }
+
+  @override
+  void onRewardedVideoAdEnded() {
+    print("onRewardedVideoAdEnded");
+
+
+  }
+
+  @override
+  void onRewardedVideoAdOpened() {
+    print("onRewardedVideoAdOpened");
+
+  }
+
+  @override
+  void onRewardedVideoAdRewarded(Placement placement) {
+
+    print("onRewardedVideoAdRewarded: ${placement.placementName}");
+  }
+
+  @override
+  void onRewardedVideoAdShowFailed(IronSourceError error) {
+
+    print("onRewardedVideoAdShowFailed : ${error.toString()}");
+  }
+
+  @override
+  void onRewardedVideoAdStarted() {
+    print("onRewardedVideoAdStarted");
+  }
+
+  @override
+  void onRewardedVideoAvailabilityChanged(bool available) {
+
+    print("onRewardedVideoAvailabilityChanged : $available");
+    setState(() {
+      rewardeVideoAvailable = available;
+    });
+  }
 }
+
+class BannerAdListener extends IronSourceBannerListener {
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void onBannerAdLoadFailed(Map<String, dynamic> error) {
+    print("onBannerAdLoadFailed");
+
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    print("onBannerAdLoaded");
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismisse");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
+  }
+}
+

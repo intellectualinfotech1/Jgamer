@@ -6,24 +6,93 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:scratcher/scratcher.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ironsource/ironsource.dart';
+import 'package:ironsource/models.dart';
 
-// class ScratchCard extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: Scaffold(
-//         body: AppBody(),
-//       ),
-//     );
-//   }
-// }
+class ScratchCard extends StatefulWidget {
+  @override
+  _ScratchCardState createState() => _ScratchCardState();
+}
 
-class ScratchCard extends StatelessWidget {
+class _ScratchCardState extends State<ScratchCard>
+    with IronSourceListener, WidgetsBindingObserver {
   double _opacity = 0.0;
   var no;
+  _ScratchCardState({this.no});
+  final String appKey = "e873a699";
 
-  ScratchCard({this.no});
+  bool rewardeVideoAvailable = false,
+      offerwallAvailable = false,
+      showBanner = true,
+      interstitialReady = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    init();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        IronSource.activityResumed();
+        break;
+      case AppLifecycleState.inactive:
+        // TODO: Handle this case.
+        break;
+      case AppLifecycleState.paused:
+        // TODO: Handle this case.
+        IronSource.activityPaused();
+        break;
+    }
+  }
+
+  void init() async {
+    var userId = await IronSource.getAdvertiserId();
+    await IronSource.validateIntegration();
+    await IronSource.setUserId(userId);
+    await IronSource.initialize(appKey: appKey, listener: this);
+    rewardeVideoAvailable = await IronSource.isRewardedVideoAvailable();
+    offerwallAvailable = await IronSource.isOfferwallAvailable();
+    setState(() {});
+  }
+
+  void loadInterstitial() {
+    IronSource.loadInterstitial();
+  }
+
+  void showInterstitial() async {
+    if (await IronSource.isInterstitialReady()) {
+      IronSource.showInterstitial();
+    } else {
+      print(
+        "Interstial is not ready. use 'Ironsource.loadInterstial' before showing it",
+      );
+    }
+  }
+
+  void showOfferwall() async {
+    if (await IronSource.isOfferwallAvailable()) {
+      IronSource.showOfferwall();
+    } else {
+      print("Offerwall not available");
+    }
+  }
+
+  void showRewardedVideo() async {
+    if (await IronSource.isRewardedVideoAvailable()) {
+      IronSource.showRewardedVideol();
+    } else {
+      print("RewardedVideo not available");
+    }
+  }
+
+  void showHideBanner() {
+    setState(() {
+      showBanner = !showBanner;
+    });
+  }
 
   var list = [
     0,
@@ -127,6 +196,8 @@ class ScratchCard extends StatelessWidget {
             height: 120,
             child: Column(
               children: [
+                IronSourceBannerAd(
+                    keepAlive: true, listener: BannerAdListener()),
                 OutlineButton(
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -370,6 +441,8 @@ class ScratchCard extends StatelessWidget {
               ],
             ),
             onPressed: () async {
+              IronSource.loadInterstitial();
+              showInterstitial();
               var res = await registerScratch(coinProv);
               if (res) {
                 scratchCardDialog(context);
@@ -391,66 +464,223 @@ class ScratchCard extends StatelessWidget {
 
   _onAlertButtonPressed(context) {
     Alert(
-      context: context,
-      onWillPopActive: true,
-      type: AlertType.success,
-      title: "You Won",
-      desc: no.toString(),
-      style: AlertStyle(
-        titleStyle: TextStyle(
-          fontFamily: "Quicksand",
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
+        context: context,
+        onWillPopActive: true,
+        type: AlertType.success,
+        title: "You Won",
+        desc: no.toString(),
+        style: AlertStyle(
+          titleStyle: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+          descStyle: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 20,
+          ),
         ),
-        descStyle: TextStyle(
-          fontFamily: "Quicksand",
-          fontSize: 20,
-        ),
-      ),
-      buttons: [
-        DialogButton(
-            color: klightDeepBlue,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Reedem",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontFamily: "Quicksand",
-                    fontWeight: FontWeight.bold,
+        buttons: [
+          DialogButton(
+              color: klightDeepBlue,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Reedem",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  no.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontFamily: "Quicksand",
-                    fontWeight: FontWeight.bold,
+                  SizedBox(
+                    width: 15,
                   ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Image.asset(
-                  "assets/diamond.png",
-                  width: 15,
-                  height: 15,
-                ),
-              ],
-            ),
-            onPressed: () {
-              var coins = Provider.of<Coins>(context, listen: false);
-              coins.addCoins(no);
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            })
-      ],
-    ).show();
+                  Text(
+                    no.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: "Quicksand",
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Image.asset(
+                    "assets/diamond.png",
+                    width: 15,
+                    height: 15,
+                  ),
+                ],
+              ),
+              onPressed: () {
+                var coins = Provider.of<Coins>(context, listen: false);
+                coins.addCoins(no);
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              }),
+        ],
+        content: Align(
+          alignment: Alignment.bottomCenter,
+          child:
+              IronSourceBannerAd(keepAlive: true, listener: BannerAdListener()),
+        )).show();
+  }
+
+  @override
+  void onInterstitialAdClicked() {
+    print("onInterstitialAdClicked");
+  }
+
+  @override
+  void onInterstitialAdClosed() {
+    print("onInterstitialAdClosed");
+  }
+
+  @override
+  void onInterstitialAdLoadFailed(IronSourceError error) {
+    print("onInterstitialAdLoadFailed : ${error.toString()}");
+  }
+
+  @override
+  void onInterstitialAdOpened() {
+    print("onInterstitialAdOpened");
+    setState(() {
+      interstitialReady = false;
+    });
+  }
+
+  @override
+  void onInterstitialAdReady() {
+    print("onInterstitialAdReady");
+    setState(() {
+      interstitialReady = true;
+    });
+  }
+
+  @override
+  void onInterstitialAdShowFailed(IronSourceError error) {
+    print("onInterstitialAdShowFailed : ${error.toString()}");
+    setState(() {
+      interstitialReady = false;
+    });
+  }
+
+  @override
+  void onInterstitialAdShowSucceeded() {
+    print("nInterstitialAdShowSucceeded");
+  }
+
+  @override
+  void onGetOfferwallCreditsFailed(IronSourceError error) {
+    print("onGetOfferwallCreditsFailed : ${error.toString()}");
+  }
+
+  @override
+  void onOfferwallAdCredited(OfferwallCredit reward) {
+    print("onOfferwallAdCredited : $reward");
+  }
+
+  @override
+  void onOfferwallAvailable(bool available) {
+    print("onOfferwallAvailable : $available");
+
+    setState(() {
+      offerwallAvailable = available;
+    });
+  }
+
+  @override
+  void onOfferwallClosed() {
+    print("onOfferwallClosed");
+  }
+
+  @override
+  void onOfferwallOpened() {
+    print("onOfferwallOpened");
+  }
+
+  @override
+  void onOfferwallShowFailed(IronSourceError error) {
+    print("onOfferwallShowFailed ${error.toString()}");
+  }
+
+  @override
+  void onRewardedVideoAdClicked(Placement placement) {
+    print("onRewardedVideoAdClicked");
+  }
+
+  @override
+  void onRewardedVideoAdClosed() {
+    print("onRewardedVideoAdClosed");
+  }
+
+  @override
+  void onRewardedVideoAdEnded() {
+    print("onRewardedVideoAdEnded");
+  }
+
+  @override
+  void onRewardedVideoAdOpened() {
+    print("onRewardedVideoAdOpened");
+  }
+
+  @override
+  void onRewardedVideoAdRewarded(Placement placement) {
+    print("onRewardedVideoAdRewarded: ${placement.placementName}");
+  }
+
+  @override
+  void onRewardedVideoAdShowFailed(IronSourceError error) {
+    print("onRewardedVideoAdShowFailed : ${error.toString()}");
+  }
+
+  @override
+  void onRewardedVideoAdStarted() {
+    print("onRewardedVideoAdStarted");
+  }
+
+  @override
+  void onRewardedVideoAvailabilityChanged(bool available) {
+    print("onRewardedVideoAvailabilityChanged : $available");
+    setState(() {
+      rewardeVideoAvailable = available;
+    });
+  }
+}
+
+class BannerAdListener extends IronSourceBannerListener {
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void onBannerAdLoadFailed(Map<String, dynamic> error) {
+    print("onBannerAdLoadFailed");
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    print("onBannerAdLoaded");
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismisse");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
   }
 }

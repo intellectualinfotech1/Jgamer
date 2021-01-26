@@ -12,6 +12,8 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'coins.dart';
 import 'constants.dart';
+import 'package:ironsource/ironsource.dart';
+import 'package:ironsource/models.dart';
 
 class SlotMachine extends StatefulWidget {
   @override
@@ -20,7 +22,8 @@ class SlotMachine extends StatefulWidget {
   }
 }
 
-class _SlotMachineState extends State<SlotMachine> {
+class _SlotMachineState extends State<SlotMachine>
+    with IronSourceListener, WidgetsBindingObserver {
   static const _ROTATION_DURATION = Duration(milliseconds: 300);
   final List<Widget> slots = _getSlots();
   int first, second, third;
@@ -29,6 +32,73 @@ class _SlotMachineState extends State<SlotMachine> {
   final centerRoller = new GlobalKey<RollerListState>();
   Timer rotator;
   Random _random = new Random();
+  final String appKey = "e873a699";
+
+  bool rewardeVideoAvailable = false,
+      offerwallAvailable = false,
+      showBanner = false,
+      interstitialReady = false;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        IronSource.activityResumed();
+        break;
+      case AppLifecycleState.inactive:
+        // TODO: Handle this case.
+        break;
+      case AppLifecycleState.paused:
+        // TODO: Handle this case.
+        IronSource.activityPaused();
+        break;
+    }
+  }
+
+  void init() async {
+    var userId = await IronSource.getAdvertiserId();
+    await IronSource.validateIntegration();
+    await IronSource.setUserId(userId);
+    await IronSource.initialize(appKey: appKey, listener: this);
+    rewardeVideoAvailable = await IronSource.isRewardedVideoAvailable();
+    offerwallAvailable = await IronSource.isOfferwallAvailable();
+    setState(() {});
+  }
+
+  void loadInterstitial() {
+    IronSource.loadInterstitial();
+  }
+
+  void showInterstitial() async {
+    if (await IronSource.isInterstitialReady()) {
+      IronSource.showInterstitial();
+    } else {
+      print(
+        "Interstial is not ready. use 'Ironsource.loadInterstial' before showing it",
+      );
+    }
+  }
+
+  void showOfferwall() async {
+    if (await IronSource.isOfferwallAvailable()) {
+      IronSource.showOfferwall();
+    } else {
+      print("Offerwall not available");
+    }
+  }
+
+  void showRewardedVideo() async {
+    if (await IronSource.isRewardedVideoAvailable()) {
+      IronSource.showRewardedVideol();
+    } else {
+      print("RewardedVideo not available");
+    }
+  }
+
+  void showHideBanner() {
+    setState(() {
+      showBanner = !showBanner;
+    });
+  }
 
   @override
   void initState() {
@@ -36,6 +106,8 @@ class _SlotMachineState extends State<SlotMachine> {
     second = 0;
     third = 0;
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    init();
   }
 
   @override
@@ -92,6 +164,7 @@ class _SlotMachineState extends State<SlotMachine> {
           height: 120,
           child: Column(
             children: [
+              IronSourceBannerAd(keepAlive: true, listener: BannerAdListener()),
               OutlineButton(
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -136,6 +209,11 @@ class _SlotMachineState extends State<SlotMachine> {
                       ),
                       content: OutlineButton(
                         onPressed: () {
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: IronSourceBannerAd(
+                                keepAlive: true, listener: BannerAdListener()),
+                          );
                           if (coinProv.getCoins >= 40) {
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
@@ -174,6 +252,12 @@ class _SlotMachineState extends State<SlotMachine> {
                                 ),
                                 content: OutlineButton(
                                   onPressed: () {
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: IronSourceBannerAd(
+                                          keepAlive: true,
+                                          listener: BannerAdListener()),
+                                    );
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
                                     Navigator.of(context).pop();
@@ -263,6 +347,7 @@ class _SlotMachineState extends State<SlotMachine> {
   @override
   Widget build(BuildContext context) {
     var coinProv = Provider.of<Coins>(context);
+
     var currentCoins = coinProv.getCoins;
     return Scaffold(
       appBar: AppBar(
@@ -470,6 +555,11 @@ class _SlotMachineState extends State<SlotMachine> {
           fontFamily: "Quicksand",
         ),
       ),
+      content: Align(
+        alignment: Alignment.bottomCenter,
+        child:
+            IronSourceBannerAd(keepAlive: true, listener: BannerAdListener()),
+      ),
       buttons: [
         DialogButton(
           color: Colors.purple,
@@ -511,6 +601,11 @@ class _SlotMachineState extends State<SlotMachine> {
           fontFamily: "Quicksand",
         ),
       ),
+      content: Align(
+        alignment: Alignment.bottomCenter,
+        child:
+            IronSourceBannerAd(keepAlive: true, listener: BannerAdListener()),
+      ),
       buttons: [
         DialogButton(
           color: Colors.purple,
@@ -548,6 +643,11 @@ class _SlotMachineState extends State<SlotMachine> {
           fontSize: 18,
           fontFamily: "Quicksand",
         ),
+      ),
+      content: Align(
+        alignment: Alignment.bottomCenter,
+        child:
+            IronSourceBannerAd(keepAlive: true, listener: BannerAdListener()),
       ),
       buttons: [
         DialogButton(
@@ -590,5 +690,158 @@ class _SlotMachineState extends State<SlotMachine> {
       ));
     }
     return result;
+  }
+
+  @override
+  void onInterstitialAdClicked() {
+    print("onInterstitialAdClicked");
+  }
+
+  @override
+  void onInterstitialAdClosed() {
+    print("onInterstitialAdClosed");
+  }
+
+  @override
+  void onInterstitialAdLoadFailed(IronSourceError error) {
+    print("onInterstitialAdLoadFailed : ${error.toString()}");
+  }
+
+  @override
+  void onInterstitialAdOpened() {
+    print("onInterstitialAdOpened");
+    setState(() {
+      interstitialReady = false;
+    });
+  }
+
+  @override
+  void onInterstitialAdReady() {
+    print("onInterstitialAdReady");
+    setState(() {
+      interstitialReady = true;
+    });
+  }
+
+  @override
+  void onInterstitialAdShowFailed(IronSourceError error) {
+    print("onInterstitialAdShowFailed : ${error.toString()}");
+    setState(() {
+      interstitialReady = false;
+    });
+  }
+
+  @override
+  void onInterstitialAdShowSucceeded() {
+    print("nInterstitialAdShowSucceeded");
+  }
+
+  @override
+  void onGetOfferwallCreditsFailed(IronSourceError error) {
+    print("onGetOfferwallCreditsFailed : ${error.toString()}");
+  }
+
+  @override
+  void onOfferwallAdCredited(OfferwallCredit reward) {
+    print("onOfferwallAdCredited : $reward");
+  }
+
+  @override
+  void onOfferwallAvailable(bool available) {
+    print("onOfferwallAvailable : $available");
+
+    setState(() {
+      offerwallAvailable = available;
+    });
+  }
+
+  @override
+  void onOfferwallClosed() {
+    print("onOfferwallClosed");
+  }
+
+  @override
+  void onOfferwallOpened() {
+    print("onOfferwallOpened");
+  }
+
+  @override
+  void onOfferwallShowFailed(IronSourceError error) {
+    print("onOfferwallShowFailed ${error.toString()}");
+  }
+
+  @override
+  void onRewardedVideoAdClicked(Placement placement) {
+    print("onRewardedVideoAdClicked");
+  }
+
+  @override
+  void onRewardedVideoAdClosed() {
+    print("onRewardedVideoAdClosed");
+  }
+
+  @override
+  void onRewardedVideoAdEnded() {
+    print("onRewardedVideoAdEnded");
+  }
+
+  @override
+  void onRewardedVideoAdOpened() {
+    print("onRewardedVideoAdOpened");
+  }
+
+  @override
+  void onRewardedVideoAdRewarded(Placement placement) {
+    print("onRewardedVideoAdRewarded: ${placement.placementName}");
+  }
+
+  @override
+  void onRewardedVideoAdShowFailed(IronSourceError error) {
+    print("onRewardedVideoAdShowFailed : ${error.toString()}");
+  }
+
+  @override
+  void onRewardedVideoAdStarted() {
+    print("onRewardedVideoAdStarted");
+  }
+
+  @override
+  void onRewardedVideoAvailabilityChanged(bool available) {
+    print("onRewardedVideoAvailabilityChanged : $available");
+    setState(() {
+      rewardeVideoAvailable = available;
+    });
+  }
+}
+
+class BannerAdListener extends IronSourceBannerListener {
+  @override
+  void onBannerAdClicked() {
+    print("onBannerAdClicked");
+  }
+
+  @override
+  void onBannerAdLeftApplication() {
+    print("onBannerAdLeftApplication");
+  }
+
+  @override
+  void onBannerAdLoadFailed(Map<String, dynamic> error) {
+    print("onBannerAdLoadFailed");
+  }
+
+  @override
+  void onBannerAdLoaded() {
+    print("onBannerAdLoaded");
+  }
+
+  @override
+  void onBannerAdScreenDismissed() {
+    print("onBannerAdScreenDismisse");
+  }
+
+  @override
+  void onBannerAdScreenPresented() {
+    print("onBannerAdScreenPresented");
   }
 }
