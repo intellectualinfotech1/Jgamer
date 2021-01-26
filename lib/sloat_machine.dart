@@ -14,9 +14,6 @@ import 'coins.dart';
 import 'constants.dart';
 
 class SlotMachine extends StatefulWidget {
-
-
-
   @override
   State<StatefulWidget> createState() {
     return _SlotMachineState();
@@ -46,6 +43,7 @@ class _SlotMachineState extends State<SlotMachine> {
     rotator?.cancel();
     super.dispose();
   }
+
   Future<bool> registerSpin(Coins coinProv) async {
     var prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey("spinAmount")) {
@@ -61,12 +59,12 @@ class _SlotMachineState extends State<SlotMachine> {
           DateTime.now()
               .add(Duration(days: 1))
               .subtract(
-            Duration(
-              hours: DateTime.now().hour,
-              minutes: DateTime.now().minute,
-              seconds: DateTime.now().second,
-            ),
-          )
+                Duration(
+                  hours: DateTime.now().hour,
+                  minutes: DateTime.now().minute,
+                  seconds: DateTime.now().second,
+                ),
+              )
               .toIso8601String());
     }
     prefs.setInt("spinAmount", remSpin - 1);
@@ -145,24 +143,24 @@ class _SlotMachineState extends State<SlotMachine> {
                             _startRotating();
                             Future.delayed(
                               Duration(milliseconds: 5000),
-                                  () {
+                              () {
                                 _finishRotating();
                               },
                             );
                             Future.delayed(
                               Duration(milliseconds: 6000),
-                                  () {
-                                if (first == second || second == third || third == first) {
+                              () {
+                                if (first == second ||
+                                    second == third ||
+                                    third == first) {
                                   _onBasicAlertPressed(context);
                                 } else if (first == second && third == second) {
                                   _onBasicAlertPressed1(context);
-                                }
-                                else if (first != second && third != second) {
+                                } else if (first != second && third != second) {
                                   _onBasicAlertPressed3(context);
                                 }
                               },
                             );
-
                           } else {
                             showDialog(
                               context: context,
@@ -265,9 +263,28 @@ class _SlotMachineState extends State<SlotMachine> {
   @override
   Widget build(BuildContext context) {
     var coinProv = Provider.of<Coins>(context);
+    var currentCoins = coinProv.getCoins;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
+        toolbarHeight: 60,
+        actions: [
+          Image.asset(
+            "assets/diamond.png",
+            height: 25,
+            width: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
+            child: Text(
+              currentCoins.toString(),
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "Quicksand",
+              ),
+            ),
+          )
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -278,11 +295,12 @@ class _SlotMachineState extends State<SlotMachine> {
               children: <Widget>[
                 Image.asset('assets/images/slot-machine.jpg'),
                 Positioned(
-                  left: 85,
-                  right: 84,
-                  top: 114,
+                  left: MediaQuery.of(context).size.width * 0.272,
+                  top: MediaQuery.of(context).size.height * 0.21,
+                  right: MediaQuery.of(context).size.width * 0.27,
+                  bottom: MediaQuery.of(context).size.width * 0.4,
                   child: Container(
-                    width: 80,
+                    width: 90,
                     height: 91,
                     color: Colors.white,
                     child: Row(
@@ -344,7 +362,7 @@ class _SlotMachineState extends State<SlotMachine> {
             ),
           ),
           Divider(
-            color: Colors.transparent ,
+            color: Colors.transparent,
           ),
           RaisedButton(
             child: Column(
@@ -380,10 +398,11 @@ class _SlotMachineState extends State<SlotMachine> {
             ),
             padding: EdgeInsets.symmetric(
               vertical: 15,
+              horizontal: 15,
             ),
-            onPressed: () async{
-              var res =  await registerSpin(coinProv);
-             if(res) {
+            onPressed: () async {
+              var res = await registerSpin(coinProv);
+              if (res) {
                 _startRotating();
                 Future.delayed(
                   Duration(milliseconds: 5000),
@@ -398,15 +417,14 @@ class _SlotMachineState extends State<SlotMachine> {
                       _onBasicAlertPressed(context);
                     } else if (first == second && third == second) {
                       _onBasicAlertPressed1(context);
-                    }
-                    else if (first != second && third != second) {
+                    } else if (first != second && third != second) {
                       _onBasicAlertPressed3(context);
                     }
                   },
                 );
-              }else{
-               noSpinDialog(context, coinProv);
-             }
+              } else {
+                noSpinDialog(context, coinProv);
+              }
             },
           ),
         ],
@@ -441,6 +459,17 @@ class _SlotMachineState extends State<SlotMachine> {
       context: context,
       title: "Congratulation",
       desc: "You won 50",
+      style: AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 20,
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 18,
+          fontFamily: "Quicksand",
+        ),
+      ),
       buttons: [
         DialogButton(
           color: Colors.purple,
@@ -450,26 +479,38 @@ class _SlotMachineState extends State<SlotMachine> {
           child: Text(
             "Collect",
             style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: "Quicksand",
-                fontWeight: FontWeight.bold),
+              color: Colors.white,
+              fontSize: 20,
+              fontFamily: "Quicksand",
+              fontWeight: FontWeight.bold,
+            ),
           ),
           onPressed: () {
             var coinProv = Provider.of<Coins>(context, listen: false);
-            coinProv.addCoins(50
-            );
+            coinProv.addCoins(50);
             Navigator.of(context).pop();
           },
         ),
       ],
     ).show();
   }
+
   _onBasicAlertPressed3(context) {
     Alert(
       context: context,
       title: "Bad Luck",
       desc: "sorry! better luck next time",
+      style: AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 20,
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 18,
+          fontFamily: "Quicksand",
+        ),
+      ),
       buttons: [
         DialogButton(
           color: Colors.purple,
@@ -477,7 +518,7 @@ class _SlotMachineState extends State<SlotMachine> {
             Radius.circular(10),
           ),
           child: Text(
-            "ok",
+            "OK",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -497,6 +538,17 @@ class _SlotMachineState extends State<SlotMachine> {
       context: context,
       title: "Congratulation",
       desc: "You won 70",
+      style: AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 20,
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 18,
+          fontFamily: "Quicksand",
+        ),
+      ),
       buttons: [
         DialogButton(
           color: Colors.purple,

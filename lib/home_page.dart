@@ -190,9 +190,29 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var coinProvider = Provider.of<Coins>(context);
+    var currentCoins = coinProvider.getCoins;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
+        toolbarHeight: 60,
+        actions: [
+          Image.asset(
+            "assets/diamond.png",
+            height: 25,
+            width: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
+            child: Text(
+              currentCoins.toString(),
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "Quicksand",
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         width: double.infinity,

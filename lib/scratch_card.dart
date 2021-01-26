@@ -325,46 +325,60 @@ class ScratchCard extends StatelessWidget {
         horizontal: 20,
       ),
       padding: EdgeInsets.symmetric(vertical: 20),
-      child: FlatButton(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-        shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide.none,
-        ),
-        color: klightDeepBlue,
-        child: Column(
-          children: [
-            Text(
-              "Get A ScratchCard",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Quicksand",
-                fontSize: 25,
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(25),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Image.asset(
+                "assets/1.jpeg",
+                fit: BoxFit.cover,
               ),
             ),
-            SizedBox(
-              height: 20,
+          ),
+          FlatButton(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+            shape: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25),
+              borderSide: BorderSide.none,
             ),
-            Text(
-              "${coinProv.getCouponCount.toString()} free coupons remaining for today...",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "Quicksand",
-                fontSize: 20,
-              ),
-              textAlign: TextAlign.center,
+            child: Column(
+              children: [
+                Text(
+                  "Get A ScratchCard",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Quicksand",
+                    fontSize: 25,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "${coinProv.getCouponCount.toString()} free coupons remaining for today...",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Quicksand",
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-          ],
-        ),
-        onPressed: () async {
-          var res = await registerScratch(coinProv);
-          if (res) {
-            scratchCardDialog(context);
-          } else {
-            noScractchCardDialog(context, coinProv);
-          }
-        },
+            onPressed: () async {
+              var res = await registerScratch(coinProv);
+              if (res) {
+                scratchCardDialog(context);
+              } else {
+                noScractchCardDialog(context, coinProv);
+              }
+            },
+          ),
+        ],
       ),
     );
   }

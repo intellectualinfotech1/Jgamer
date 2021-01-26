@@ -9,7 +9,6 @@ import 'ads.dart';
 import 'tasks.dart';
 
 class FirstPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +26,22 @@ class FirstPage extends StatelessWidget {
               // ),
               child: AdsButton(),
             ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               height: 150,
               child: TasksButton(),
             ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               height: 150,
               child: playquiz(),
+            ),
+            SizedBox(
+              height: 20,
             ),
           ],
         ),

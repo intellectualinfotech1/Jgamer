@@ -10,27 +10,44 @@ class playquiz extends StatelessWidget {
         margin: EdgeInsets.symmetric(
           horizontal: 20,
         ),
-        child: FlatButton(
-          onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => AdsPage(),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(25),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Image.asset(
+                  "assets/3.jpeg",
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-          ),
-          color: klightDeepBlue,
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-          shape: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25),
-            borderSide: BorderSide.none,
-          ),
-          child: Text(
-            "Play quiz & Earn",
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: "Quicksand",
-              fontSize: 25,
-              fontWeight: FontWeight.w600,
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: FlatButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => AdsPage(),
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
+                child: Text(
+                  "Play quiz & Earn",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Quicksand",
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
