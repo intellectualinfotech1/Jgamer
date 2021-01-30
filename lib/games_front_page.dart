@@ -1,23 +1,74 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/home_page.dart';
 import 'package:jgamer/memorygame.dart';
+import 'package:jgamer/progressscreen.dart';
 import 'package:jgamer/sloat_machine.dart';
 import 'Spinner_wheel.dart';
 import 'constants.dart';
 import 'package:ironsource/ironsource.dart';
 import 'package:ironsource/models.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
+const String testDevice = 'YOUR_DEVICE_ID';
 
 class GamesFrontPage extends StatefulWidget {
   @override
   _GamesFrontPageState createState() => _GamesFrontPageState();
 }
 
-class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener , WidgetsBindingObserver{
+class _GamesFrontPageState extends State<GamesFrontPage>
+    with IronSourceListener, WidgetsBindingObserver {
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+  bool _isInterstitialAdReady;
+
+  var interstital_id = "ca-app-pub-3940256099942544/8691691433";
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: interstital_id,
+      listener: (MobileAdEvent event) {
+        print("InterstitialAd event $event");
+      },
+    );
+  }
+
+  NativeAd createNativeAd() {
+    return NativeAd(
+      adUnitId: NativeAd.testAdUnitId,
+      factoryId: 'adFactoryExample',
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("$NativeAd event $event");
+      },
+    );
+  }
 
   var games = [
     {
@@ -32,7 +83,7 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
     },
     {
       "name": "Spin & Earn",
-      "game":  Roulette(),
+      "game": Roulette(),
       "thumb": "Image/roulette-8-300.png"
     },
     {
@@ -47,30 +98,39 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
       offerwallAvailable = false,
       showBanner = false,
       interstitialReady = true;
+
   @override
   void initState() {
-    loadInterstitial();
+    //loadInterstitial();
+    //showInterstitial();
     super.initState();
+
+    _isInterstitialAdReady = false;
+
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+    };
     WidgetsBinding.instance.addObserver(this);
-    loadInterstitial();
+    //loadInterstitial();
+    //showInterstitial();
     init();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch(state){
-
+    switch (state) {
       case AppLifecycleState.resumed:
         IronSource.activityResumed();
         break;
       case AppLifecycleState.inactive:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         break;
       case AppLifecycleState.paused:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         IronSource.activityPaused();
         break;
-
     }
   }
 
@@ -82,7 +142,9 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
     await IronSource.initialize(appKey: appKey, listener: this);
     rewardeVideoAvailable = await IronSource.isRewardedVideoAvailable();
     offerwallAvailable = await IronSource.isOfferwallAvailable();
-    setState(() {loadInterstitial();});
+    setState(() {
+      loadInterstitial();
+    });
   }
 
   void loadInterstitial() {
@@ -120,6 +182,16 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
       showBanner = !showBanner;
     });
   }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    _nativeAd?.dispose();
+    _interstitialAd?.dispose();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,13 +213,16 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
                     ),
                     child: GestureDetector(
                       onTap: () {
-                       showInterstitial();
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) => games[index]["game"],
                           ),
                         );
-
+                        createInterstitialAd()
+                          ..load()
+                          ..show();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => ProgressScreen()));
                       },
                       child: Container(
                         height: 160,
@@ -155,7 +230,7 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
                           children: [
                             ClipRRect(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(15)),
+                                  BorderRadius.all(Radius.circular(15)),
                               child: Image.asset(
                                 games[index]["thumb"],
                                 width: double.infinity,
@@ -193,6 +268,7 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
       ),
     );
   }
+
   @override
   void onInterstitialAdClicked() {
     print("onInterstitialAdClicked");
@@ -214,8 +290,6 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
     setState(() {
       interstitialReady = false;
     });
-
-
   }
 
   @override
@@ -224,12 +298,10 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
     setState(() {
       interstitialReady = true;
     });
-
   }
 
   @override
   void onInterstitialAdShowFailed(IronSourceError error) {
-
     print("onInterstitialAdShowFailed : ${error.toString()}");
     setState(() {
       interstitialReady = false;
@@ -243,13 +315,11 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
 
   @override
   void onGetOfferwallCreditsFailed(IronSourceError error) {
-
     print("onGetOfferwallCreditsFailed : ${error.toString()}");
   }
 
   @override
   void onOfferwallAdCredited(OfferwallCredit reward) {
-
     print("onOfferwallAdCredited : $reward");
   }
 
@@ -279,38 +349,31 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
 
   @override
   void onRewardedVideoAdClicked(Placement placement) {
-
     print("onRewardedVideoAdClicked");
   }
 
   @override
   void onRewardedVideoAdClosed() {
     print("onRewardedVideoAdClosed");
-
   }
 
   @override
   void onRewardedVideoAdEnded() {
     print("onRewardedVideoAdEnded");
-
-
   }
 
   @override
   void onRewardedVideoAdOpened() {
     print("onRewardedVideoAdOpened");
-
   }
 
   @override
   void onRewardedVideoAdRewarded(Placement placement) {
-
     print("onRewardedVideoAdRewarded: ${placement.placementName}");
   }
 
   @override
   void onRewardedVideoAdShowFailed(IronSourceError error) {
-
     print("onRewardedVideoAdShowFailed : ${error.toString()}");
   }
 
@@ -321,7 +384,6 @@ class _GamesFrontPageState extends State<GamesFrontPage> with IronSourceListener
 
   @override
   void onRewardedVideoAvailabilityChanged(bool available) {
-
     print("onRewardedVideoAvailabilityChanged : $available");
     setState(() {
       rewardeVideoAvailable = available;
@@ -343,7 +405,6 @@ class BannerAdListener extends IronSourceBannerListener {
   @override
   void onBannerAdLoadFailed(Map<String, dynamic> error) {
     print("onBannerAdLoadFailed");
-
   }
 
   @override

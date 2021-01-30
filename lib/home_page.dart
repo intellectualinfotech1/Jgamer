@@ -10,6 +10,10 @@ import 'package:ironsource/ironsource.dart';
 import 'package:ironsource/models.dart';
 
 import 'game_button.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
+const String testDevice = 'YOUR_DEVICE_ID';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,6 +21,51 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBindingObserver{
+
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+  int _coins = 0;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("InterstitialAd event $event");
+      },
+    );
+  }
+
+  NativeAd createNativeAd() {
+    return NativeAd(
+      adUnitId: NativeAd.testAdUnitId,
+      factoryId: 'adFactoryExample',
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("$NativeAd event $event");
+      },
+    );
+  }
+
   List<GameButton> buttonsList;
   var player1;
   var player2;
@@ -95,9 +144,37 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(
+        Duration(milliseconds: 3000),
+            () {
+              _bannerAd = createBannerAd()..load()..show();
+
+        });
+
+
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+      if (event == RewardedVideoAdEvent.rewarded) {
+        setState(() {
+          _coins += rewardAmount;
+        });
+      }
+    };
+
     buttonsList = doInit();
     WidgetsBinding.instance.addObserver(this);
     init();
+  }
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    _nativeAd?.dispose();
+    _interstitialAd?.dispose();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   List<GameButton> doInit() {
@@ -254,6 +331,7 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
 
   void collect1() {
     if (Navigator.canPop(context)) Navigator.pop(context);
+    createBannerAd().dispose();
     Navigator.pop(context);
     var coins = Provider.of<Coins>(context, listen: false);
     coins.addCoins(5);

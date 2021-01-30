@@ -12,6 +12,11 @@ import 'coins.dart';
 import 'package:provider/provider.dart';
 import 'package:ironsource/ironsource.dart';
 import 'package:ironsource/models.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
+
+const String testDevice = 'YOUR_DEVICE_ID';
 
 class Roulette extends StatefulWidget {
   @override
@@ -24,11 +29,59 @@ class _RouletteState extends State<Roulette> with IronSourceListener , WidgetsBi
   var currentScore;
 
   final _wheelNotifier = StreamController<double>();
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+  int _coins = 0;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("InterstitialAd event $event");
+      },
+    );
+  }
+
+  NativeAd createNativeAd() {
+    return NativeAd(
+      adUnitId: NativeAd.testAdUnitId,
+      factoryId: 'adFactoryExample',
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("$NativeAd event $event");
+      },
+    );
+  }
 
   dispose() {
+    _bannerAd.dispose();
+    _nativeAd?.dispose();
+    _interstitialAd?.dispose();
     _dividerController.close();
     _wheelNotifier.close();
   }
+
   final String appKey = "e873a699";
 
   bool rewardeVideoAvailable = false,
@@ -38,6 +91,22 @@ class _RouletteState extends State<Roulette> with IronSourceListener , WidgetsBi
   @override
   void initState() {
     super.initState();
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    Future.delayed(
+        Duration(milliseconds: 3000),
+            () {
+          _bannerAd = createBannerAd()..load()..show();
+
+        });
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+      if (event == RewardedVideoAdEvent.rewarded) {
+        setState(() {
+          _coins += rewardAmount;
+        });
+      }
+    };
     WidgetsBinding.instance.addObserver(this);
     init();
   }
@@ -71,7 +140,10 @@ class _RouletteState extends State<Roulette> with IronSourceListener , WidgetsBi
   }
 
   void loadInterstitial() {
-    IronSource.loadInterstitial();
+    setState(() {
+      IronSource.loadInterstitial();
+    });
+
   }
 
   void showInterstitial() async {
@@ -701,7 +773,7 @@ _onAlertButtonPressed(context, currentScore) {
         alignment: Alignment.bottomCenter,
         child: IronSourceBannerAd(
             keepAlive: true, listener: BannerAdListener()),
-      ),
+      ) ,
     buttons: [
       DialogButton(
         radius: BorderRadius.all(

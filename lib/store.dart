@@ -1,14 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_native_admob/flutter_native_admob.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:http/http.dart';
 import 'package:jgamer/coins.dart';
+import 'package:jgamer/progressscreen.dart';
 import 'package:provider/provider.dart';
 import 'package:jgamer/constants.dart';
 import 'package:ironsource/ironsource.dart';
 import 'package:ironsource/models.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:rflutter_alert/rflutter_alert.dart';
+const String testDevice = 'YOUR_DEVICE_ID';
+
 
 class Store extends StatefulWidget {
   final Response linkData;
@@ -24,6 +31,57 @@ enum Level {
 }
 
 class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingObserver{
+
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+  int _coins = 0;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("InterstitialAd event $event");
+      },
+    );
+  }
+  final _nControler = NativeAdmobController();
+  creatNative(){
+    NativeAdmob nativeAdmobAd =NativeAdmob(
+      adUnitID: NativeAd.testAdUnitId,
+      controller: _nControler,
+    );
+    return  ClipRRect(
+        borderRadius: BorderRadius.circular(25),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+          width: double.infinity,
+          height: 300,
+          child: nativeAdmobAd,
+        )
+    );
+  }
+
   var currentLevel = Level.one;
   var currentSelection;
   var currentSelection2;
@@ -38,9 +96,28 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
   @override
   void initState() {
     super.initState();
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    _bannerAd = createBannerAd()..load();
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+      if (event == RewardedVideoAdEvent.rewarded) {
+        setState(() {
+          _coins += rewardAmount;
+        });
+      }
+    };
     WidgetsBinding.instance.addObserver(this);
     init();
   }
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    _nativeAd?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -145,6 +222,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                             setState(() {
                               currentLevel = Level.two;
                             });
+                            createInterstitialAd()..load()..show();
+                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                           },
                           child: Stack(
                             children: [
@@ -211,6 +290,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                             setState(() {
                               currentLevel = Level.two;
                             });
+                            createInterstitialAd()..load()..show();
+                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                           },
                           child: Stack(
                             children: [
@@ -322,6 +403,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                         setState(() {
                           currentLevel = Level.three;
                         });
+                        createInterstitialAd()..load()..show();
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                       },
                       child: Stack(
                         children: [
@@ -548,6 +631,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                         onPressed: () {
                                                           Navigator.of(context)
                                                               .pop();
+                                                          createInterstitialAd()..load()..show();
+                                                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                                                         },
                                                         color: klightDeepBlue,
                                                         child: Text(
@@ -566,6 +651,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                   ),
                                                 );
                                               }
+                                              createInterstitialAd()..load()..show();
+                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                                             },
                                             color: klightDeepBlue,
                                             padding: EdgeInsets.symmetric(
@@ -643,6 +730,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                             ],
                           ),
                         );
+                        createInterstitialAd()..load()..show();
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                       },
                       child: Stack(
                         children: [
@@ -724,6 +813,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                               ),
                             ),
                           ),
+
                         ],
                       ),
                     ),
@@ -751,6 +841,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                         currentSelection = null;
                         currentLevel = Level.one;
                       });
+
                     },
                   ),
                   SizedBox(
@@ -798,6 +889,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                   RaisedButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
+                                      createInterstitialAd()..load()..show();
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                                     },
                                     padding: EdgeInsets.symmetric(
                                         vertical: 7, horizontal: 18),
@@ -854,6 +947,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                             actions: [
                                               RaisedButton(
                                                 onPressed: () async {
+                                                  createInterstitialAd()..load()..show();
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                                                   if (_controller.text.length ==
                                                       10) {
                                                     Navigator.of(context).pop();
@@ -917,6 +1012,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                       ),
                                                     );
                                                   }
+
                                                 },
                                                 color: klightDeepBlue,
                                                 padding: EdgeInsets.symmetric(
@@ -994,6 +1090,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                 ],
                               ),
                             );
+                            createInterstitialAd()..load()..show();
+                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                           },
                           leading: Image.network(
                             storeData[currentSelection][index]["imgurl"],
@@ -1069,6 +1167,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                       currentSelection2 = null;
                       currentLevel = Level.two;
                     });
+                    createInterstitialAd()..load()..show();
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                   },
                 ),
                 SizedBox(
@@ -1293,6 +1393,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                     ),
                                   );
                                 }
+
                               },
                               child: Row(
                                 children: [

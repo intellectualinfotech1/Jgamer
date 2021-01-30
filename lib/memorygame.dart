@@ -7,6 +7,11 @@ import 'package:provider/provider.dart';
 
 import 'coins.dart';
 import 'constants.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+const String testDevice = 'YOUR_DEVICE_ID';
+
+
 
 class Memory extends StatefulWidget {
   @override
@@ -16,10 +21,68 @@ class Memory extends StatefulWidget {
 class _MemoryState extends State<Memory> {
   List<TileModel> gridViewTiles = new List<TileModel>();
   List<TileModel> questionPairs = new List<TileModel>();
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("InterstitialAd event $event");
+      },
+    );
+  }
+
+  NativeAd createNativeAd() {
+    return NativeAd(
+      adUnitId: NativeAd.testAdUnitId,
+      factoryId: 'adFactoryExample',
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("$NativeAd event $event");
+      },
+    );
+  }
+
 
   @override
   void initState() {
     super.initState();
+
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    Future.delayed(
+        Duration(milliseconds: 3000),
+            () {
+          _bannerAd = createBannerAd()..load()..show();
+
+        });
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print("RewardedVideoAd event $event");
+
+    };
     reStart();
   }
 
@@ -39,6 +102,14 @@ class _MemoryState extends State<Memory> {
       });
     });
   }
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    _nativeAd?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
