@@ -37,11 +37,11 @@ class _GamesFrontPageState extends State<GamesFrontPage>
   InterstitialAd _interstitialAd;
   bool _isInterstitialAdReady;
 
-  var interstital_id = "ca-app-pub-3940256099942544/8691691433";
+
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: banneridAdmob,
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
@@ -52,7 +52,7 @@ class _GamesFrontPageState extends State<GamesFrontPage>
 
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
-      adUnitId: interstital_id,
+      adUnitId: interstitialidAdmob,
       listener: (MobileAdEvent event) {
         print("InterstitialAd event $event");
       },

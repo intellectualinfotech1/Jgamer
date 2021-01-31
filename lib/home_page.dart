@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: banneridAdmob,
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
 
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: interstitialidAdmob,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("InterstitialAd event $event");

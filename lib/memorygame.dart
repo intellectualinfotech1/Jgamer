@@ -36,7 +36,7 @@ class _MemoryState extends State<Memory> {
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: banneridAdmob,
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {

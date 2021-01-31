@@ -44,7 +44,7 @@ class _RouletteState extends State<Roulette> with IronSourceListener , WidgetsBi
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: banneridAdmob,
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {

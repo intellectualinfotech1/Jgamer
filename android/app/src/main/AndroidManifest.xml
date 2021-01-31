@@ -27,7 +27,7 @@
             android:theme="@android:style/Theme.Translucent" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7562751556058621~9888493928"/>
+            android:value="ca-app-pub-3894791004337850~6309299427"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -38,7 +38,7 @@
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
-                 to determine the Window background behind the Flutter UI. -->
+                 to determine th ne Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"

@@ -50,6 +50,7 @@ dependencies:
   facebook_audience_network: ^0.7.1
   adsunity: ^1.0.3
   ironsource: ^0.1.1
+  change_app_package_name: ^0.1.2
 
 
 

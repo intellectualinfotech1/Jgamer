@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
-import 'package:flutter_native_admob/native_admob_options.dart';
 import 'package:jgamer/QuizScreen.dart';
 import 'package:jgamer/home_page.dart';
 import 'package:jgamer/memorygame.dart';
 import 'package:jgamer/playquiz.dart';
 import 'package:jgamer/scratch_card.dart';
-import 'constants.dart';
+import './constants.dart';
 import 'ads.dart';
 import 'tasks.dart';
 import 'package:ironsource/ironsource.dart';
@@ -53,7 +52,7 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
 
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: interstitialidAdmob,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("InterstitialAd event $event");
@@ -63,10 +62,9 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
   final _nControler = NativeAdmobController();
   creatNative(){
     NativeAdmob nativeAdmobAd =NativeAdmob(
-      adUnitID: NativeAd.testAdUnitId,
+      adUnitID: nativeidAdmob,
       controller: _nControler,
-      |
-      ),
+
     );
     return  ClipRRect(
         borderRadius: BorderRadius.circular(25),
@@ -88,7 +86,8 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance.initialize(
+        appId: FirebaseAdMob.testAppId);
     _bannerAd = createBannerAd()..load();
     RewardedVideoAd.instance.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {

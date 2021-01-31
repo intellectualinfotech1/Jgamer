@@ -14,6 +14,10 @@ import 'coins.dart';
 import 'constants.dart';
 import 'package:ironsource/ironsource.dart';
 import 'package:ironsource/models.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_admob/firebase_admob.dart';
+
+const String testDevice = 'YOUR_DEVICE_ID';
 
 class SlotMachine extends StatefulWidget {
   @override
@@ -24,6 +28,33 @@ class SlotMachine extends StatefulWidget {
 
 class _SlotMachineState extends State<SlotMachine>
     with IronSourceListener, WidgetsBindingObserver {
+
+
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: testDevice != null ? <String>[testDevice] : null,
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    childDirected: true,
+    nonPersonalizedAds: true,
+  );
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+  int _coins = 0;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: banneridAdmob,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("BannerAd event $event");
+      },
+    );
+  }
+
+
+
   static const _ROTATION_DURATION = Duration(milliseconds: 300);
   final List<Widget> slots = _getSlots();
   int first, second, third;
