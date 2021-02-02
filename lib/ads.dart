@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/constants.dart';
 import 'package:provider/provider.dart';
 import 'coins.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
+
 
 class AdsButton extends StatelessWidget {
   @override
@@ -56,7 +58,56 @@ class AdsButton extends StatelessWidget {
   }
 }
 
-class AdsPage extends StatelessWidget {
+class AdsPage extends StatefulWidget {
+  @override
+  _AdsPageState createState() => _AdsPageState();
+}
+
+class _AdsPageState extends State<AdsPage>  {
+
+  bool _isInterstitialAdLoaded = false;
+  bool _isRewardedAdLoaded = false;
+  bool _isRewardedVideoComplete = false;
+
+  /// All widget ads are stored in this variable. When a button is pressed, its
+  /// respective ad widget is set to this variable and the view is rebuilt using
+  /// setState().
+  Widget _currentAd = SizedBox(
+    width: 0.0,
+    height: 0.0,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadInterstitialAd();
+  }
+
+
+  void _loadInterstitialAd() {
+    FacebookInterstitialAd.loadInterstitialAd(
+      placementId:
+      "411792826571456_411793176571421", //"IMG_16_9_APP_INSTALL#2312433698835503_2650502525028617" YOUR_PLACEMENT_ID
+      listener: (result, value) {
+        print(">> FAN > Interstitial Ad: $result --> $value");
+        if (result == InterstitialAdResult.LOADED)
+          _isInterstitialAdLoaded = true;
+
+        /// Once an Interstitial Ad has been dismissed and becomes invalidated,
+        /// load a fresh Ad by calling this function.
+        if (result == InterstitialAdResult.DISMISSED &&
+            value["invalidated"] == true) {
+          _isInterstitialAdLoaded = false;
+          _loadInterstitialAd();
+        }
+      },
+    );
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     var coinProvider = Provider.of<Coins>(context);
@@ -92,7 +143,7 @@ class AdsPage extends StatelessWidget {
                 horizontal: MediaQuery.of(context).size.height * 0.05,
               ),
               child: Text(
-                "Watch a complete ad and earn 20 diamonds",
+                "Watch a complete ad and click on ad and earn 5 diamonds",
                 style: TextStyle(
                   fontFamily: "Quicksand",
                   fontSize: 25,
@@ -104,7 +155,11 @@ class AdsPage extends StatelessWidget {
               height: 80,
               width: 200,
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _showInterstitialAd();
+                  var coins = Provider.of<Coins>(context, listen: false);
+                  coins.addCoins(5);
+                },
                 color: klightDeepBlue,
                 child: Text(
                   "Load Ad",
@@ -121,4 +176,23 @@ class AdsPage extends StatelessWidget {
       ),
     );
   }
+  _showInterstitialAd() {
+    if (_isInterstitialAdLoaded == true)
+      FacebookInterstitialAd.showInterstitialAd();
+    else
+      print("Interstial Ad not yet loaded!");
+  }
+  _showBannerAd() {
+    setState(() {
+      _currentAd = FacebookBannerAd(
+         placementId:
+             "411792826571456_411795863237819",
+        bannerSize: BannerSize.STANDARD,
+        listener: (result, value) {
+          print("Banner Ad: $result -->  $value");
+        },
+      );
+    });
+  }
 }
+

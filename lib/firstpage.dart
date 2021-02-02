@@ -71,7 +71,7 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
     child: Container(
       padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
     width: double.infinity,
-    height: 300,
+    height: 150,
       child: nativeAdmobAd,
     )
     );
@@ -186,7 +186,6 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
               child: ScratchCard(),
             ),
             creatNative(),
-
             Container(
               height: 150,
               child: AdsButton(),
