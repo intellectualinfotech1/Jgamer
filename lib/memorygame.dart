@@ -1,15 +1,15 @@
 import 'dart:async';
+
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
-import 'package:jgamer/custom_dailog1.dart';
-import 'package:jgamer/models/TileModel.dart';
+import 'package:jgamer/coins.dart';
 import 'package:jgamer/data/data.dart';
+import 'package:jgamer/models/TileModel.dart';
 import 'package:provider/provider.dart';
 
-import 'coins.dart';
 import 'constants.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_admob/firebase_admob.dart';
-const String testDevice = 'YOUR_DEVICE_ID';
+import 'custom_dailog.dart';
+import 'custom_dailog1.dart';
 
 
 
@@ -21,8 +21,8 @@ class Memory extends StatefulWidget {
 class _MemoryState extends State<Memory> {
   List<TileModel> gridViewTiles = new List<TileModel>();
   List<TileModel> questionPairs = new List<TileModel>();
+
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    testDevices: testDevice != null ? <String>[testDevice] : null,
     keywords: <String>['foo', 'bar'],
     contentUrl: 'http://foo.com/bar.html',
     childDirected: true,
@@ -30,9 +30,6 @@ class _MemoryState extends State<Memory> {
   );
 
   BannerAd _bannerAd;
-  NativeAd _nativeAd;
-  InterstitialAd _interstitialAd;
-
 
   BannerAd createBannerAd() {
     return BannerAd(
@@ -45,48 +42,31 @@ class _MemoryState extends State<Memory> {
     );
   }
 
-  InterstitialAd createInterstitialAd() {
-    return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("InterstitialAd event $event");
-      },
-    );
-  }
-
-  NativeAd createNativeAd() {
-    return NativeAd(
-      adUnitId: NativeAd.testAdUnitId,
-      factoryId: 'adFactoryExample',
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print("$NativeAd event $event");
-      },
-    );
-  }
-
-
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-
     FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-    Future.delayed(
-        Duration(milliseconds: 3000),
-            () {
-          _bannerAd = createBannerAd()..load()..show();
+    _bannerAd = createBannerAd()..load()..show();
 
-        });
     RewardedVideoAd.instance.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
       print("RewardedVideoAd event $event");
-
+      if (event == RewardedVideoAdEvent.rewarded) {
+        setState(() {
+        });
+      }
     };
     reStart();
   }
-
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _bannerAd.dispose();
+  }
   void reStart() {
+
     myPairs = getPairs();
     myPairs.shuffle();
 
@@ -102,19 +82,12 @@ class _MemoryState extends State<Memory> {
       });
     });
   }
-  @override
-  void dispose() {
-    _bannerAd.dispose();
-    _nativeAd?.dispose();
-    _interstitialAd?.dispose();
-    super.dispose();
-  }
 
 
   @override
   Widget build(BuildContext context) {
-    var coinProvider = Provider.of<Coins>(context);
-    var currentCoins = coinProvider.getCoins;
+    var coinProv = Provider.of<Coins>(context);
+    var currentCoins = coinProv.getCoins;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
@@ -137,88 +110,81 @@ class _MemoryState extends State<Memory> {
           )
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 10,
-                ),
-                points != 800
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "$points/800",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w500),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Container(
+
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 40,
+              ),
+              points != 800 ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "$points/800",
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "Points",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: 14, fontWeight: FontWeight.w300),
+                  ),
+                ],
+              ) : Container(),
+              SizedBox(
+                height: 20,
+              ),
+              points != 800 ? GridView(
+                shrinkWrap: true,
+                //physics: ClampingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    mainAxisSpacing: 0.0, maxCrossAxisExtent: 100.0),
+                children: List.generate(gridViewTiles.length, (index) {
+                  return Tile(
+                    imagePathUrl: gridViewTiles[index].getImageAssetPath(),
+                    tileIndex: index,
+                    parent: this,
+                  );
+                }),
+              ) : Container(
+                  child: Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: (){
+                          setState(() {
+                            points = 0;
+                            reStart();
+                          });
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 200,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(24),
                           ),
-                          Text(
-                            "Points",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w300),
-                          ),
-                        ],
-                      )
-                    : Container(),
-                SizedBox(
-                  height: 5,
-                ),
-                points != 800
-                    ? GridView(
-                        shrinkWrap: true,
-                        //physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            mainAxisSpacing: 0.0, maxCrossAxisExtent: 100.0),
-                        children: List.generate(gridViewTiles.length, (index) {
-                          return Tile(
-                            imagePathUrl:
-                                gridViewTiles[index].getImageAssetPath(),
-                            tileIndex: index,
-                            parent: this,
-                          );
-                        }),
-                      )
-                    : Container(
-                        child: Column(
-                        children: <Widget>[
-                          GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  points = 0;
-                                  reStart();
-                                });
-                              },
-                              child: InkWell(
-                                child: Container(
-                                  height: 20,
-                                  width: 200,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: Text(
-                                    "Replay",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                                onTap: () {
-                                  reStart();
-                                },
-                              )),
-                          CustomDialog1("You Won", "you get 5 coin", collect1)
-                        ],
-                      ))
-              ],
-            ),
+                          child: Text("Replay", style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500
+                          ),),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      CustomDialog(
+                          "Congratulation You Won", "Collect your reward 5", collect1)
+
+
+                    ],
+                  )
+              )
+            ],
           ),
         ),
       ),
@@ -227,10 +193,15 @@ class _MemoryState extends State<Memory> {
 
   void collect1() {
     if (Navigator.canPop(context)) Navigator.pop(context);
+    createBannerAd().dispose();
+    Navigator.pop(context);
     var coins = Provider.of<Coins>(context, listen: false);
     coins.addCoins(5);
+
   }
 }
+
+
 
 class Tile extends StatefulWidget {
   String imagePathUrl;
@@ -308,12 +279,12 @@ class _TileState extends State<Tile> {
         margin: EdgeInsets.all(5),
         child: myPairs[widget.tileIndex].getImageAssetPath() != ""
             ? Image.asset(myPairs[widget.tileIndex].getIsSelected()
-                ? myPairs[widget.tileIndex].getImageAssetPath()
-                : widget.imagePathUrl)
+            ? myPairs[widget.tileIndex].getImageAssetPath()
+            : widget.imagePathUrl)
             : Container(
-                color: Colors.white,
-                child: Image.asset("assets/correct.png"),
-              ),
+          color: Colors.white,
+          child: Image.asset("assets/correct.png"),
+        ),
       ),
     );
   }

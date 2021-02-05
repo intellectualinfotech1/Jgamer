@@ -151,19 +151,6 @@ class UserProfileState extends State<UserProfile> {
             ),
             Divider(),
             ListTile(
-              leading: Icon(Icons.star),
-              title: Text(
-                "Rate My App",
-                style: TextStyle(
-                  fontFamily: "Quicksand",
-                  fontSize: 20,
-                ),
-              ),
-              subtitle: Text("Get 1000 diamonds"),
-              onTap: () {},
-            ),
-            Divider(),
-            ListTile(
               leading: Icon(Icons.monetization_on),
               title: Text(
                 "Install & earn",

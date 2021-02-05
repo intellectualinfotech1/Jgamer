@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
 import 'package:flutter_native_admob/native_admob_controller.dart';
-import 'package:jgamer/QuizScreen.dart';
 import 'package:jgamer/home_page.dart';
 import 'package:jgamer/memorygame.dart';
 import 'package:jgamer/playquiz.dart';
@@ -14,18 +13,15 @@ import 'package:ironsource/models.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
-
 const String testDevice = 'YOUR_DEVICE_ID';
-
-
 
 class FirstPage extends StatefulWidget {
   @override
   _FirstPageState createState() => _FirstPageState();
 }
 
-class _FirstPageState extends State<FirstPage> with IronSourceListener , WidgetsBindingObserver  {
-
+class _FirstPageState extends State<FirstPage>
+    with IronSourceListener, WidgetsBindingObserver {
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: testDevice != null ? <String>[testDevice] : null,
     keywords: <String>['foo', 'bar'],
@@ -59,22 +55,21 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
       },
     );
   }
+
   final _nControler = NativeAdmobController();
-  creatNative(){
-    NativeAdmob nativeAdmobAd =NativeAdmob(
+  creatNative() {
+    NativeAdmob nativeAdmobAd = NativeAdmob(
       adUnitID: nativeidAdmob,
       controller: _nControler,
-
     );
-    return  ClipRRect(
+    return ClipRRect(
         borderRadius: BorderRadius.circular(25),
-    child: Container(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-    width: double.infinity,
-    height: 150,
-      child: nativeAdmobAd,
-    )
-    );
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+          width: double.infinity,
+          height: 150,
+          child: nativeAdmobAd,
+        ));
   }
 
   final String appKey = "e873a699";
@@ -86,8 +81,7 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(
-        appId: FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
     _bannerAd = createBannerAd()..load();
     RewardedVideoAd.instance.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
@@ -101,6 +95,7 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
     WidgetsBinding.instance.addObserver(this);
     init();
   }
+
   @override
   void dispose() {
     _bannerAd?.dispose();
@@ -111,19 +106,17 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch(state){
-
+    switch (state) {
       case AppLifecycleState.resumed:
         IronSource.activityResumed();
         break;
       case AppLifecycleState.inactive:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         break;
       case AppLifecycleState.paused:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         IronSource.activityPaused();
         break;
-
     }
   }
 
@@ -173,8 +166,6 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -191,7 +182,6 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
               child: AdsButton(),
             ),
             creatNative(),
-
             SizedBox(
               height: 20,
             ),
@@ -216,6 +206,7 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
       ),
     );
   }
+
   @override
   void onInterstitialAdClicked() {
     print("onInterstitialAdClicked");
@@ -237,8 +228,6 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
     setState(() {
       interstitialReady = false;
     });
-
-
   }
 
   @override
@@ -247,12 +236,10 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
     setState(() {
       interstitialReady = true;
     });
-
   }
 
   @override
   void onInterstitialAdShowFailed(IronSourceError error) {
-
     print("onInterstitialAdShowFailed : ${error.toString()}");
     setState(() {
       interstitialReady = false;
@@ -266,13 +253,11 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
 
   @override
   void onGetOfferwallCreditsFailed(IronSourceError error) {
-
     print("onGetOfferwallCreditsFailed : ${error.toString()}");
   }
 
   @override
   void onOfferwallAdCredited(OfferwallCredit reward) {
-
     print("onOfferwallAdCredited : $reward");
   }
 
@@ -302,38 +287,31 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
 
   @override
   void onRewardedVideoAdClicked(Placement placement) {
-
     print("onRewardedVideoAdClicked");
   }
 
   @override
   void onRewardedVideoAdClosed() {
     print("onRewardedVideoAdClosed");
-
   }
 
   @override
   void onRewardedVideoAdEnded() {
     print("onRewardedVideoAdEnded");
-
-
   }
 
   @override
   void onRewardedVideoAdOpened() {
     print("onRewardedVideoAdOpened");
-
   }
 
   @override
   void onRewardedVideoAdRewarded(Placement placement) {
-
     print("onRewardedVideoAdRewarded: ${placement.placementName}");
   }
 
   @override
   void onRewardedVideoAdShowFailed(IronSourceError error) {
-
     print("onRewardedVideoAdShowFailed : ${error.toString()}");
   }
 
@@ -344,7 +322,6 @@ class _FirstPageState extends State<FirstPage> with IronSourceListener , Widgets
 
   @override
   void onRewardedVideoAvailabilityChanged(bool available) {
-
     print("onRewardedVideoAvailabilityChanged : $available");
     setState(() {
       rewardeVideoAvailable = available;
@@ -366,7 +343,6 @@ class BannerAdListener extends IronSourceBannerListener {
   @override
   void onBannerAdLoadFailed(Map<String, dynamic> error) {
     print("onBannerAdLoadFailed");
-
   }
 
   @override
@@ -408,6 +384,4 @@ class CustomButton extends StatelessWidget {
       ),
     );
   }
-
 }
-
