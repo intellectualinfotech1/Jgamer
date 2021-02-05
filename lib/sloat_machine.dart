@@ -28,8 +28,6 @@ class SlotMachine extends StatefulWidget {
 
 class _SlotMachineState extends State<SlotMachine>
     with IronSourceListener, WidgetsBindingObserver {
-
-
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: testDevice != null ? <String>[testDevice] : null,
     keywords: <String>['foo', 'bar'],
@@ -52,8 +50,6 @@ class _SlotMachineState extends State<SlotMachine>
       },
     );
   }
-
-
 
   static const _ROTATION_DURATION = Duration(milliseconds: 300);
   final List<Widget> slots = _getSlots();
@@ -149,16 +145,16 @@ class _SlotMachineState extends State<SlotMachine>
 
   Future<bool> registerSpin(Coins coinProv) async {
     var prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey("spinAmount")) {
-      prefs.setInt("spinAmount", 5);
+    if (!prefs.containsKey("slotAmount")) {
+      prefs.setInt("slotAmount", 5);
     }
-    var remSpin = prefs.getInt("spinAmount");
+    var remSpin = prefs.getInt("slotAmount");
     if (remSpin == 0) {
       return false;
     }
     if (remSpin == 1) {
       prefs.setString(
-          "nextSpins",
+          "nextSlots",
           DateTime.now()
               .add(Duration(days: 1))
               .subtract(
@@ -170,9 +166,20 @@ class _SlotMachineState extends State<SlotMachine>
               )
               .toIso8601String());
     }
-    prefs.setInt("spinAmount", remSpin - 1);
-    coinProv.changeSpinCount(prefs.getInt("spinAmount"));
+    prefs.setInt("slotAmount", remSpin - 1);
+    coinProv.changeSlotCount(prefs.getInt("slotAmount"));
     return true;
+  }
+
+  void refreshSpins() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("nextSlots")) {
+      if (DateTime.parse(prefs.getString("nextSlots"))
+          .isBefore(DateTime.now())) {
+        prefs.remove("nextSlots");
+        prefs.remove("slotAmount");
+      }
+    }
   }
 
   void noSpinDialog(BuildContext context, Coins coinProv) {
@@ -192,7 +199,7 @@ class _SlotMachineState extends State<SlotMachine>
           ),
         ),
         content: Container(
-          height: 120,
+          height: 155,
           child: Column(
             children: [
               IronSourceBannerAd(keepAlive: true, listener: BannerAdListener()),
@@ -377,8 +384,8 @@ class _SlotMachineState extends State<SlotMachine>
 
   @override
   Widget build(BuildContext context) {
+    refreshSpins();
     var coinProv = Provider.of<Coins>(context);
-
     var currentCoins = coinProv.getCoins;
     return Scaffold(
       appBar: AppBar(
@@ -496,7 +503,7 @@ class _SlotMachineState extends State<SlotMachine>
                   height: 8,
                 ),
                 Text(
-                  "${coinProv.getSpinCount.toString()} free spins remaining for today...",
+                  "${coinProv.getSlotCount.toString()} free spins remaining for today...",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "Quicksand",

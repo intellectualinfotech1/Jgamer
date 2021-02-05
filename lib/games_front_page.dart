@@ -37,8 +37,6 @@ class _GamesFrontPageState extends State<GamesFrontPage>
   InterstitialAd _interstitialAd;
   bool _isInterstitialAdReady;
 
-
-
   BannerAd createBannerAd() {
     return BannerAd(
       adUnitId: banneridAdmob,
@@ -213,16 +211,22 @@ class _GamesFrontPageState extends State<GamesFrontPage>
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) => games[index]["game"],
-                          ),
-                        );
                         createInterstitialAd()
                           ..load()
                           ..show();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (ctx) => ProgressScreen()));
+                        Future.delayed(
+                          Duration(milliseconds: 5000),
+                          () {
+                            Navigator.pop(context);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => games[index]["game"],
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: Container(
                         height: 160,

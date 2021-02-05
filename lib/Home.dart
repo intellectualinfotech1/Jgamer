@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:async';
+import 'dart:io';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,11 @@ import 'package:jgamer/store.dart';
 import 'package:jgamer/third_page.dart';
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
+import 'package:jgamer/offline.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 class Home extends StatefulWidget {
   final Map userData;
@@ -439,6 +443,56 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<bool> _onWillPop() {
+    return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            title: Text(
+              "Are you sure you want to exit ?",
+              style: TextStyle(
+                fontFamily: "Quicksand",
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            actionsPadding: EdgeInsets.only(
+              left: 50,
+            ),
+            actions: [
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(
+                  "No",
+                  style: TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              FlatButton(
+                onPressed: () => exit(0),
+                child: Text(
+                  "Yes",
+                  style: TextStyle(
+                    fontFamily: "Quicksand",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                textColor: Colors.redAccent[700],
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     var coinProvider = Provider.of<Coins>(context);
@@ -450,82 +504,95 @@ class _HomeState extends State<Home> {
       shown = true;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 30,
-        toolbarHeight: 60,
-        actions: [
-          Image.asset(
-            "assets/diamond.png",
-            height: 25,
-            width: 25,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
-            child: Text(
-              currentCoins.toString(),
-              style: TextStyle(
-                fontSize: 25,
-                fontFamily: "Quicksand",
-              ),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          titleSpacing: 30,
+          toolbarHeight: 60,
+          actions: [
+            Image.asset(
+              "assets/diamond.png",
+              height: 25,
+              width: 25,
             ),
-          )
-        ],
-        title: Text(
-          "jGamer",
-          style: TextStyle(
-            fontFamily: "Quicksand",
-            fontSize: 30,
-            fontWeight: FontWeight.w900,
+            Padding(
+              padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
+              child: Text(
+                currentCoins.toString(),
+                style: TextStyle(
+                  fontSize: 25,
+                  fontFamily: "Quicksand",
+                ),
+              ),
+            )
+          ],
+          title: Text(
+            "jGamer",
+            style: TextStyle(
+              fontFamily: "Quicksand",
+              fontSize: 30,
+              fontWeight: FontWeight.w900,
+            ),
           ),
+          backgroundColor: klightDeepBlue,
         ),
-        backgroundColor: klightDeepBlue,
-      ),
-      body: <Widget>[
-        FirstPage(),
-        GamesFrontPage(),
-        Store(linkData),
-        UserProfile(
-          widget.userData,
-          widget.userKeys,
-          leaderBoard,
-          refrenceIds,
-          refrenceNames,
-          refrenceEmails,
-          refrenceImage,
-          shareMessage,
+        body: OfflineBuilder(
+          connectivityBuilder: (
+            BuildContext context,
+            ConnectivityResult connectivity,
+            Widget child,
+          ) {
+            final bool connected = connectivity != ConnectivityResult.none;
+            return connected ? child : OfflineScreen();
+          },
+          child: <Widget>[
+            FirstPage(),
+            GamesFrontPage(),
+            Store(linkData),
+            UserProfile(
+              widget.userData,
+              widget.userKeys,
+              leaderBoard,
+              refrenceIds,
+              refrenceNames,
+              refrenceEmails,
+              refrenceImage,
+              shareMessage,
+            ),
+          ][currenIndex],
         ),
-      ][currenIndex],
-      bottomNavigationBar: CurvedNavigationBar(
-        onTap: changePage,
-        height: 50.0,
-        items: <Widget>[
-          Icon(
-            Icons.card_giftcard_sharp,
-            size: 30,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.widgets,
-            size: 30,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.shopping_basket,
-            size: 30,
-            color: Colors.white,
-          ),
-          Icon(
-            Icons.perm_identity,
-            size: 30,
-            color: Colors.white,
-          ),
-        ],
-        color: klightDeepBlue,
-        buttonBackgroundColor: kdeepBlue,
-        backgroundColor: Colors.white,
-        animationCurve: Curves.ease,
-        animationDuration: Duration(milliseconds: 600),
+        bottomNavigationBar: CurvedNavigationBar(
+          onTap: changePage,
+          height: 50.0,
+          items: <Widget>[
+            Icon(
+              Icons.card_giftcard_sharp,
+              size: 30,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.widgets,
+              size: 30,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.shopping_basket,
+              size: 30,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.perm_identity,
+              size: 30,
+              color: Colors.white,
+            ),
+          ],
+          color: klightDeepBlue,
+          buttonBackgroundColor: kdeepBlue,
+          backgroundColor: Colors.white,
+          animationCurve: Curves.ease,
+          animationDuration: Duration(milliseconds: 600),
+        ),
       ),
     );
   }

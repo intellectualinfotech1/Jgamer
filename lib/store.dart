@@ -14,8 +14,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:rflutter_alert/rflutter_alert.dart';
-const String testDevice = 'YOUR_DEVICE_ID';
 
+const String testDevice = 'YOUR_DEVICE_ID';
 
 class Store extends StatefulWidget {
   final Response linkData;
@@ -30,8 +30,8 @@ enum Level {
   three,
 }
 
-class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingObserver{
-
+class _StoreState extends State<Store>
+    with IronSourceListener, WidgetsBindingObserver {
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: testDevice != null ? <String>[testDevice] : null,
     keywords: <String>['foo', 'bar'],
@@ -65,21 +65,21 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
       },
     );
   }
+
   final _nControler = NativeAdmobController();
-  creatNative(){
-    NativeAdmob nativeAdmobAd =NativeAdmob(
+  creatNative() {
+    NativeAdmob nativeAdmobAd = NativeAdmob(
       adUnitID: NativeAd.testAdUnitId,
       controller: _nControler,
     );
-    return  ClipRRect(
+    return ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
           width: double.infinity,
           height: 300,
           child: nativeAdmobAd,
-        )
-    );
+        ));
   }
 
   var currentLevel = Level.one;
@@ -110,6 +110,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
     WidgetsBinding.instance.addObserver(this);
     init();
   }
+
   @override
   void dispose() {
     _bannerAd?.dispose();
@@ -118,22 +119,19 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
     super.dispose();
   }
 
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch(state){
-
+    switch (state) {
       case AppLifecycleState.resumed:
         IronSource.activityResumed();
         break;
       case AppLifecycleState.inactive:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         break;
       case AppLifecycleState.paused:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         IronSource.activityPaused();
         break;
-
     }
   }
 
@@ -222,8 +220,14 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                             setState(() {
                               currentLevel = Level.two;
                             });
-                            createInterstitialAd()..load()..show();
-                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                            createInterstitialAd()
+                              ..load()
+                              ..show();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => ProgressScreen()));
+                            Future.delayed(Duration(milliseconds: 5000), () {
+                              Navigator.pop(context);
+                            });
                           },
                           child: Stack(
                             children: [
@@ -290,8 +294,14 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                             setState(() {
                               currentLevel = Level.two;
                             });
-                            createInterstitialAd()..load()..show();
-                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                            createInterstitialAd()
+                              ..load()
+                              ..show();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => ProgressScreen()));
+                            Future.delayed(Duration(milliseconds: 5000), () {
+                              Navigator.pop(context);
+                            });
                           },
                           child: Stack(
                             children: [
@@ -365,7 +375,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                     ),
                     onPressed: () {
                       setState(() {
-                        showInterstitial();
                         currentSelection = null;
                         currentLevel = Level.one;
                       });
@@ -403,8 +412,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                         setState(() {
                           currentLevel = Level.three;
                         });
-                        createInterstitialAd()..load()..show();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                       },
                       child: Stack(
                         children: [
@@ -556,7 +563,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                               ),
                               RaisedButton(
                                 onPressed: () {
-                                  showOfferwall();
                                   var coinProv = Provider.of<Coins>(context,
                                       listen: false);
                                   if (coinProv.getCoins >=
@@ -571,7 +577,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                       barrierDismissible: false,
                                       child: AlertDialog(
                                         title: Text(
-                                          "Enter you mobile number here, your reward will be added to your account in 7 business days",
+                                          "Enter you ${currentSelection2.toString().startsWith("P") ? 'PUBG ID' : 'FreeFire ID'} your reward will be added to your account.",
                                           style: TextStyle(
                                             fontFamily: "Quicksand",
                                             fontSize: 20,
@@ -631,8 +637,21 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                         onPressed: () {
                                                           Navigator.of(context)
                                                               .pop();
-                                                          createInterstitialAd()..load()..show();
-                                                          Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                                                          createInterstitialAd()
+                                                            ..load()
+                                                            ..show();
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder: (ctx) =>
+                                                                      ProgressScreen()));
+                                                          Future.delayed(
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      5000),
+                                                              () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          });
                                                         },
                                                         color: klightDeepBlue,
                                                         child: Text(
@@ -651,8 +670,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                   ),
                                                 );
                                               }
-                                              createInterstitialAd()..load()..show();
-                                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                                             },
                                             color: klightDeepBlue,
                                             padding: EdgeInsets.symmetric(
@@ -683,7 +700,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                           ),
                                         ),
                                         content: RaisedButton(
-
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
@@ -730,8 +746,14 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                             ],
                           ),
                         );
-                        createInterstitialAd()..load()..show();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                        createInterstitialAd()
+                          ..load()
+                          ..show();
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => ProgressScreen()));
+                        Future.delayed(Duration(milliseconds: 5000), () {
+                          Navigator.pop(context);
+                        });
                       },
                       child: Stack(
                         children: [
@@ -813,7 +835,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -841,7 +862,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                         currentSelection = null;
                         currentLevel = Level.one;
                       });
-
                     },
                   ),
                   SizedBox(
@@ -889,8 +909,17 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                   RaisedButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      createInterstitialAd()..load()..show();
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                                      createInterstitialAd()
+                                        ..load()
+                                        ..show();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  ProgressScreen()));
+                                      Future.delayed(
+                                          Duration(milliseconds: 5000), () {
+                                        Navigator.pop(context);
+                                      });
                                     },
                                     padding: EdgeInsets.symmetric(
                                         vertical: 7, horizontal: 18),
@@ -927,7 +956,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                           barrierDismissible: false,
                                           child: AlertDialog(
                                             title: Text(
-                                              "Enter you mobile number here, your reward will be added to your account in 7 business days",
+                                              "Enter you mobile number here, your reward will be added to your account.",
                                               style: TextStyle(
                                                 fontFamily: "Quicksand",
                                                 fontSize: 20,
@@ -947,8 +976,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                             actions: [
                                               RaisedButton(
                                                 onPressed: () async {
-                                                  createInterstitialAd()..load()..show();
-                                                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                                                   if (_controller.text.length ==
                                                       10) {
                                                     Navigator.of(context).pop();
@@ -991,6 +1018,23 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                               Navigator.of(
                                                                       context)
                                                                   .pop();
+                                                              createInterstitialAd()
+                                                                ..load()
+                                                                ..show();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .push(MaterialPageRoute(
+                                                                      builder:
+                                                                          (ctx) =>
+                                                                              ProgressScreen()));
+                                                              Future.delayed(
+                                                                  Duration(
+                                                                      milliseconds:
+                                                                          5000),
+                                                                  () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              });
                                                             },
                                                             color:
                                                                 klightDeepBlue,
@@ -1012,7 +1056,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                       ),
                                                     );
                                                   }
-
                                                 },
                                                 color: klightDeepBlue,
                                                 padding: EdgeInsets.symmetric(
@@ -1090,8 +1133,14 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                 ],
                               ),
                             );
-                            createInterstitialAd()..load()..show();
-                            Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                            createInterstitialAd()
+                              ..load()
+                              ..show();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => ProgressScreen()));
+                            Future.delayed(Duration(milliseconds: 5000), () {
+                              Navigator.pop(context);
+                            });
                           },
                           leading: Image.network(
                             storeData[currentSelection][index]["imgurl"],
@@ -1167,8 +1216,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                       currentSelection2 = null;
                       currentLevel = Level.two;
                     });
-                    createInterstitialAd()..load()..show();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                   },
                 ),
                 SizedBox(
@@ -1220,7 +1267,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                           ),
                           actions: [
                             IronSourceBannerAd(
-                                  keepAlive: true, listener: BannerAdListener()),
+                                keepAlive: true, listener: BannerAdListener()),
                             RaisedButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -1264,7 +1311,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                     barrierDismissible: false,
                                     child: AlertDialog(
                                       title: Text(
-                                        "Enter you $currentSelection3 ID here, your reward will be added to your account in 7 business days",
+                                        "Enter you $currentSelection3 ID here, your reward will be added to your account.",
                                         style: TextStyle(
                                           fontFamily: "Quicksand",
                                           fontSize: 20,
@@ -1272,7 +1319,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                         ),
                                       ),
                                       content: TextField(
-
                                         controller: _controller,
                                         decoration: InputDecoration(
                                           labelText: "$currentSelection3 ID",
@@ -1280,7 +1326,8 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                       ),
                                       actions: [
                                         IronSourceBannerAd(
-                                          keepAlive: true, listener: BannerAdListener()),
+                                            keepAlive: true,
+                                            listener: BannerAdListener()),
                                         RaisedButton(
                                           onPressed: () async {
                                             if (_controller.text.isNotEmpty) {
@@ -1306,7 +1353,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                               showDialog(
                                                 context: context,
                                                 barrierDismissible: false,
-
                                                 child: AlertDialog(
                                                   title: Text(
                                                     "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your $currentSelection3 account in 7 working days",
@@ -1317,16 +1363,33 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                                           FontWeight.w600,
                                                     ),
                                                   ),
-                                                   content: Align(
-                                                      alignment: Alignment.bottomCenter,
-                                                      child: IronSourceBannerAd(
-                                                          keepAlive: true, listener: BannerAdListener()),
-                                                    ),
+                                                  content: Align(
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    child: IronSourceBannerAd(
+                                                        keepAlive: true,
+                                                        listener:
+                                                            BannerAdListener()),
+                                                  ),
                                                   actions: [
                                                     RaisedButton(
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop();
+                                                        createInterstitialAd()
+                                                          ..load()
+                                                          ..show();
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder: (ctx) =>
+                                                                    ProgressScreen()));
+                                                        Future.delayed(
+                                                            Duration(
+                                                                milliseconds:
+                                                                    5000), () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
                                                       },
                                                       color: klightDeepBlue,
                                                       child: Text(
@@ -1393,7 +1456,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
                                     ),
                                   );
                                 }
-
                               },
                               child: Row(
                                 children: [
@@ -1494,6 +1556,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
       );
     }
   }
+
   @override
   void onInterstitialAdClicked() {
     print("onInterstitialAdClicked");
@@ -1515,8 +1578,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
     setState(() {
       interstitialReady = false;
     });
-
-
   }
 
   @override
@@ -1525,12 +1586,10 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
     setState(() {
       interstitialReady = true;
     });
-
   }
 
   @override
   void onInterstitialAdShowFailed(IronSourceError error) {
-
     print("onInterstitialAdShowFailed : ${error.toString()}");
     setState(() {
       interstitialReady = false;
@@ -1544,13 +1603,11 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
 
   @override
   void onGetOfferwallCreditsFailed(IronSourceError error) {
-
     print("onGetOfferwallCreditsFailed : ${error.toString()}");
   }
 
   @override
   void onOfferwallAdCredited(OfferwallCredit reward) {
-
     print("onOfferwallAdCredited : $reward");
   }
 
@@ -1580,38 +1637,31 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
 
   @override
   void onRewardedVideoAdClicked(Placement placement) {
-
     print("onRewardedVideoAdClicked");
   }
 
   @override
   void onRewardedVideoAdClosed() {
     print("onRewardedVideoAdClosed");
-
   }
 
   @override
   void onRewardedVideoAdEnded() {
     print("onRewardedVideoAdEnded");
-
-
   }
 
   @override
   void onRewardedVideoAdOpened() {
     print("onRewardedVideoAdOpened");
-
   }
 
   @override
   void onRewardedVideoAdRewarded(Placement placement) {
-
     print("onRewardedVideoAdRewarded: ${placement.placementName}");
   }
 
   @override
   void onRewardedVideoAdShowFailed(IronSourceError error) {
-
     print("onRewardedVideoAdShowFailed : ${error.toString()}");
   }
 
@@ -1622,7 +1672,6 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
 
   @override
   void onRewardedVideoAvailabilityChanged(bool available) {
-
     print("onRewardedVideoAvailabilityChanged : $available");
     setState(() {
       rewardeVideoAvailable = available;
@@ -1644,7 +1693,6 @@ class BannerAdListener extends IronSourceBannerListener {
   @override
   void onBannerAdLoadFailed(Map<String, dynamic> error) {
     print("onBannerAdLoadFailed");
-
   }
 
   @override
@@ -1662,4 +1710,3 @@ class BannerAdListener extends IronSourceBannerListener {
     print("onBannerAdScreenPresented");
   }
 }
-

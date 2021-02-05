@@ -20,8 +20,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => new _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBindingObserver{
-
+class _HomePageState extends State<HomePage>
+    with IronSourceListener, WidgetsBindingObserver {
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: testDevice != null ? <String>[testDevice] : null,
     keywords: <String>['foo', 'bar'],
@@ -78,19 +78,17 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
       interstitialReady = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    switch(state){
-
+    switch (state) {
       case AppLifecycleState.resumed:
         IronSource.activityResumed();
         break;
       case AppLifecycleState.inactive:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         break;
       case AppLifecycleState.paused:
-      // TODO: Handle this case.
+        // TODO: Handle this case.
         IronSource.activityPaused();
         break;
-
     }
   }
 
@@ -144,13 +142,11 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(
-        Duration(milliseconds: 3000),
-            () {
-              _bannerAd = createBannerAd()..load()..show();
-
-        });
-
+    Future.delayed(Duration(milliseconds: 3000), () {
+      _bannerAd = createBannerAd()
+        ..load()
+        ..show();
+    });
 
     FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
 
@@ -168,6 +164,7 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
     WidgetsBinding.instance.addObserver(this);
     init();
   }
+
   @override
   void dispose() {
     _bannerAd.dispose();
@@ -366,7 +363,6 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
           )
         ],
       ),
-
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -403,14 +399,11 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
               ),
             ),
           ),
-
-
         ),
-
-
       ),
     );
   }
+
   @override
   void onInterstitialAdClicked() {
     print("onInterstitialAdClicked");
@@ -432,8 +425,6 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
     setState(() {
       interstitialReady = false;
     });
-
-
   }
 
   @override
@@ -442,12 +433,10 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
     setState(() {
       interstitialReady = true;
     });
-
   }
 
   @override
   void onInterstitialAdShowFailed(IronSourceError error) {
-
     print("onInterstitialAdShowFailed : ${error.toString()}");
     setState(() {
       interstitialReady = false;
@@ -461,13 +450,11 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
 
   @override
   void onGetOfferwallCreditsFailed(IronSourceError error) {
-
     print("onGetOfferwallCreditsFailed : ${error.toString()}");
   }
 
   @override
   void onOfferwallAdCredited(OfferwallCredit reward) {
-
     print("onOfferwallAdCredited : $reward");
   }
 
@@ -497,38 +484,31 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
 
   @override
   void onRewardedVideoAdClicked(Placement placement) {
-
     print("onRewardedVideoAdClicked");
   }
 
   @override
   void onRewardedVideoAdClosed() {
     print("onRewardedVideoAdClosed");
-
   }
 
   @override
   void onRewardedVideoAdEnded() {
     print("onRewardedVideoAdEnded");
-
-
   }
 
   @override
   void onRewardedVideoAdOpened() {
     print("onRewardedVideoAdOpened");
-
   }
 
   @override
   void onRewardedVideoAdRewarded(Placement placement) {
-
     print("onRewardedVideoAdRewarded: ${placement.placementName}");
   }
 
   @override
   void onRewardedVideoAdShowFailed(IronSourceError error) {
-
     print("onRewardedVideoAdShowFailed : ${error.toString()}");
   }
 
@@ -539,7 +519,6 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
 
   @override
   void onRewardedVideoAvailabilityChanged(bool available) {
-
     print("onRewardedVideoAvailabilityChanged : $available");
     setState(() {
       rewardeVideoAvailable = available;
@@ -561,7 +540,6 @@ class BannerAdListener extends IronSourceBannerListener {
   @override
   void onBannerAdLoadFailed(Map<String, dynamic> error) {
     print("onBannerAdLoadFailed");
-
   }
 
   @override
@@ -579,4 +557,3 @@ class BannerAdListener extends IronSourceBannerListener {
     print("onBannerAdScreenPresented");
   }
 }
-

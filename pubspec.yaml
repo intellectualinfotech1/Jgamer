@@ -45,6 +45,7 @@ dependencies:
   assets_audio_player: ^2.0.13+1
   url_launcher: ^5.7.10
   device_apps: ^1.2.0
+  flutter_offline: ^0.3.0
   firebase_admob: ^0.10.2
   flutter_native_admob: ^2.1.0+3
   facebook_audience_network: ^0.7.1

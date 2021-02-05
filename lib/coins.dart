@@ -10,6 +10,7 @@ class Coins with ChangeNotifier {
   String userKey;
   int couponCount;
   int spinCount;
+  int slotCount;
 
   int get getCouponCount {
     return couponCount;
@@ -19,8 +20,17 @@ class Coins with ChangeNotifier {
     return spinCount;
   }
 
+  int get getSlotCount {
+    return slotCount;
+  }
+
   Future changeSpinCount(int newCount) {
     spinCount = newCount;
+    notifyListeners();
+  }
+
+  Future changeSlotCount(int newCount) {
+    slotCount = newCount;
     notifyListeners();
   }
 
@@ -36,11 +46,15 @@ class Coins with ChangeNotifier {
     coins = prefs.getInt("coins");
     couponCount = 5;
     spinCount = 5;
+    slotCount = 5;
     if (prefs.containsKey("scratchAmount")) {
       couponCount = prefs.getInt("scratchAmount");
     }
     if (prefs.containsKey("spinAmount")) {
       spinCount = prefs.getInt("spinAmount");
+    }
+    if (prefs.containsKey("slotAmount")) {
+      slotCount = prefs.getInt("slotAmount");
     }
     notifyListeners();
   }
