@@ -47,7 +47,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
 
   BannerAd createBannerAd() {
     return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: banneridAdmob,
       size: AdSize.banner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
@@ -58,7 +58,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
 
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
+      adUnitId: interstitialidAdmob,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("InterstitialAd event $event");
@@ -68,7 +68,7 @@ class _StoreState extends State<Store> with IronSourceListener , WidgetsBindingO
   final _nControler = NativeAdmobController();
   creatNative(){
     NativeAdmob nativeAdmobAd =NativeAdmob(
-      adUnitID: NativeAd.testAdUnitId,
+      adUnitID: nativeidAdmob,
       controller: _nControler,
     );
     return  ClipRRect(

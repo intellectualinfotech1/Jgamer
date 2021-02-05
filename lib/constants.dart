@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const kdeepBlue = Color.fromARGB(255, 21, 40, 80);
 const klightDeepBlue = Color.fromARGB(255, 39, 73, 110);
 const klightCyan = Color.fromARGB(255, 104, 204, 240);
-const banneridAdmob = "ca-app-pub-3894791004337850/2098591679";
+const banneridAdmob = "ca-app-pub-3894791004337850/9909487296";
 const interstitialidAdmob = "ca-app-pub-3894791004337850/9785510009";
 const rewardidAdmob = "ca-app-pub-3894791004337850/8743891079";
 const nativeidAdmob = "ca-app-pub-3894791004337850/7159346662";

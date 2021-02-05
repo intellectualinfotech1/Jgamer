@@ -144,16 +144,7 @@ class _HomePageState extends State<HomePage> with IronSourceListener , WidgetsBi
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(
-        Duration(milliseconds: 3000),
-            () {
-              _bannerAd = createBannerAd()..load()..show();
-
-        });
-
-
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-
+    _bannerAd = createBannerAd()..load()..show();
     RewardedVideoAd.instance.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
       print("RewardedVideoAd event $event");

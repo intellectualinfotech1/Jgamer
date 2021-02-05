@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:jgamer/QuizScreen.dart';
 import 'package:jgamer/Spinner_wheel.dart';
 import 'package:jgamer/coins.dart';
 import 'package:jgamer/constants.dart';
@@ -10,7 +9,7 @@ import 'package:jgamer/firstpage.dart';
 import 'package:jgamer/games_front_page.dart';
 import 'package:jgamer/sloat_machine.dart';
 import 'package:jgamer/store.dart';
-import 'package:jgamer/third_page.dart';
+
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
 import 'package:provider/provider.dart';

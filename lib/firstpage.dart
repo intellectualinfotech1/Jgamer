@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_admob/flutter_native_admob.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
-import 'package:jgamer/QuizScreen.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';=0
 import 'package:jgamer/home_page.dart';
 import 'package:jgamer/memorygame.dart';
 import 'package:jgamer/playquiz.dart';
