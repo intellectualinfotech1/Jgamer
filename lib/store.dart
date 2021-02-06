@@ -1363,13 +1363,10 @@ class _StoreState extends State<Store>
                                                           FontWeight.w600,
                                                     ),
                                                   ),
-                                                  content: Align(
-                                                    alignment:
-                                                        Alignment.bottomCenter,
-                                                    child: IronSourceBannerAd(
-                                                        keepAlive: true,
-                                                        listener:
-                                                            BannerAdListener()),
+                                                  content: IronSourceBannerAd(
+                                                    keepAlive: true,
+                                                    listener:
+                                                        BannerAdListener(),
                                                   ),
                                                   actions: [
                                                     RaisedButton(

@@ -479,7 +479,8 @@ class Refrences extends StatelessWidget {
             Container(
               child: RaisedButton(
                 onPressed: () => Share.share(
-                    "please download  jgamer ${userKeys[2]["referId"]}525"),
+                  shareMessage,
+                ),
                 color: klightDeepBlue,
                 child: Container(
                   width: double.infinity,

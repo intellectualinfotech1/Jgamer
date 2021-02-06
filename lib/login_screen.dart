@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:jgamer/auth.dart';
 import 'constants.dart';
 import 'package:jgamer/Home.dart';
+import 'progressscreen.dart';
 
 enum authMode {
   signinEmail,
@@ -470,32 +471,42 @@ class _LoginScreenState extends State<LoginScreen>
                                   bottom: 70,
                                   child: FloatingActionButton(
                                     onPressed: () async {
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        child: Center(
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        ),
-                                      );
+                                      // showDialog(
+                                      //   context: context,
+                                      //   barrierDismissible: false,
+                                      //   child: Center(
+                                      //     child: Container(
+                                      //       height: 150,
+                                      //       width: 150,
+                                      //       child: CircularProgressIndicator(),
+                                      //     ),
+                                      //   ),
+                                      // );
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  ProgressScreen()));
                                       form.currentState.save();
                                       var res = await auth.logInWithEmail(
                                         userData["email"],
                                         userData["password"],
                                         userData["name"],
                                       );
-                                      Navigator.of(context).pop();
+                                      // Navigator.of(context).pop();
                                       if (res[0]) {
                                         coins.loadUser(res[1][2], res[1][0]);
                                         userKeys = res[1];
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                Home(userData, userKeys),
-                                          ),
+                                        WidgetsBinding.instance
+                                            .addPostFrameCallback(
+                                          (_) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (ctx) =>
+                                                      Home(userData, userKeys)),
+                                            );
+                                          },
                                         );
                                       }
                                     },
@@ -581,10 +592,15 @@ class _LoginScreenState extends State<LoginScreen>
                                   bottom: 70,
                                   child: FloatingActionButton(
                                     onPressed: () {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                Home(userData, userKeys)),
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback(
+                                        (_) {
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    Home(userData, userKeys)),
+                                          );
+                                        },
                                       );
                                     },
                                     child: Icon(Icons.arrow_right_alt),

@@ -47,6 +47,7 @@ class _HomeState extends State<Home> {
     loadData();
     getLeaderBoard();
     getShareMesaage();
+    getAdIds();
     if (!widget.userKeys[2]["refrenceOffered"]) {
       Future.delayed(Duration.zero, () {
         var codeController = TextEditingController();
@@ -343,6 +344,14 @@ class _HomeState extends State<Home> {
         }
       }
     }
+  }
+
+  Future getAdIds() async {
+    var temp = await http
+        .get("https://jgamer-347e6-default-rtdb.firebaseio.com/adsId.json");
+    var res = jsonDecode(temp.body);
+    changeAdId(res["bannerId"], res["interstitialId"], res["rewardedId"],
+        res["nativeId"]);
   }
 
   Future loadData() async {
