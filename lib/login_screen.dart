@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jgamer/coins.dart';
+import 'package:jgamer/progressscreen.dart';
 import 'package:provider/provider.dart';
 import 'package:jgamer/auth.dart';
 import 'constants.dart';
@@ -470,17 +471,8 @@ class _LoginScreenState extends State<LoginScreen>
                                   bottom: 70,
                                   child: FloatingActionButton(
                                     onPressed: () async {
-                                      showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        child: Center(
-                                          child: Container(
-                                            height: 150,
-                                            width: 150,
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        ),
-                                      );
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (ctx) => ProgressScreen()));
                                       form.currentState.save();
                                       var res = await auth.logInWithEmail(
                                         userData["email"],
