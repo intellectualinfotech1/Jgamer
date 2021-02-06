@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jgamer/coins.dart';
+import 'package:jgamer/progressscreen.dart';
 import 'package:provider/provider.dart';
 import 'package:jgamer/auth.dart';
 import 'constants.dart';
