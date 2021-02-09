@@ -35,6 +35,7 @@ class _HomeState extends State<Home> {
   http.Response linkData;
   http.Response leaderBoard;
   String shareMessage;
+  String qUrl;
   List refrenceIds = [];
   List refrenceNames = [];
   List refrenceImage = [];
@@ -48,6 +49,7 @@ class _HomeState extends State<Home> {
     getLeaderBoard();
     getShareMesaage();
     getAdIds();
+    getQUrl();
     if (!widget.userKeys[2]["refrenceOffered"]) {
       Future.delayed(Duration.zero, () {
         var codeController = TextEditingController();
@@ -354,6 +356,12 @@ class _HomeState extends State<Home> {
         res["nativeId"]);
   }
 
+  Future getQUrl() async {
+    var temp = await http
+        .get("https://jgamer-347e6-default-rtdb.firebaseio.com/qureka.json");
+    qUrl = temp.body;
+  }
+
   Future loadData() async {
     var link = "https://jgamer-347e6-default-rtdb.firebaseio.com/data.json";
     linkData = await http.get(link);
@@ -555,7 +563,7 @@ class _HomeState extends State<Home> {
             return connected ? child : OfflineScreen();
           },
           child: <Widget>[
-            FirstPage(),
+            FirstPage(qUrl),
             GamesFrontPage(),
             Store(linkData),
             UserProfile(

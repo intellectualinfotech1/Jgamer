@@ -16,6 +16,8 @@ import 'package:firebase_admob/firebase_admob.dart';
 const String testDevice = 'YOUR_DEVICE_ID';
 
 class FirstPage extends StatefulWidget {
+  final String qUrl;
+  FirstPage(this.qUrl);
   @override
   _FirstPageState createState() => _FirstPageState();
 }
@@ -180,7 +182,6 @@ class _FirstPageState extends State<FirstPage>
               children: [
                 creatNative(),
                 creatNative(),
-
               ],
             ),
             SizedBox(
@@ -194,7 +195,6 @@ class _FirstPageState extends State<FirstPage>
               children: [
                 creatNative(),
                 creatNative(),
-
               ],
             ),
             SizedBox(
@@ -202,13 +202,12 @@ class _FirstPageState extends State<FirstPage>
             ),
             Container(
               height: 150,
-              child: playquiz(),
+              child: Playquiz(widget.qUrl),
             ),
             Stack(
               children: [
                 creatNative(),
                 creatNative(),
-
               ],
             ),
             SizedBox(
@@ -218,7 +217,6 @@ class _FirstPageState extends State<FirstPage>
               children: [
                 creatNative(),
                 creatNative(),
-
               ],
             ),
           ],

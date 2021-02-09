@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jgamer/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import 'coins.dart';
 
-class playquiz extends StatelessWidget {
+class Playquiz extends StatelessWidget {
+  final String url;
+  Playquiz(this.url);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +33,7 @@ class playquiz extends StatelessWidget {
               child: FlatButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (ctx) => AdsPage(),
+                    builder: (ctx) => AdsPage(url),
                   ),
                 ),
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
@@ -56,11 +60,33 @@ class playquiz extends StatelessWidget {
 }
 
 class AdsPage extends StatelessWidget {
+  final String qUrl;
+  AdsPage(this.qUrl);
   @override
   Widget build(BuildContext context) {
+    var coinProvider = Provider.of<Coins>(context);
+    var currentCoins = coinProvider.getCoins;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
+        toolbarHeight: 60,
+        actions: [
+          Image.asset(
+            "assets/diamond.png",
+            height: 25,
+            width: 25,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 13, right: 15, left: 10),
+            child: Text(
+              currentCoins.toString(),
+              style: TextStyle(
+                fontSize: 25,
+                fontFamily: "Quicksand",
+              ),
+            ),
+          )
+        ],
       ),
       body: Container(
         child: Column(
@@ -84,7 +110,37 @@ class AdsPage extends StatelessWidget {
               width: 200,
               child: RaisedButton(
                 onPressed: () {
-                  _lunchUrl();
+                  if (qUrl == '"INSERT/LINK/HERE"') {
+                    showDialog(
+                      context: context,
+                      child: AlertDialog(
+                        content: Text(
+                          "Quiz coming soon...",
+                          style: TextStyle(
+                            fontFamily: "Quicksand",
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        actions: [
+                          RaisedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            color: klightDeepBlue,
+                            child: Text(
+                              "OK",
+                              style: TextStyle(
+                                fontFamily: "Quicksand",
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    _launchURL();
+                  }
                 },
                 color: klightDeepBlue,
                 child: Text(
@@ -104,11 +160,10 @@ class AdsPage extends StatelessWidget {
   }
 
   void _launchURL() async {
-    const url = '';
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunch(qUrl)) {
+      await launch(qUrl);
     } else {
-      throw 'Could not launch $url';
+      throw 'Could not launch $qUrl';
     }
   }
 }

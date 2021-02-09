@@ -956,7 +956,7 @@ class _StoreState extends State<Store>
                                           barrierDismissible: false,
                                           child: AlertDialog(
                                             title: Text(
-                                              "Enter you mobile number here, your reward will be added to your account.",
+                                              "Enter you mobile number here, your purchase will be added to your account.",
                                               style: TextStyle(
                                                 fontFamily: "Quicksand",
                                                 fontSize: 20,
@@ -998,63 +998,79 @@ class _StoreState extends State<Store>
                                                             .pop();
                                                       },
                                                     );
-                                                    showDialog(
+                                                    Alert(
                                                       context: context,
-                                                      barrierDismissible: false,
-                                                      child: AlertDialog(
-                                                        title: Text(
-                                                          "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your account in 7 working days",
-                                                          style: TextStyle(
-                                                            fontFamily:
-                                                                "Quicksand",
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                          ),
+                                                      type: AlertType.success,
+                                                      title:
+                                                          "Congratulations...\n\nYour purchase is approved on our servers.\n\n100₹ added to your Paytm account.",
+                                                      style: AlertStyle(
+                                                        titleStyle: TextStyle(
+                                                          fontFamily:
+                                                              "Quicksand",
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w600,
                                                         ),
-                                                        actions: [
-                                                          RaisedButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              createInterstitialAd()
-                                                                ..load()
-                                                                ..show();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .push(MaterialPageRoute(
-                                                                      builder:
-                                                                          (ctx) =>
-                                                                              ProgressScreen()));
-                                                              Future.delayed(
-                                                                  Duration(
-                                                                      milliseconds:
-                                                                          5000),
-                                                                  () {
-                                                                Navigator.pop(
-                                                                    context);
-                                                              });
-                                                            },
-                                                            color:
-                                                                klightDeepBlue,
-                                                            child: Text(
-                                                              "OK",
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontFamily:
-                                                                    "Quicksand",
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
+                                                        isButtonVisible: false,
                                                       ),
-                                                    );
+                                                    )..show();
+                                                    // showDialog(
+                                                    //   context: context,
+                                                    //   barrierDismissible: false,
+                                                    //   child: AlertDialog(
+                                                    //     title: Text(
+                                                    // "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your account in 7 working days",
+                                                    // style: TextStyle(
+                                                    //   fontFamily:
+                                                    //       "Quicksand",
+                                                    //   fontSize: 20,
+                                                    //   fontWeight:
+                                                    //       FontWeight.w600,
+                                                    // ),
+                                                    //     ),
+                                                    //     actions: [
+                                                    //       RaisedButton(
+                                                    //         onPressed: () {
+                                                    //           Navigator.of(
+                                                    //                   context)
+                                                    //               .pop();
+                                                    //           createInterstitialAd()
+                                                    //             ..load()
+                                                    //             ..show();
+                                                    //           Navigator.of(
+                                                    //                   context)
+                                                    //               .push(MaterialPageRoute(
+                                                    //                   builder:
+                                                    //                       (ctx) =>
+                                                    //                           ProgressScreen()));
+                                                    //           Future.delayed(
+                                                    //               Duration(
+                                                    //                   milliseconds:
+                                                    //                       5000),
+                                                    //               () {
+                                                    //             Navigator.pop(
+                                                    //                 context);
+                                                    //           });
+                                                    //         },
+                                                    //         color:
+                                                    //             klightDeepBlue,
+                                                    //         child: Text(
+                                                    //           "OK",
+                                                    //           style: TextStyle(
+                                                    //             color: Colors
+                                                    //                 .white,
+                                                    //             fontFamily:
+                                                    //                 "Quicksand",
+                                                    //             fontSize: 20,
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .w600,
+                                                    //           ),
+                                                    //         ),
+                                                    //       ),
+                                                    //     ],
+                                                    //   ),
+                                                    // );
                                                   }
                                                 },
                                                 color: klightDeepBlue,

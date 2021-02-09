@@ -483,32 +483,34 @@ class _LoginScreenState extends State<LoginScreen>
                                       //     ),
                                       //   ),
                                       // );
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (ctx) =>
-                                                  ProgressScreen()));
-                                      form.currentState.save();
-                                      var res = await auth.logInWithEmail(
-                                        userData["email"],
-                                        userData["password"],
-                                        userData["name"],
-                                      );
-                                      // Navigator.of(context).pop();
-                                      if (res[0]) {
-                                        coins.loadUser(res[1][2], res[1][0]);
-                                        userKeys = res[1];
-                                        WidgetsBinding.instance
-                                            .addPostFrameCallback(
-                                          (_) {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (ctx) =>
-                                                      Home(userData, userKeys)),
-                                            );
-                                          },
+                                      if (form.currentState.validate()) {
+                                        form.currentState.save();
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    ProgressScreen()));
+                                        var res = await auth.logInWithEmail(
+                                          userData["email"],
+                                          userData["password"],
+                                          userData["name"],
                                         );
+                                        // Navigator.of(context).pop();
+                                        if (res[0]) {
+                                          coins.loadUser(res[1][2], res[1][0]);
+                                          userKeys = res[1];
+                                          WidgetsBinding.instance
+                                              .addPostFrameCallback(
+                                            (_) {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context)
+                                                  .pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (ctx) => Home(
+                                                        userData, userKeys)),
+                                              );
+                                            },
+                                          );
+                                        }
                                       }
                                     },
                                     child: Icon(Icons.arrow_right_alt),

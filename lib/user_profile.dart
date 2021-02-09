@@ -66,7 +66,7 @@ class UserProfileState extends State<UserProfile> {
                           height: 50,
                           color: Colors.blue[800],
                           child: Text(
-                            widget.userData["email"][0],
+                            widget.userData["name"][0],
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: "Quicksand",
@@ -101,7 +101,7 @@ class UserProfileState extends State<UserProfile> {
             ListTile(
               leading: Icon(Icons.swap_horizontal_circle),
               title: Text(
-                "Refferal Code",
+                "Refer & Earn",
                 style: TextStyle(
                   fontFamily: "Quicksand",
                   fontSize: 20,
@@ -290,6 +290,14 @@ class _LeaderBoardState extends State<LeaderBoard> {
     leaderBoard = jsonDecode(widget.leaderBoard.body).toList();
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          "Leader Board",
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 30,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         backgroundColor: klightDeepBlue,
       ),
       body: Container(
@@ -302,19 +310,6 @@ class _LeaderBoardState extends State<LeaderBoard> {
           ),
           child: Column(
             children: [
-              Container(
-                padding: EdgeInsets.only(
-                  top: 10,
-                ),
-                child: Text(
-                  "LeaderBoard",
-                  style: TextStyle(
-                    fontFamily: "Quicksand",
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (ctx, index) {
@@ -427,6 +422,7 @@ class Refrences extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   return refrenceEmails.length == 0
                       ? Container(
+                          margin: EdgeInsets.only(top: 20),
                           child: Center(
                             child: Text(
                               "Your refrences appear here",
