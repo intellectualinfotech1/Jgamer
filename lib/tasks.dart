@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:jgamer/constants.dart';
 import 'package:jgamer/progressscreen.dart';
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'coins.dart';
 
 class TasksButton extends StatelessWidget {
@@ -245,9 +246,7 @@ class _TasksPageState extends State<TasksPage> {
                     var coins = Provider.of<Coins>(context, listen: false);
                     coins.addCoins(5);
                   }else{
-                    AlertDialog(
-                      title: Text("sorry you dont have any ads"),
-                    );
+                   _onBasicAlertPressed1(context);
                   }
                 },
                 color: klightDeepBlue,
@@ -286,5 +285,43 @@ class _TasksPageState extends State<TasksPage> {
       );
     });
   }
+  _onBasicAlertPressed1(context) {
+    Alert(
+      context: context,
+      title: "Sorry",
+      desc: "This time we have no ads please try after some time",
+      style: AlertStyle(
+        titleStyle: TextStyle(
+          fontSize: 20,
+          fontFamily: "Quicksand",
+          fontWeight: FontWeight.bold,
+        ),
+        descStyle: TextStyle(
+          fontSize: 18,
+          fontFamily: "Quicksand",
+        ),
+      ),
+      buttons: [
+        DialogButton(
+          color: Colors.purple,
+          radius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+          child: Text(
+            "Ok",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontFamily: "Quicksand",
+                fontWeight: FontWeight.bold),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ).show();
+  }
+
 
 }

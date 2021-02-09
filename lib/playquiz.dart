@@ -84,7 +84,7 @@ class AdsPage extends StatelessWidget {
               width: 200,
               child: RaisedButton(
                 onPressed: () {
-                  _lunchUrl();
+                  _launchURL();
                 },
                 color: klightDeepBlue,
                 child: Text(
