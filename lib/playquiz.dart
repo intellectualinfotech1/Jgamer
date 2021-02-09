@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jgamer/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class playquiz extends StatelessWidget {
   @override
@@ -70,7 +71,7 @@ class AdsPage extends StatelessWidget {
                 horizontal: MediaQuery.of(context).size.height * 0.05,
               ),
               child: Text(
-                "Watch a complete ad and earn 20 diamonds",
+                "Play quiz and win Rewards",
                 style: TextStyle(
                   fontFamily: "Quicksand",
                   fontSize: 25,
@@ -82,10 +83,12 @@ class AdsPage extends StatelessWidget {
               height: 80,
               width: 200,
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  _lunchUrl();
+                },
                 color: klightDeepBlue,
                 child: Text(
-                  "Load Ad",
+                  "Play",
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: "Quicksand",
@@ -98,5 +101,14 @@ class AdsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _launchURL() async {
+    const url = '';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

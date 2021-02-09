@@ -15,7 +15,7 @@ import 'package:firebase_admob/firebase_admob.dart';
 
 const String testDevice = 'YOUR_DEVICE_ID';
 
-class HomePage extends StatefulWidget {
+class  HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => new _HomePageState();
 }

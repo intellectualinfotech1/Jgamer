@@ -82,8 +82,10 @@ class _TasksPageState extends State<TasksPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _loadInterstitialAd();
+    });
 
-    _loadInterstitialAd();
   }
 
 
@@ -233,13 +235,20 @@ class _TasksPageState extends State<TasksPage> {
               child: RaisedButton(
                 onPressed: () {
                   _loadInterstitialAd();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => ProgressScreen()));
-                  _showInterstitialAd();
-                  var coins = Provider.of<Coins>(context, listen: false);
-                  coins.addCoins(5);
-                  counter--;
-
+                  if(_isInterstitialAdLoaded){
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (ctx) => ProgressScreen()));
+                    Future.delayed(Duration(milliseconds: 5000), () {
+                      Navigator.pop(context);
+                    });
+                    _showInterstitialAd();
+                    var coins = Provider.of<Coins>(context, listen: false);
+                    coins.addCoins(5);
+                  }else{
+                    AlertDialog(
+                      title: Text("sorry you dont have any ads"),
+                    );
+                  }
                 },
                 color: klightDeepBlue,
                 child: Text(

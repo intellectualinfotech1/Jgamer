@@ -7,6 +7,12 @@ class ProgressScreen extends StatefulWidget {
 
 class _ProgressScreenState extends State<ProgressScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(

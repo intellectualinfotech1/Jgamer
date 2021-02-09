@@ -67,7 +67,7 @@ class _FirstPageState extends State<FirstPage>
         child: Container(
           padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
           width: double.infinity,
-          height: 150,
+          height: 170,
           child: nativeAdmobAd,
         ));
   }
@@ -180,32 +180,7 @@ class _FirstPageState extends State<FirstPage>
               children: [
                 creatNative(),
                 creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-              ],
-            ),
-            Container(
-              height: 150,
-              child: AdsButton(),
-            ),
-            Stack(
-              children: [
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
+
               ],
             ),
             SizedBox(
@@ -219,14 +194,7 @@ class _FirstPageState extends State<FirstPage>
               children: [
                 creatNative(),
                 creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
+
               ],
             ),
             SizedBox(
@@ -240,18 +208,18 @@ class _FirstPageState extends State<FirstPage>
               children: [
                 creatNative(),
                 creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
-                creatNative(),
+
               ],
             ),
             SizedBox(
               height: 20,
+            ),
+            Stack(
+              children: [
+                creatNative(),
+                creatNative(),
+
+              ],
             ),
           ],
         ),

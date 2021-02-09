@@ -52,6 +52,7 @@ dependencies:
   adsunity: ^1.0.3
   ironsource: ^0.1.1
   change_app_package_name: ^0.1.2
+  flutter_launcher_icons: ^0.8.1
 
 
 
