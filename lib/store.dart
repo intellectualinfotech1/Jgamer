@@ -1014,63 +1014,63 @@ class _StoreState extends State<Store>
                                                         isButtonVisible: false,
                                                       ),
                                                     )..show();
-                                                    // showDialog(
-                                                    //   context: context,
-                                                    //   barrierDismissible: false,
-                                                    //   child: AlertDialog(
-                                                    //     title: Text(
-                                                    // "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your account in 7 working days",
-                                                    // style: TextStyle(
-                                                    //   fontFamily:
-                                                    //       "Quicksand",
-                                                    //   fontSize: 20,
-                                                    //   fontWeight:
-                                                    //       FontWeight.w600,
-                                                    // ),
-                                                    //     ),
-                                                    //     actions: [
-                                                    //       RaisedButton(
-                                                    //         onPressed: () {
-                                                    //           Navigator.of(
-                                                    //                   context)
-                                                    //               .pop();
-                                                    //           createInterstitialAd()
-                                                    //             ..load()
-                                                    //             ..show();
-                                                    //           Navigator.of(
-                                                    //                   context)
-                                                    //               .push(MaterialPageRoute(
-                                                    //                   builder:
-                                                    //                       (ctx) =>
-                                                    //                           ProgressScreen()));
-                                                    //           Future.delayed(
-                                                    //               Duration(
-                                                    //                   milliseconds:
-                                                    //                       5000),
-                                                    //               () {
-                                                    //             Navigator.pop(
-                                                    //                 context);
-                                                    //           });
-                                                    //         },
-                                                    //         color:
-                                                    //             klightDeepBlue,
-                                                    //         child: Text(
-                                                    //           "OK",
-                                                    //           style: TextStyle(
-                                                    //             color: Colors
-                                                    //                 .white,
-                                                    //             fontFamily:
-                                                    //                 "Quicksand",
-                                                    //             fontSize: 20,
-                                                    //             fontWeight:
-                                                    //                 FontWeight
-                                                    //                     .w600,
-                                                    //           ),
-                                                    //         ),
-                                                    //       ),
-                                                    //     ],
-                                                    //   ),
-                                                    // );
+                                                     showDialog(
+                                                       context: context,
+                                                       barrierDismissible: false,
+                                                       child: AlertDialog(
+                                                         title: Text(
+                                                     "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your account in 7 working days",
+                                                     style: TextStyle(
+                                                       fontFamily:
+                                                           "Quicksand",
+                                                      fontSize: 20,
+                                                       fontWeight:
+                                                           FontWeight.w600,
+                                                    ),
+                                                        ),
+                                                         actions: [
+                                                           RaisedButton(
+                                                             onPressed: () {
+                                                               Navigator.of(
+                                                                       context)
+                                                                   .pop();
+                                                               createInterstitialAd()
+                                                                 ..load()
+                                                                 ..show();
+                                                               Navigator.of(
+                                                                      context)
+                                                                   .push(MaterialPageRoute(
+                                                                       builder:
+                                                                           (ctx) =>
+                                                                               ProgressScreen()));
+                                                               Future.delayed(
+                                                                   Duration(
+                                                                       milliseconds:
+                                                                           5000),
+                                                                   () {
+                                                                 Navigator.pop(
+                                                                     context);
+                                                               });
+                                                             },
+                                                             color:
+                                                                klightDeepBlue,
+                                                             child: Text(
+                                                               "OK",
+                                                              style: TextStyle(
+                                                                 color: Colors
+                                                                     .white,
+                                                                fontFamily:
+                                                                     "Quicksand",
+                                                                 fontSize: 20,
+                                                                 fontWeight:
+                                                                     FontWeight
+                                                                         .w600,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ],
+                                                       ),
+                                                     );
                                                   }
                                                 },
                                                 color: klightDeepBlue,
