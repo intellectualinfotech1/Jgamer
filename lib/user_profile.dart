@@ -400,6 +400,7 @@ class Refrences extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var temp = jsonDecode(shareMessage);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
@@ -474,8 +475,8 @@ class Refrences extends StatelessWidget {
             ),
             Container(
               child: RaisedButton(
-                onPressed: () => Share.share('${shareMessage}${userKeys[2]["referId"]}'
-                ),
+                onPressed: () => Share.share(
+                    '${temp["message"]}\n\n${temp["link"]}\n\nUse my refrence code to recieve instant reward :\n${userKeys[2]["referId"]}'),
                 color: klightDeepBlue,
                 child: Container(
                   width: double.infinity,

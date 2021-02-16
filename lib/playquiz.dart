@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:jgamer/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,6 +66,7 @@ class AdsPage extends StatelessWidget {
   AdsPage(this.qUrl);
   @override
   Widget build(BuildContext context) {
+    var fQUrl = jsonDecode(qUrl)["link"];
     var coinProvider = Provider.of<Coins>(context);
     var currentCoins = coinProvider.getCoins;
     return Scaffold(
@@ -110,7 +113,7 @@ class AdsPage extends StatelessWidget {
               width: 200,
               child: RaisedButton(
                 onPressed: () {
-                  if (qUrl == '"INSERT/LINK/HERE"') {
+                  if (fQUrl == "INSERT/LINK/HERE") {
                     showDialog(
                       context: context,
                       child: AlertDialog(
@@ -160,10 +163,12 @@ class AdsPage extends StatelessWidget {
   }
 
   void _launchURL() async {
-    if (await canLaunch(qUrl)) {
-      await launch(qUrl);
-    } else {
-      throw 'Could not launch $qUrl';
-    }
+    var fQUrl = jsonDecode(qUrl)["link"];
+    await launch(fQUrl);
+    //   if (await canLaunch(fQUrl)) {
+    //     await launch(fQUrl);
+    //   } else {
+    //     throw 'Could not launch $fQUrl';
+    //   }
   }
 }
