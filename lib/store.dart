@@ -998,30 +998,14 @@ class _StoreState extends State<Store>
                                                             .pop();
                                                       },
                                                     );
-                                                    Alert(
-                                                      context: context,
-                                                      type: AlertType.success,
-                                                      title:
-                                                          "Congratulations...\n\nYour purchase is approved on our servers.\n\n100₹ added to your Paytm account.",
-                                                      style: AlertStyle(
-                                                        titleStyle: TextStyle(
-                                                          fontFamily:
-                                                              "Quicksand",
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                        isButtonVisible: false,
-                                                      ),
-                                                    )..show();
                                                      showDialog(
                                                        context: context,
                                                        barrierDismissible: false,
                                                        child: AlertDialog(
                                                          title: Text(
-                                                     "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your account in 7 working days",
-                                                     style: TextStyle(
-                                                       fontFamily:
+                                                        "Congratulations...\n\nYour purchase is approved on our servers. \nIt will be added to your account in 7 working days",
+                                                        style: TextStyle(
+                                                        fontFamily:
                                                            "Quicksand",
                                                       fontSize: 20,
                                                        fontWeight:

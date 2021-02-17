@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "300567947201",
+    "firebase_url": "https://jgamer-347e6-default-rtdb.firebaseio.com",
     "project_id": "jgamer-347e6",
     "storage_bucket": "jgamer-347e6.appspot.com"
   },
@@ -21,6 +22,35 @@
             "certificate_hash": "f61a3539f20541cb9ff8ffaa0fe93d6e81d0e4d7"
           }
         },
+        {
+          "client_id": "300567947201-e7c11kdj36l7sub43degh65aqh862gqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf7uZkyXA1EL8B9y6nMqhIAXkL73F-7jo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "300567947201-e7c11kdj36l7sub43degh65aqh862gqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:300567947201:android:f22a7cd57909977dd0b140",
+        "android_client_info": {
+          "package_name": "com.frecash.jgamer"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "300567947201-e7c11kdj36l7sub43degh65aqh862gqq.apps.googleusercontent.com",
           "client_type": 3
