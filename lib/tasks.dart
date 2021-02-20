@@ -288,8 +288,8 @@ class _TasksPageState extends State<TasksPage> {
   _onBasicAlertPressed1(context) {
     Alert(
       context: context,
-      title: "Sorry",
-      desc: "This time we have no ads please try after some time",
+      title: "Ad is not loaded",
+      desc: "Tap on Load button again and again",
       style: AlertStyle(
         titleStyle: TextStyle(
           fontSize: 20,

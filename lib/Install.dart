@@ -9,7 +9,6 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'constants.dart';
 
-
 class InstallnEran extends StatefulWidget {
   final Response linkDataa;
   InstallnEran(this.linkDataa);
@@ -18,13 +17,11 @@ class InstallnEran extends StatefulWidget {
 }
 
 class _InstallnEranState extends State<InstallnEran> {
-
-   checkApps(data) async{
+  checkApps(data) async {
     var xyz = await DeviceApps.isAppInstalled(data);
     print(xyz);
     return xyz;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,33 +30,38 @@ class _InstallnEranState extends State<InstallnEran> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: klightDeepBlue,
-        title: Text('Install & Earn'),
+        title: Text(
+          'Install & Earn',
+          style: TextStyle(
+            fontFamily: "Quicksand",
+            fontSize: 30,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       body: ListView.builder(
-        itemBuilder: (context, index)  {
+        itemBuilder: (context, index) {
           // isInstalled = checkApps(InstallData[index]["packagename"]);
 
           return Card(
-            elevation: 10,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15))),
-            margin: EdgeInsets.symmetric(
-              vertical: 10,
-            ),
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              margin: EdgeInsets.symmetric(
+                vertical: 10,
+              ),
               child: InkWell(
-                onTap: (){
-                  setState(() async{
-                    bool isInstalled = await DeviceApps.isAppInstalled(InstallData[index]["packagename"]);
+                onTap: () {
+                  setState(() async {
+                    bool isInstalled = await DeviceApps.isAppInstalled(
+                        InstallData[index]["packagename"]);
 
-                    if(isInstalled == false){
+                    if (isInstalled == false) {
                       _launchURL(InstallData[index]);
-                    }
-                    else{
+                    } else {
                       _onBasicAlertPressed(context);
                     }
-                  }
-                  );
-
+                  });
                 },
                 child: Stack(
                   children: [
@@ -99,8 +101,7 @@ class _InstallnEranState extends State<InstallnEran> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              InstallData[index]
-                              ["name"],
+                              InstallData[index]["name"],
                               style: TextStyle(
                                 fontFamily: "Quicksand",
                                 fontSize: 20,
@@ -113,13 +114,11 @@ class _InstallnEranState extends State<InstallnEran> {
                               height: 5,
                             ),
                             Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  InstallData[index]
-                                  ["Diamonds"],
+                                  InstallData[index]["Diamonds"],
                                   style: TextStyle(
                                     fontFamily: "Quicksand",
                                     fontSize: 20,
@@ -142,28 +141,25 @@ class _InstallnEranState extends State<InstallnEran> {
                       ),
                     ),
                   ],
-                ),)
-          );
+                ),
+              ));
         },
         itemCount: InstallData.length,
-
       ),
     );
   }
 }
 
-
-
-
 _launchURL(InstallData) async {
-   var url = InstallData["applink"];
+  var url = InstallData["applink"];
   if (await canLaunch(url)) {
     await launch(url);
   } else {
     throw 'Could not launch $url';
   }
 }
-_onBasicAlertPressed(context) async{
+
+_onBasicAlertPressed(context) async {
   Alert(
     context: context,
     title: "Sorry",
@@ -187,7 +183,5 @@ _onBasicAlertPressed(context) async{
         },
       ),
     ],
-
   ).show();
-
 }

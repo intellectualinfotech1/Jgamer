@@ -27,7 +27,7 @@
             android:theme="@android:style/Theme.Translucent" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3894791004337850~6309299427"/>
+            android:value="ca-app-pub-6610077604910288~6494626516"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

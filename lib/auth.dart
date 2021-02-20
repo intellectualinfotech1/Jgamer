@@ -57,6 +57,7 @@ class Auth {
             "key": userList[0],
             "coins": userList[1],
             "user": userList[2],
+            "name": userList[2]["Name"],
           }),
         );
         prefs.setInt("coins", userList[1]);
@@ -97,6 +98,7 @@ class Auth {
               "key": userList[0],
               "coins": userList[1],
               "user": userList[2],
+              "name": userList[2]["Name"],
             },
           ),
         );
@@ -146,6 +148,7 @@ class Auth {
           "key": userList[0],
           "coins": userList[1],
           "user": userList[2],
+          "name": userList[2]["Name"],
         },
       ),
     );
@@ -168,6 +171,7 @@ class Auth {
     var user;
     var userKey;
     var userKey2;
+    var d;
     var databaseUrl =
         "https://jgamer-347e6-default-rtdb.firebaseio.com/users.json";
     await http.get(databaseUrl).then(
@@ -180,6 +184,7 @@ class Auth {
             if ((users[key]["userId"] == uId) ||
                 (users[key]["Email"] == email)) {
               user = users[key];
+              user["Name"] = name;
               userKey = key;
             }
           }
@@ -206,6 +211,7 @@ class Auth {
                 if ((users[key]["userId"] == uId && uId.isNotEmpty) ||
                     (users[key]["Email"] == email && email.isNotEmpty)) {
                   user = users[key];
+                  user["Name"] = name;
                   userKey = key;
                 }
               }
