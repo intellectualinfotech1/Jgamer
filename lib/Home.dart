@@ -11,6 +11,7 @@ import 'package:jgamer/firstpage.dart';
 import 'package:jgamer/games_front_page.dart';
 import 'package:jgamer/sloat_machine.dart';
 import 'package:jgamer/store.dart';
+import 'package:jgamer/refrence_code.dart';
 
 import 'package:jgamer/user_profile.dart';
 import 'package:jgamer/scratch_card.dart';
@@ -52,106 +53,8 @@ class _HomeState extends State<Home> {
     getQUrl();
     if (!widget.userKeys[2]["refrenceOffered"]) {
       Future.delayed(Duration.zero, () {
-        var codeController = TextEditingController();
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          child: AlertDialog(
-            title: Text(
-              "Do you have a refferal code ? Enter here to get 50 diamonds now",
-              style: TextStyle(
-                fontFamily: "Quicksand",
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            content: TextField(
-              keyboardType: TextInputType.number,
-              controller: codeController,
-              decoration: InputDecoration(
-                labelText: "Refferal Code",
-                labelStyle: TextStyle(
-                  fontFamily: "Quicksand",
-                ),
-              ),
-            ),
-            actions: [
-              RaisedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  refferalShown();
-                },
-                child: Container(
-                  child: Row(
-                    children: [
-                      Icon(Icons.cancel),
-                      SizedBox(width: 5),
-                      Text(
-                        "I don't have a code",
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              RaisedButton(
-                onPressed: () async {
-                  if (codeController.text.length >= 5 &&
-                      codeController.text.length <= 7) {
-                    await makeRefrence(codeController.text, context);
-                    refferalShown();
-                  } else {
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      child: AlertDialog(
-                        title: Text(
-                          "Invalid Refrence Code",
-                          style: TextStyle(
-                            fontFamily: "Quicksand",
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        content: RaisedButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          color: klightDeepBlue,
-                          child: Text(
-                            "OK",
-                            style: TextStyle(
-                              fontFamily: "Quicksand",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                },
-                child: Container(
-                  child: Row(
-                    children: [
-                      Icon(Icons.check),
-                      SizedBox(width: 5),
-                      Text(
-                        "OK",
-                        style: TextStyle(
-                          fontFamily: "Quicksand",
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => RefrenceScreen(widget.userKeys)));
       });
     }
     super.initState();

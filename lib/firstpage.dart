@@ -8,6 +8,7 @@ import 'package:jgamer/scratch_card.dart';
 import './constants.dart';
 import 'ads.dart';
 import 'tasks.dart';
+import 'refrence_code.dart';
 import 'package:ironsource/ironsource.dart';
 import 'package:ironsource/models.dart';
 import 'package:firebase_core/firebase_core.dart';

@@ -66,8 +66,6 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
-
-
   bool _isInterstitialAdLoaded = false;
   bool _isRewardedAdLoaded = false;
   bool _isRewardedVideoComplete = false;
@@ -86,14 +84,11 @@ class _TasksPageState extends State<TasksPage> {
     setState(() {
       _loadInterstitialAd();
     });
-
   }
-
 
   void _loadInterstitialAd() {
     FacebookInterstitialAd.loadInterstitialAd(
-      placementId:
-      "411792826571456_411793176571421",
+      placementId: "411792826571456_411793176571421",
       listener: (result, value) {
         print(">> FAN > Interstitial Ad: $result --> $value");
         if (result == InterstitialAdResult.LOADED)
@@ -109,7 +104,6 @@ class _TasksPageState extends State<TasksPage> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -144,18 +138,12 @@ class _TasksPageState extends State<TasksPage> {
           children: [
             Container(
               padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.1,
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
+                top: MediaQuery.of(context).size.height * 0.1,
+                left: MediaQuery.of(context).size.height * 0.05,
               ),
               alignment: Alignment.center,
               child: Text(
-                "Complete the tasks to earn 40 diamonds",
+                "Complete the tasks to earn 5 diamonds",
                 style: TextStyle(
                   fontFamily: "Quicksand",
                   fontSize: 25,
@@ -165,14 +153,8 @@ class _TasksPageState extends State<TasksPage> {
             ),
             Container(
               padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
+                top: MediaQuery.of(context).size.height * 0.05,
+                left: MediaQuery.of(context).size.height * 0.05,
               ),
               child: Text(
                 "1. Load the Ad from button below",
@@ -184,14 +166,8 @@ class _TasksPageState extends State<TasksPage> {
             ),
             Container(
               padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
+                top: MediaQuery.of(context).size.height * 0.05,
+                left: MediaQuery.of(context).size.height * 0.05,
               ),
               child: Text(
                 "2. Click on it",
@@ -203,17 +179,11 @@ class _TasksPageState extends State<TasksPage> {
             ),
             Container(
               padding: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
+                top: MediaQuery.of(context).size.height * 0.05,
+                left: MediaQuery.of(context).size.height * 0.05,
               ),
               child: Text(
-                "3. Install the app and recieve your diamonds $counter",
+                "3. Collect your diamonds",
                 style: TextStyle(
                   fontFamily: "Quicksand",
                   fontSize: 22,
@@ -222,21 +192,15 @@ class _TasksPageState extends State<TasksPage> {
             ),
             Container(
               margin: EdgeInsets.only(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
-                left: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.05,
+                top: MediaQuery.of(context).size.height * 0.05,
+                left: MediaQuery.of(context).size.height * 0.05,
               ),
               height: 80,
               width: 200,
               child: RaisedButton(
                 onPressed: () {
                   _loadInterstitialAd();
-                  if(_isInterstitialAdLoaded){
+                  if (_isInterstitialAdLoaded) {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) => ProgressScreen()));
                     Future.delayed(Duration(milliseconds: 5000), () {
@@ -245,8 +209,8 @@ class _TasksPageState extends State<TasksPage> {
                     _showInterstitialAd();
                     var coins = Provider.of<Coins>(context, listen: false);
                     coins.addCoins(5);
-                  }else{
-                   _onBasicAlertPressed1(context);
+                  } else {
+                    _onBasicAlertPressed1(context);
                   }
                 },
                 color: klightDeepBlue,
@@ -276,8 +240,7 @@ class _TasksPageState extends State<TasksPage> {
   _showBannerAd() {
     setState(() {
       _currentAd = FacebookBannerAd(
-        placementId:
-        "411792826571456_411795863237819",
+        placementId: "411792826571456_411795863237819",
         bannerSize: BannerSize.STANDARD,
         listener: (result, value) {
           print("Banner Ad: $result -->  $value");
@@ -285,11 +248,12 @@ class _TasksPageState extends State<TasksPage> {
       );
     });
   }
+
   _onBasicAlertPressed1(context) {
     Alert(
       context: context,
-      title: "Sorry",
-      desc: "This time we have no ads please try after some time",
+      type: AlertType.error,
+      title: "No ads available at the moment. Try again after few seconds.",
       style: AlertStyle(
         titleStyle: TextStyle(
           fontSize: 20,
@@ -303,12 +267,12 @@ class _TasksPageState extends State<TasksPage> {
       ),
       buttons: [
         DialogButton(
-          color: Colors.purple,
+          color: klightDeepBlue,
           radius: BorderRadius.all(
             Radius.circular(10),
           ),
           child: Text(
-            "Ok",
+            "OK",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -322,6 +286,4 @@ class _TasksPageState extends State<TasksPage> {
       ],
     ).show();
   }
-
-
 }
