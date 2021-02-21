@@ -1,4 +1,4 @@
-package com.example.jgamer
+package com.frecash.jgamer
 
 import io.flutter.embedding.android.FlutterActivity
 
